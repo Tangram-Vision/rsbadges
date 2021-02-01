@@ -61,9 +61,9 @@ fn parse_project_dir_from_args() -> Result<String, String> {
     opts.optopt(
         "el",
         "embed-logo",
-        "if the logo is specified then include the image data directly 
+        "if the logo is specified then include the image data directly
         in the badge (this will prevent a URL fetch and may work around
-             the fact that some browsers do not fetch external image 
+             the fact that some browsers do not fetch external image
              references); only works if --logo is a HTTP/HTTPS URI or a file path",
         "",
     );
@@ -92,26 +92,37 @@ fn parse_project_dir_from_args() -> Result<String, String> {
         "",
     );
 
-    // parser.add_argument(
-    //     '--deja-vu-sans-path',
-    //     default=None,
-    //     help='the path to the ttf font file containing DejaVu Sans. If not ' +
-    //     'present on your system, you can download it from ' +
-    //     'https://www.fontsquirrel.com/fonts/dejavu-sans')
-
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
         Err(f) => return Err(f.to_string()),
     };
 
-    let home_dir = match matches.opt_str("d") {
-        Some(d) => d,
+    let left_text = match_arg("l", &matches, &program, &opts);
+    let right_text = match_arg("r", &matches, &program, &opts);
+
+    // Tricky: Grab the color
+    // We have to use
+    // `color_str.parse::<css_color::Rgba>()?;`
+    let left_color_arg = match_arg("lcol", &matches, &program, &opts);
+    let right_color_arg = match_arg("rcol", &matches, &program, &opts);
+    // first to make sure that the color passed is valid.
+
+    Ok(String::from(""))
+}
+
+fn match_arg(
+    arg: &str,
+    matches: &getopts::Matches,
+    program: &str,
+    opts: &getopts::Options,
+) -> Result<String, String> {
+    match matches.opt_str(&arg) {
+        Some(d) => Ok(d),
         None => {
             let brief = format!("Usage: {} FILE [options]", program);
             return Err(opts.usage(&brief));
         }
-    };
-    Ok(home_dir)
+    }
 }
 
 fn main() {}
