@@ -12,23 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::path::PathBuf;
+mod badge;
 
-pub struct Badge {
-    left_text: String,
-    right_text: String,
-    link: String,
-    left_link: String,
-    right_link: String,
-    left_color: css_color::Rgba,
-    right_color: css_color::Rgba,
-    logo: PathBuf,
-    embed_logo: bool,
-    title: String,
-    left_title: String,
-    right_title: String,
-    browser: bool,
-}
+use badge::Badge;
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+
+    use crate::badge::Badge;
+    use css_color::Rgba;
+    use std::fs;
+    use std::path::Path;
+    #[test]
+    fn create_flat_badge() {
+        let left_text = String::from("test");
+        let right_text = String::from("test");
+        let left_color: Rgba = "#555".parse().unwrap();
+        let right_color: Rgba = "#007ec6".parse().unwrap();
+        let badge = Badge::new(left_text, right_text, left_color, right_color);
+
+        let ci_path = std::env::current_dir().unwrap();
+
+        let commit_svg_path = ci_path.join(Path::new("badge_commits.svg"));
+        println!("Saving commit badge to {:#?}", commit_svg_path);
+        if let Err(c) = fs::write(commit_svg_path, badge.to_flat_badge()) {
+            println!("ERROR: Could not save badge_commits: {}", c);
+        }
+        // println!("{}", badge.to_plastic_badge());
+    }
+}
