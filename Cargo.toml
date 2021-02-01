@@ -9,3 +9,6 @@ edition = "2018"
 [dependencies]
 css-color = "0.1"
 getopts = "0.2"
+askama = "0.10"
+rand = "0.8"
+rusttype = "0.9"
