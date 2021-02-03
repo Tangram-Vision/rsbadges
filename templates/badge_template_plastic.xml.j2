@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink" width="{{ left_width + right_width }}" height="20">
-  {% if !full_title.is_empty() %}
-  <title>{{ full_title }}</title>
+  {% if !full_badge_title.is_empty() %}
+  <badge_title>{{ full_badge_title }}</badge_title>
   {% endif %}
   <linearGradient id="{{ id_smooth }}" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
@@ -13,14 +13,14 @@
   </clipPath>
 
   <g clip-path="url(#{{ id_round }})">
-    <rect width="{{ left_width }}" height="20" fill="{{ left_color }}">
-      {% if !left_title.is_empty() %}
-      <title>{{ left_title }}</title>
+    <rect width="{{ left_width }}" height="20" fill="{{ label_color }}">
+      {% if !label_title.is_empty() %}
+      <badge_title>{{ label_title }}</badge_title>
       {% endif %}
     </rect>
-    <rect x="{{ left_width }}" width="{{ right_width }}" height="20" fill="{{ right_color }}">
-      {% if !right_title.is_empty() %}
-      <title>{{ right_title }}</title>
+    <rect x="{{ left_width }}" width="{{ right_width }}" height="20" fill="{{ msg_color }}">
+      {% if !msg_title.is_empty() %}
+      <badge_title>{{ msg_title }}</badge_title>
       {% endif %}
     </rect>
     <rect width="{{ left_width + right_width }}" height="20" fill="url(#{{ id_smooth }})"/>
@@ -30,35 +30,35 @@
     {% if !logo.is_empty() %}
     <image x="5" y="3" width="{{ logo_width }}" height="14" xlink:href="{{ logo }}"/>
     {% endif %}
-    <text aria-hidden="true" x="{{ left_text_x }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)"
-    textLength="{{ left_text_width }}" lengthAdjust="spacing">{{ left_text }}</text>
+    <text aria-hidden="true" x="{{ label_text_x }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)"
+    textLength="{{ label_text_width }}" lengthAdjust="spacing">{{ label_text }}</text>
 
-    <text x="{{ left_text_x }}" y="140" transform="scale(0.1)"
-    textLength="{{ left_text_width }}" lengthAdjust="spacing">{{ left_text }}</text>
+    <text x="{{ label_text_x }}" y="140" transform="scale(0.1)"
+    textLength="{{ label_text_width }}" lengthAdjust="spacing">{{ label_text }}</text>
 
-    <text aria-hidden="true" x="{{ right_text_x }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)"
-    textLength="{{ right_text_width }}" lengthAdjust="spacing">{{ right_text }}</text>
+    <text aria-hidden="true" x="{{ msg_text_x }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)"
+    textLength="{{ msg_text_width }}" lengthAdjust="spacing">{{ msg_text }}</text>
 
-    <text x="{{ right_text_x }}" y="140" transform="scale(0.1)"
-    textLength="{{ right_text_width }}" lengthAdjust="spacing">{{ right_text}}</text>
+    <text x="{{ msg_text_x }}" y="140" transform="scale(0.1)"
+    textLength="{{ msg_text_width }}" lengthAdjust="spacing">{{ msg_text}}</text>
 
     <!-- full link takes precedence -->
-  {% if !full_link.is_empty() %}
-    <a xlink:href="{{ full_link }}">
+  {% if !badge_link.is_empty() %}
+    <a xlink:href="{{ badge_link }}">
       <rect width="{{ left_width }}" height="20" fill="rgba(0,0,0,0)"/>
     </a>
-    <a xlink:href="{{ full_link }}">
+    <a xlink:href="{{ badge_link }}">
       <rect x="{{ left_width }}" width="{{ right_width }}" height="20" fill="rgba(0,0,0,0)"/>
     </a>
   {% else %}
     <!-- check left and right links -->
-    {% if !left_link.is_empty() %}
-      <a xlink:href="{{ left_link }}">
+    {% if !label_link.is_empty() %}
+      <a xlink:href="{{ label_link }}">
         <rect width="{{ left_width }}" height="20" fill="rgba(0,0,0,0)"/>
       </a>
     {% endif %}
-    {% if !right_link.is_empty() %}
-      <a xlink:href="{{ right_link }}">
+    {% if !msg_link.is_empty() %}
+      <a xlink:href="{{ msg_link }}">
         <rect x="{{ left_width }}" width="{{ right_width }}" height="20" fill="rgba(0,0,0,0)"/>
       </a>
     {% endif %}
