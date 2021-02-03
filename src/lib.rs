@@ -22,3 +22,5 @@
 // OF SUCH DAMAGE.
 
 mod badge;
+
+pub use badge::Badge;
