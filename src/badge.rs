@@ -77,6 +77,7 @@ fn get_text_dims(font: &Font, text: &str, font_size: f32, kerning_pix: f32) -> (
     (glyphs_width, glyphs_height)
 }
 
+#[derive(Debug)]
 pub struct Badge {
     pub label_text: String,
     pub msg_text: String,
@@ -124,8 +125,8 @@ fn color_to_string(color: css_color::Rgba) -> String {
     )
 }
 
-#[derive(Default)]
-struct DerivedInfo {
+#[derive(Default, Debug)]
+pub struct DerivedInfo {
     label_text_width: f32,
     msg_text_width: f32,
     label_total_width: f32,
