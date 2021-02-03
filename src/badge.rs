@@ -61,36 +61,15 @@ fn load_font<'a>() -> Font<'a> {
     Font::try_from_bytes(font_data as &[u8]).expect("error constructing a Font from bytes")
 }
 
-fn get_text_dims(font: &Font, text: &str) -> (usize, usize) {
-    // Desired font pixel height
-    let height: f32 = 8.0; // to get 80 chars across (fits most terminals); adjust as desired
-    let pixel_height = height.ceil() as usize;
-
-    // 2x scale in x direction to counter the aspect ratio of monospace characters.
-    let scale = Scale {
-        x: height * 1.5,
-        y: height,
-    };
-
-    // The origin of a line of text is at the baseline (roughly where
-    // non-descending letters sit). We don't want to clip the text, so we shift
-    // it down with an offset when laying it out. v_metrics.ascent is the
-    // distance between the baseline and the highest edge of any glyph in
-    // the font. That's enough to guarantee that there's no clipping.
+fn get_text_dims(font: &Font, text: &str, font_size: f32) -> (usize, usize) {
+    let scale = Scale::uniform(font_size);
+    let layout = font.layout(text, scale, point(0.0, 0.0));
+    let glyphs_width = layout.fold(0.0, |acc, x| {
+        acc + x.into_unpositioned().h_metrics().advance_width
+    });
     let v_metrics = font.v_metrics(scale);
-    let offset = point(0.0, v_metrics.ascent);
-    let glyphs: Vec<_> = font.layout(&text, scale, offset).collect();
-
-    // Find the most visually pleasing width to display
-    let width = glyphs
-        .iter()
-        .rev()
-        .map(|g| g.position().x as f32 + g.unpositioned().h_metrics().advance_width)
-        .next()
-        .unwrap_or(0.0)
-        .ceil() as usize;
-
-    (width, pixel_height)
+    let glyphs_height = (v_metrics.ascent - v_metrics.descent).ceil() as usize;
+    (glyphs_width as usize, glyphs_height)
 }
 
 pub struct Badge {
