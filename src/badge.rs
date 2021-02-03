@@ -24,8 +24,6 @@
 use askama::Template;
 use rand::{distributions::Alphanumeric, Rng};
 use rusttype::{point, Font, Scale};
-use std::env;
-use std::path::{Path, PathBuf}; // bring trait in scope // 0.8
 
 // Keep these grouped...
 #[derive(Template, Debug)]
