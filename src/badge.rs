@@ -145,31 +145,67 @@ impl Badge {
             .collect();
 
         let font = load_font();
-        let left_text_width = get_text_dims(&font, &self.left_text, 110.0).0;
-        let right_text_width = get_text_dims(&font, &self.right_text, 110.0).0;
+        let mut left_text_width = get_text_dims(&font, &self.left_text, 11.0, 0.8).0;
+        let mut right_text_width = get_text_dims(&font, &self.right_text, 11.0, 0.8).0;
+
+        // Padding and spacing calculations
         let mut logo_padding = 0.0;
         // TODO: Get logo width
         let logo_width = 0.0;
-        if self.logo.to_str().is_some() && self.left_text.is_empty() {
+        if self.logo.is_some() && self.left_text.is_empty() {
             logo_padding = 3.0;
         }
 
+        let horiz_padding = 5.0;
+        let left_text_margin = logo_width + 1.0;
+        let mut left_total_width = 0.0;
+        if !self.left_text.is_empty() {
+            left_total_width = left_text_width + (2.0 * horiz_padding) + logo_width;
+        }
+        let mut right_text_margin = left_total_width;
+        if !self.right_text.is_empty() {
+            right_text_margin -= 1.0;
+        }
+
+        if self.left_text.is_empty() {
+            if self.logo.is_some() {
+                right_text_margin += logo_width + horiz_padding;
+            } else {
+                right_text_margin += 1.0;
+            }
+        }
+
+        let mut right_total_width = right_text_width + (2.0 * horiz_padding);
+        if self.logo.is_some() && self.left_text.is_empty() {
+            right_total_width += logo_width + horiz_padding - 1.0;
+        }
+
+        let mut left_text_x = left_text_margin + (0.5 * left_text_width) + horiz_padding;
+        let mut right_text_x = right_text_margin + (0.5 * right_text_width) + horiz_padding;
+
+        // Scale back up for the SVG
+        left_text_width *= 10.0;
+        right_text_width *= 10.0;
+        left_text_x *= 10.0;
+        right_text_x *= 10.0;
+
+        // Color conversion to string
         let left_color = color_to_string(self.left_color);
         let right_color = color_to_string(self.right_color);
 
-        // These factors are scaled down by 10x on the svg side, by design.
-        let mut ltw_scaled = left_text_width / 10.0;
-        let mut rtw_scaled = right_text_width / 10.0;
-        ltw_scaled += self.left_text.len() as f32;
-        rtw_scaled += self.right_text.len() as f32;
-        let left_width = ltw_scaled + logo_width + logo_padding + 10.0;
-        let right_width = rtw_scaled + 10.0;
-        let left_text_x = ((left_width / 2.0) + logo_width + logo_padding + 1.0) as usize * 10;
-        let right_text_x = (left_width + (right_width as f32 / 2.0) - 1.0) as usize * 10;
+        // let left_width = ltw_scaled + logo_width + logo_padding + 10.0;
+        // let right_width = rtw_scaled + 10.0;
+        // let left_text_x = ((left_width / 2.0) + logo_width + logo_padding + 1.0) as usize * 10;
+        // let right_text_x = (left_width + (right_width as f32 / 2.0)) as usize * 10;
 
         let id_smooth = format!("smooth{}", id_suffix);
         let id_round = format!("round{}", id_suffix);
-        let logo_url = self.logo.to_str().unwrap();
+        let logo_url: &str;
+        if let Some(e) = &self.logo {
+            logo_url = e.to_str().unwrap();
+        } else {
+            logo_url = "";
+        }
 
         let flat_badge = BadgeTemplate {
             left_text: &self.left_text,
@@ -185,12 +221,12 @@ impl Badge {
             right_title: &self.right_title,
             logo_width: logo_width as usize,
             logo_padding: logo_padding as usize,
-            left_text_width: ltw_scaled as usize * 10,
-            right_text_width: rtw_scaled as usize * 10,
-            left_text_x,
-            right_text_x,
-            left_width: left_width as usize,
-            right_width: right_width as usize,
+            left_text_width: left_text_width as usize,
+            right_text_width: right_text_width as usize,
+            left_text_x: left_text_x as usize,
+            right_text_x: right_text_x as usize,
+            left_width: left_total_width as usize,
+            right_width: right_total_width as usize,
             id_smooth: &id_smooth,
             id_round: &id_round,
         };
