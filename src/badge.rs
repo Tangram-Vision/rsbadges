@@ -238,22 +238,64 @@ impl Badge {
 mod tests {
 
     use crate::badge::Badge;
-    use css_color::Rgba;
     use std::fs;
     use std::path::Path;
     #[test]
-    fn create_flat_badge() {
-        let left_text = String::from("version");
-        let right_text = String::from("1.2.3");
-        let left_color: Rgba = "#555".parse().unwrap();
-        let right_color: Rgba = "#007ec6".parse().unwrap();
-        let badge = Badge::new(left_text, right_text, left_color, right_color);
+    fn create_plastic_badge() {
+        let mut badge = Badge {
+            label_text: String::from("version"),
+            msg_text: String::from("1.2.3"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            ..Default::default()
+        };
 
         let ci_path = std::env::current_dir().unwrap();
 
-        let commit_svg_path = ci_path.join(Path::new("badge_commits.svg"));
-        println!("Saving commit badge to {:#?}", commit_svg_path);
-        if let Err(c) = fs::write(commit_svg_path, badge.to_flat_badge()) {
+        let svg_path = ci_path.join(Path::new("plastic_badge.svg"));
+        println!("Saving badge to {:#?}", svg_path);
+        if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
+            println!("ERROR: Could not save badge_commits: {}", c);
+        }
+    }
+
+    #[test]
+    fn create_plastic_badge_with_badge_link() {
+        let mut badge = Badge {
+            label_text: String::from("version"),
+            msg_text: String::from("1.2.3"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            badge_link: String::from("http://www.tangramvision.com"),
+            ..Default::default()
+        };
+
+        let ci_path = std::env::current_dir().unwrap();
+
+        let svg_path = ci_path.join(Path::new("plastic_badge_link.svg"));
+        println!("Saving badge to {:#?}", svg_path);
+        if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
+            println!("ERROR: Could not save badge_commits: {}", c);
+        }
+    }
+
+    #[test]
+    fn create_plastic_badge_with_label_msg_links() {
+        let mut badge = Badge {
+            label_text: String::from("version"),
+            msg_text: String::from("1.2.3"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            label_link: String::from("http://www.tangramvision.com"),
+            msg_link: String::from("http://www.google.com"),
+            ..Default::default()
+        };
+
+        let ci_path = std::env::current_dir().unwrap();
+
+        let svg_path = ci_path.join(Path::new("plastic_badge_two_link.svg"));
+        println!("Saving badge to {:#?}", svg_path);
+        if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
             println!("ERROR: Could not save badge_commits: {}", c);
         }
     }
