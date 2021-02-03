@@ -22,130 +22,155 @@
 // OF SUCH DAMAGE.
 
 use getopts::Options;
+use rsbadges::Badge;
 use std::env;
-use std::process::Command; // For git stuff
 
-fn parse_project_dir_from_args() -> Result<String, String> {
+fn parse_project_dir_from_args() -> Result<Badge, String> {
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
 
     let mut opts = Options::new();
     // Required Args
-    opts.reqopt(
-        "l",
-        "left-text",
+    opts.optopt(
+        "",
+        "label",
         "the text to show on the left side of the badge",
         "build",
     );
-    opts.reqopt(
-        "r",
-        "right-text",
+    opts.optopt(
+        "",
+        "msg",
         "the text to show on the right side of the badge",
         "passed",
     );
-    opts.reqopt(
-        "lcol",
-        "left-color",
-        "the background color of the left side of the badge",
-        "#555555",
-    );
-    opts.reqopt(
-        "rcol",
-        "right-color",
-        "the background color of the right side of the badge",
-        "#00ff00",
-    );
-
-    // Optional Args
     opts.optopt(
-        "link",
-        "link",
+        "",
+        "label-color",
+        "the background color of the left side of the badge",
+        "#555",
+    );
+    opts.optopt(
+        "",
+        "msg-color",
+        "the background color of the right side of the badge",
+        "#007ec6",
+    );
+    opts.optopt(
+        "",
+        "badge-link",
         "the url to redirect to when the badge is clicked",
         "",
     );
     opts.optopt(
-        "ll",
-        "left-link",
+        "",
+        "label-link",
         "the url to redirect to when the left side of the badge is clicked",
         "",
     );
     opts.optopt(
-        "rl",
-        "right-link",
+        "",
+        "msg-link",
         "the url to redirect to when the right side of the badge is clicked",
         "",
     );
     opts.optopt(
-        "logo",
+        "",
         "logo",
         "a URI reference to a logo to display in the badge",
         "",
     );
     opts.optopt(
-        "el",
+        "",
         "embed-logo",
         "if the logo is specified then include the image data directly
         in the badge (this will prevent a URL fetch and may work around
              the fact that some open_in_browsers do not fetch external image
              references); only works if --logo is a HTTP/HTTPS URI or a file path",
-        "",
+        "false",
     );
     opts.optopt(
-        "t",
+        "",
         "badge_title",
-        "the badge_title to associate with the entire badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
+        "the badge title to associate with the entire badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
         "",
     );
     opts.optopt(
-        "lt",
-        "left-badge_title",
-        "the badge_title to associate with the left side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
+        "",
+        "label-title",
+        "the badge title to associate with the left side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
         "",
     );
     opts.optopt(
-        "rt",
-        "right-badge_title",
-        "the badge_title to associate with the right side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
+        "",
+        "msg-title",
+        "the badge title to associate with the right side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
         "",
     );
-    opts.optopt(
-        "open_in_browser",
-        "open_in_browser",
-        "display the badge in a open_in_browser tab",
-        "",
-    );
+    opts.optflag("", "open-in-browser", "display the badge in a browser tab");
+    opts.optflag("h", "help", "print arguments to console");
 
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
         Err(f) => return Err(f.to_string()),
     };
 
-    let label_text = match_arg("l", &matches, &program, &opts);
-    let msg_text = match_arg("r", &matches, &program, &opts);
+    if matches.opt_present("h") {
+        let brief = format!("Usage: {} FILE [options]", program);
+        println!("{}", opts.usage(&brief));
+        std::process::exit(1);
+    }
 
-    // Tricky: Grab the color
-    // We have to use
-    // `color_str.parse::<css_color::Rgba>()?;`
-    let label_color_arg = match_arg("lcol", &matches, &program, &opts);
-    let msg_color_arg = match_arg("rcol", &matches, &program, &opts);
-    // first to make sure that the color passed is valid.
+    // Get the default Badge settings
+    let badge_default = Badge::default();
 
-    Ok(String::from(""))
+    let label_text = match matches.opt_str("label") {
+        Some(val) => val,
+        None => badge_default.label_text,
+    };
+    let msg_text = match matches.opt_str("msg") {
+        Some(val) => val,
+        None => badge_default.msg_text,
+    };
+    let label_color = match matches.opt_str("label-color") {
+        Some(val) => match val.parse::<css_color::Rgba>() {
+            Ok(color) => color,
+            Err(_) => {
+                return Err(format!(
+                    "Could not parse label-color argument; {} is not a valid CSS color.",
+                    val
+                ));
+            }
+        },
+        None => badge_default.label_color,
+    };
+    let msg_color = match matches.opt_str("msg-color") {
+        Some(val) => match val.parse() {
+            Ok(color) => color,
+            Err(_) => {
+                return Err(format!(
+                    "Could not parse msg-color argument; {} is not a valid CSS color.",
+                    val
+                ));
+            }
+        },
+        None => badge_default.msg_color,
+    };
+
+    let badge = Badge {
+        label_text,
+        msg_text,
+        label_color,
+        msg_color,
+        ..Default::default()
+    };
+
+    println!("{:#?}", badge);
+    Ok(badge)
 }
 
-fn match_arg(
-    arg: &str,
-    matches: &getopts::Matches,
-    program: &str,
-    opts: &getopts::Options,
-) -> Result<String, String> {
-    match matches.opt_str(&arg) {
-        Some(d) => Ok(d),
-        None => {
-            let brief = format!("Usage: {} FILE [options]", program);
-            return Err(opts.usage(&brief));
-        }
+fn main() {
+    if let Err(e) = parse_project_dir_from_args() {
+        println!("{}", e);
+        std::process::exit(1);
     }
 }
-
-fn main() {}
