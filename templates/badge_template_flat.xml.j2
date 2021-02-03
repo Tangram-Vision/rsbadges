@@ -30,10 +30,17 @@
     {% if !logo.is_empty() %}
     <image x="5" y="3" width="{{ logo_width }}" height="14" xlink:href="{{ logo }}"/>
     {% endif %}
-    <text x="{{ (((left_width+logo_width+logo_padding)/2)+1)*10 }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{ (left_width-(10+logo_width+logo_padding))*10 }}" lengthAdjust="spacing">{{ left_text }}</text>
-    <text x="{{ (((left_width+logo_width+logo_padding)/2)+1)*10 }}" y="140" transform="scale(0.1)" textLength="{{ (left_width-(10+logo_width+logo_padding))*10 }}" lengthAdjust="spacing">{{ left_text }}</text>
-    <text x="{{ (left_width+right_width/2-1)*10 }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{ (right_width-10)*10 }}" lengthAdjust="spacing">{{ right_text }}</text>
-    <text x="{{ (left_width+right_width/2-1)*10 }}" y="140" transform="scale(0.1)" textLength="{{ (right_width-10)*10 }}" lengthAdjust="spacing">{{ right_text}}</text>
+    <text x="{{ left_text_x }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)"
+    textLength="{{ left_text_width }}" lengthAdjust="spacing">{{ left_text }}</text>
+
+    <text x="{{ left_text_x }}" y="140" transform="scale(0.1)"
+    textLength="{{ left_text_width }}" lengthAdjust="spacing">{{ left_text }}</text>
+
+    <text x="{{ right_text_x }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)"
+    textLength="{{ right_text_width }}" lengthAdjust="spacing">{{ right_text }}</text>
+
+    <text x="{{ right_text_x }}" y="140" transform="scale(0.1)"
+    textLength="{{ right_text_width }}" lengthAdjust="spacing">{{ right_text}}</text>
 
     <!-- full link takes precedence -->
   {% if !full_link.is_empty() %}
