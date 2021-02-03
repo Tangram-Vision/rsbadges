@@ -61,15 +61,15 @@ fn load_font<'a>() -> Font<'a> {
     Font::try_from_bytes(font_data as &[u8]).expect("error constructing a Font from bytes")
 }
 
-fn get_text_dims(font: &Font, text: &str, font_size: f32) -> (usize, usize) {
+fn get_text_dims(font: &Font, text: &str, font_size: f32) -> (f32, f32) {
     let scale = Scale::uniform(font_size);
     let layout = font.layout(text, scale, point(0.0, 0.0));
     let glyphs_width = layout.fold(0.0, |acc, x| {
         acc + x.into_unpositioned().h_metrics().advance_width
     });
     let v_metrics = font.v_metrics(scale);
-    let glyphs_height = (v_metrics.ascent - v_metrics.descent).ceil() as usize;
-    (glyphs_width as usize, glyphs_height)
+    let glyphs_height = (v_metrics.ascent - v_metrics.descent).ceil();
+    (glyphs_width, glyphs_height)
 }
 
 pub struct Badge {
@@ -142,33 +142,28 @@ impl Badge {
         let font = load_font();
         let left_text_width = get_text_dims(&font, &self.left_text, 110.0).0;
         let right_text_width = get_text_dims(&font, &self.right_text, 110.0).0;
-        let mut logo_padding = 0;
+        let mut logo_padding = 0.0;
+        // TODO: Get logo width
+        let logo_width = 0.0;
         if self.logo.to_str().is_some() && self.left_text.is_empty() {
-            logo_padding = 3;
+            logo_padding = 3.0;
         }
 
-        let badge_d = BadgeDerived {
-            id_suffix,
-            logo_width: 0,
-            logo_padding,
-            left_text_width,
-            right_text_width,
-            left_color: color_to_string(self.left_color),
-            right_color: color_to_string(self.right_color),
-        };
+        let left_color = color_to_string(self.left_color);
+        let right_color = color_to_string(self.right_color);
 
         // These factors are scaled down by 10x on the svg side, by design.
-        let mut ltw_scaled = badge_d.left_text_width / 10;
-        let mut rtw_scaled = badge_d.right_text_width / 10;
-        ltw_scaled += (self.left_text.len() as f32 / 2.0) as usize;
-        rtw_scaled += (self.right_text.len() as f32 / 2.0) as usize;
-        let left_width = ltw_scaled + badge_d.logo_width + badge_d.logo_padding + 10;
-        let right_width = rtw_scaled + 10;
-        let left_text_x = ((left_width / 2) + badge_d.logo_width + badge_d.logo_padding) * 10;
-        let right_text_x = (left_width + (right_width / 2)) * 10;
+        let mut ltw_scaled = left_text_width / 10.0;
+        let mut rtw_scaled = right_text_width / 10.0;
+        ltw_scaled += self.left_text.len() as f32;
+        rtw_scaled += self.right_text.len() as f32;
+        let left_width = ltw_scaled + logo_width + logo_padding + 10.0;
+        let right_width = rtw_scaled + 10.0;
+        let left_text_x = ((left_width / 2.0) + logo_width + logo_padding + 1.0) as usize * 10;
+        let right_text_x = (left_width + (right_width as f32 / 2.0) - 1.0) as usize * 10;
 
-        let id_smooth = format!("smooth{}", badge_d.id_suffix);
-        let id_round = format!("round{}", badge_d.id_suffix);
+        let id_smooth = format!("smooth{}", id_suffix);
+        let id_round = format!("round{}", id_suffix);
         let logo_url = self.logo.to_str().unwrap();
 
         let flat_badge = BadgeTemplate {
@@ -177,20 +172,20 @@ impl Badge {
             full_link: &self.link,
             left_link: &self.left_link,
             right_link: &self.right_link,
-            left_color: &badge_d.left_color,
-            right_color: &badge_d.right_color,
+            left_color: &left_color,
+            right_color: &right_color,
             logo: logo_url,
             full_title: &self.title,
             left_title: &self.left_title,
             right_title: &self.right_title,
-            logo_width: badge_d.logo_width,
-            logo_padding: badge_d.logo_padding,
-            left_text_width: ltw_scaled * 10,
-            right_text_width: rtw_scaled * 10,
+            logo_width: logo_width as usize,
+            logo_padding: logo_padding as usize,
+            left_text_width: ltw_scaled as usize * 10,
+            right_text_width: rtw_scaled as usize * 10,
             left_text_x,
             right_text_x,
-            left_width,
-            right_width,
+            left_width: left_width as usize,
+            right_width: right_width as usize,
             id_smooth: &id_smooth,
             id_round: &id_round,
         };
