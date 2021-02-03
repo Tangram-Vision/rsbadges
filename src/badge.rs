@@ -204,8 +204,8 @@ mod tests {
     use std::path::Path;
     #[test]
     fn create_flat_badge() {
-        let left_text = String::from("test");
-        let right_text = String::from("test");
+        let left_text = String::from("version");
+        let right_text = String::from("1.2.3");
         let left_color: Rgba = "#555".parse().unwrap();
         let right_color: Rgba = "#007ec6".parse().unwrap();
         let badge = Badge::new(left_text, right_text, left_color, right_color);
