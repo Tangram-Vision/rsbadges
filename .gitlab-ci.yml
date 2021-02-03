@@ -1,0 +1,53 @@
+# CONFIGURATION
+image: 'rust:latest'
+
+stages:
+  - test
+  - doc
+
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/cargo
+
+##### ########## ########## ########## ########## #####
+# TEST STAGE
+# - [PASS REQ] runs all unit tests in the build
+# - [PASS REQ] runs a lint checker over every piece of code
+test:
+  stage: test
+  script:
+    - rustc --version
+    - cargo --version
+    - cargo test --verbose
+
+lint:
+  stage: test
+  script:
+    - rustc --version
+    - cargo --version
+    - cargo clippy --all-targets --all-features -- -D warnings
+
+##### ########## ########## ########## ########## #####
+# DOC STAGE
+# - [PASS OPT] checks for documentation on all relevant pieces of code
+# - [PASS REQ] creates documentation pages
+doc-check:
+  stage: doc
+  script:
+    - cargo clippy --all-targets --all-features -- -A clippy::all -D clippy::missing_docs_in_private_items
+  allow_failure: true
+
+pages:
+  stage: doc
+  # Run this at the same time as test and lint jobs
+  # https://docs.gitlab.com/ee/ci/yaml/#needs
+  needs: []
+  script:
+    - cargo doc --no-deps --document-private-items
+    - mkdir public
+    - cp -r target/doc/* public
+    - LOWERCASE_PROJECT_NAME=$(echo $CI_PROJECT_NAME | awk '{print tolower($0)}') && echo "<meta http-equiv=refresh content=0;url=$LOWERCASE_PROJECT_NAME>" > public/index.html
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
