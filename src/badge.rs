@@ -191,16 +191,6 @@ impl Badge {
     }
 }
 
-struct BadgeDerived {
-    id_suffix: String,
-    logo_width: usize,
-    logo_padding: usize,
-    left_text_width: usize,
-    right_text_width: usize,
-    left_color: String,
-    right_color: String,
-}
-
 fn color_to_string(color: css_color::Rgba) -> String {
     format!(
         "rgb({}, {}, {})",
