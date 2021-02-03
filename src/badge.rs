@@ -99,6 +99,15 @@ impl Default for Badge {
     }
 }
 
+fn color_to_string(color: css_color::Rgba) -> String {
+    format!(
+        "rgb({}, {}, {})",
+        color.red * 255.0,
+        color.green * 255.0,
+        color.blue * 255.0
+    )
+}
+
 impl Badge {
     pub fn new(
         left_text: String,
@@ -189,15 +198,6 @@ impl Badge {
 
         flat_badge.render().unwrap()
     }
-}
-
-fn color_to_string(color: css_color::Rgba) -> String {
-    format!(
-        "rgb({}, {}, {})",
-        color.red * 255.0,
-        color.green * 255.0,
-        color.blue * 255.0
-    )
 }
 
 #[cfg(test)]
