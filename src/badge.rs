@@ -28,7 +28,7 @@ use std::env;
 use std::path::{Path, PathBuf}; // bring trait in scope // 0.8
 
 // Keep these grouped...
-#[derive(Template)]
+#[derive(Template, Debug)]
 #[template(path = "badge_template_flat.xml.j2", escape = "xml")]
 struct BadgeTemplate<'a> {
     left_text: &'a str,
