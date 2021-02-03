@@ -77,7 +77,7 @@ fn get_text_dims(font: &Font, text: &str, font_size: f32, kerning_pix: f32) -> (
     (glyphs_width, glyphs_height)
 }
 
-struct Badge {
+pub struct Badge {
     pub label_text: String,
     pub msg_text: String,
     pub badge_link: String,
