@@ -131,8 +131,8 @@ impl Badge {
             .collect();
 
         let font = load_font();
-        let left_text_width = get_text_dims(&font, &self.left_text).0;
-        let right_text_width = get_text_dims(&font, &self.right_text).0;
+        let left_text_width = get_text_dims(&font, &self.left_text, 110.0).0;
+        let right_text_width = get_text_dims(&font, &self.right_text, 110.0).0;
         let mut logo_padding = 0;
         if self.logo.to_str().is_some() && self.left_text.is_empty() {
             logo_padding = 3;
@@ -148,8 +148,16 @@ impl Badge {
             right_color: color_to_string(self.right_color),
         };
 
-        let left_width = badge_d.left_text_width + 10 + badge_d.logo_width + badge_d.logo_padding;
-        let right_width = badge_d.right_text_width + 10;
+        // These factors are scaled down by 10x on the svg side, by design.
+        let mut ltw_scaled = badge_d.left_text_width / 10;
+        let mut rtw_scaled = badge_d.right_text_width / 10;
+        ltw_scaled += (self.left_text.len() as f32 / 2.0) as usize;
+        rtw_scaled += (self.right_text.len() as f32 / 2.0) as usize;
+        let left_width = ltw_scaled + badge_d.logo_width + badge_d.logo_padding + 10;
+        let right_width = rtw_scaled + 10;
+        let left_text_x = ((left_width / 2) + badge_d.logo_width + badge_d.logo_padding) * 10;
+        let right_text_x = (left_width + (right_width / 2)) * 10;
+
         let id_smooth = format!("smooth{}", badge_d.id_suffix);
         let id_round = format!("round{}", badge_d.id_suffix);
         let logo_url = self.logo.to_str().unwrap();
@@ -168,11 +176,16 @@ impl Badge {
             right_title: &self.right_title,
             logo_width: badge_d.logo_width,
             logo_padding: badge_d.logo_padding,
+            left_text_width: ltw_scaled * 10,
+            right_text_width: rtw_scaled * 10,
+            left_text_x,
+            right_text_x,
             left_width,
             right_width,
             id_smooth: &id_smooth,
             id_round: &id_round,
         };
+        println!("{:#?}", flat_badge);
 
         flat_badge.render().unwrap()
     }
