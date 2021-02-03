@@ -86,32 +86,32 @@ fn parse_project_dir_from_args() -> Result<String, String> {
         "embed-logo",
         "if the logo is specified then include the image data directly
         in the badge (this will prevent a URL fetch and may work around
-             the fact that some browsers do not fetch external image
+             the fact that some open_in_browsers do not fetch external image
              references); only works if --logo is a HTTP/HTTPS URI or a file path",
         "",
     );
     opts.optopt(
         "t",
-        "title",
-        "the title to associate with the entire badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/title",
+        "badge_title",
+        "the badge_title to associate with the entire badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
         "",
     );
     opts.optopt(
         "lt",
-        "left-title",
-        "the title to associate with the left side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/title",
+        "left-badge_title",
+        "the badge_title to associate with the left side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
         "",
     );
     opts.optopt(
         "rt",
-        "right-title",
-        "the title to associate with the right side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/title",
+        "right-badge_title",
+        "the badge_title to associate with the right side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
         "",
     );
     opts.optopt(
-        "browser",
-        "browser",
-        "display the badge in a browser tab",
+        "open_in_browser",
+        "open_in_browser",
+        "display the badge in a open_in_browser tab",
         "",
     );
 
@@ -120,14 +120,14 @@ fn parse_project_dir_from_args() -> Result<String, String> {
         Err(f) => return Err(f.to_string()),
     };
 
-    let left_text = match_arg("l", &matches, &program, &opts);
-    let right_text = match_arg("r", &matches, &program, &opts);
+    let label_text = match_arg("l", &matches, &program, &opts);
+    let msg_text = match_arg("r", &matches, &program, &opts);
 
     // Tricky: Grab the color
     // We have to use
     // `color_str.parse::<css_color::Rgba>()?;`
-    let left_color_arg = match_arg("lcol", &matches, &program, &opts);
-    let right_color_arg = match_arg("rcol", &matches, &program, &opts);
+    let label_color_arg = match_arg("lcol", &matches, &program, &opts);
+    let msg_color_arg = match_arg("rcol", &matches, &program, &opts);
     // first to make sure that the color passed is valid.
 
     Ok(String::from(""))
