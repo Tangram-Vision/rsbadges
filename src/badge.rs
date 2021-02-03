@@ -90,7 +90,7 @@ pub struct Badge {
     pub label_title: String,
     pub msg_title: String,
     pub open_in_browser: bool,
-    derived_info: DerivedInfo,
+    pub derived_info: DerivedInfo,
 }
 
 impl<'a> Default for Badge {
