@@ -21,7 +21,7 @@ test:
 
 lint:
   stage: test
-    before_script:
+  before_script:
     - rustup component add clippy
   script:
     - rustc --version
@@ -34,7 +34,7 @@ lint:
 # - [PASS REQ] creates documentation pages
 doc-check:
   stage: doc
-    before_script:
+  before_script:
     - rustup component add clippy
   script:
     - cargo clippy --all-targets --all-features -- -A clippy::all -D clippy::missing_docs_in_private_items
