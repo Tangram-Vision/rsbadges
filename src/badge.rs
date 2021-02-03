@@ -24,6 +24,7 @@
 use askama::Template;
 use rand::{distributions::Alphanumeric, Rng};
 use rusttype::{point, Font, Scale};
+use unicode_normalization::UnicodeNormalization;
 
 // Keep these grouped...
 #[derive(Template, Debug)]
@@ -141,6 +142,10 @@ impl Badge {
     fn derive_construction_info(&mut self) {
         let mut derived_info = DerivedInfo::default();
 
+        // Normalize text
+        self.label_text = self.label_text.nfc().collect::<String>();
+        self.msg_text = self.msg_text.nfc().collect::<String>();
+
         let font = load_font();
         derived_info.label_text_width = get_text_dims(&font, &self.label_text, 11.0, 0.8).0;
         derived_info.msg_text_width = get_text_dims(&font, &self.msg_text, 11.0, 0.8).0;
@@ -252,6 +257,44 @@ mod tests {
         let ci_path = std::env::current_dir().unwrap();
 
         let svg_path = ci_path.join(Path::new("plastic_badge.svg"));
+        println!("Saving badge to {:#?}", svg_path);
+        if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
+            println!("ERROR: Could not save badge_commits: {}", c);
+        }
+    }
+
+    #[test]
+    fn create_plastic_badge_mandarin() {
+        let mut badge = Badge {
+            label_text: String::from("版"),
+            msg_text: String::from("不知道"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            ..Default::default()
+        };
+
+        let ci_path = std::env::current_dir().unwrap();
+
+        let svg_path = ci_path.join(Path::new("plastic_badge_mandarin.svg"));
+        println!("Saving badge to {:#?}", svg_path);
+        if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
+            println!("ERROR: Could not save badge_commits: {}", c);
+        }
+    }
+
+    #[test]
+    fn create_plastic_badge_metal() {
+        let mut badge = Badge {
+            label_text: String::from("röck döts"),
+            msg_text: String::from("metal"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            ..Default::default()
+        };
+
+        let ci_path = std::env::current_dir().unwrap();
+
+        let svg_path = ci_path.join(Path::new("plastic_badge_metal.svg"));
         println!("Saving badge to {:#?}", svg_path);
         if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
             println!("ERROR: Could not save badge_commits: {}", c);
