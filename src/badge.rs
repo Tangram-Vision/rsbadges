@@ -182,12 +182,11 @@ fn color_to_string(color: css_color::Rgba) -> String {
     )
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 enum Flavor {
     Plastic,
     Flat,
     FlatSquare,
-    Social,
     ForTheBadge,
 }
 
