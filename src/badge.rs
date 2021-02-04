@@ -212,23 +212,32 @@ impl Badge {
         let mut derived_info = DerivedInfo::default();
 
         // Normalize text
-        self.label_text = self.label_text.nfc().collect::<String>();
-        self.msg_text = self.msg_text.nfc().collect::<String>();
-
-        let font = load_font();
-        derived_info.label_text_width = get_text_dims(&font, &self.label_text, 11.0, 0.8).0;
-        derived_info.msg_text_width = get_text_dims(&font, &self.msg_text, 11.0, 0.8).0;
+        let font = load_regular_font();
+        let bold_font = load_bold_font();
+        if flavor == Flavor::ForTheBadge {
+            self.label_text = self.label_text.to_uppercase();
+            self.msg_text = self.msg_text.to_uppercase();
+            derived_info.label_text_width = get_text_dims(&font, &self.label_text, 10.0, 0.8).0;
+            derived_info.msg_text_width = get_text_dims(&bold_font, &self.msg_text, 10.0, 0.8).0;
+        } else {
+            derived_info.label_text_width = get_text_dims(&font, &self.label_text, 11.0, 0.8).0;
+            derived_info.msg_text_width = get_text_dims(&font, &self.msg_text, 11.0, 0.8).0;
+        }
 
         // Padding and spacing calculations
-        let horiz_padding = 5.0;
+        let horiz_padding = match flavor {
+            Flavor::ForTheBadge => 9.0,
+            _ => 5.0,
+        };
         derived_info.badge_height = match flavor {
             Flavor::ForTheBadge => 28.0,
             Flavor::Plastic => 18.0,
             Flavor::Flat => 20.0,
             Flavor::FlatSquare => 20.0,
-            Flavor::Social => 20.0,
+            // Flavor::Social => 20.0,
         };
 
+        // Logo padding and width
         let mut total_logo_width = 0.0;
         derived_info.logo_width = 0.0;
         derived_info.logo_padding = 0.0;
@@ -243,34 +252,84 @@ impl Badge {
             total_logo_width = derived_info.logo_width + derived_info.logo_padding;
         }
 
-        let label_text_margin = total_logo_width + 1.0;
-        derived_info.label_total_width = 0.0;
-        if !self.label_text.is_empty() {
-            derived_info.label_total_width =
-                derived_info.label_text_width + (2.0 * horiz_padding) + total_logo_width;
-        }
-        let mut msg_text_margin = derived_info.label_total_width;
-        if !self.msg_text.is_empty() {
-            msg_text_margin -= 1.0;
-        }
+        if flavor == Flavor::ForTheBadge {
+            // TODO: Complete for ForTheBadge
+            // // Label padding and width
+            // derived_info.label_total_width = derived_info.label_text_width + 10.0;
+            // if !self.label_text.is_empty() {
+            //     derived_info.label_total_width += 10.0 + (2.0 * self.label_text.len() as f32);
+            // } else if !self.logo.is_empty() {
+            //     if !self.label_text.is_empty() {
+            //         derived_info.label_total_width += 7.0;
+            //     } else {
+            //         derived_info.label_total_width -= 7.0;
+            //     }
+            // } else {
+            //     derived_info.label_total_width -= 11.0;
+            // }
 
-        if self.label_text.is_empty() {
-            if !self.logo.is_empty() {
-                msg_text_margin += derived_info.logo_width + horiz_padding;
-            } else {
-                msg_text_margin += 1.0;
+            // derived_info.label_text_x = (derived_info.label_total_width + total_logo_width) / 2.0;
+            // derived_info.label_text_width =
+            //     derived_info.label_total_width - (24.0 + total_logo_width);
+
+            // // Message padding and width
+            // derived_info.msg_total_width = derived_info.msg_text_width * 1.5 + 20.0;
+            // let left_width = 0;
+            // let
+
+            // let mut msg_text_margin = derived_info.label_total_width;
+            // if !self.msg_text.is_empty() {
+            //     msg_text_margin -= 1.0;
+            // }
+
+            // if self.label_text.is_empty() {
+            //     if !self.logo.is_empty() {
+            //         msg_text_margin += derived_info.logo_width + horiz_padding;
+            //     } else {
+            //         msg_text_margin += 1.0;
+            //     }
+            // }
+
+            // derived_info.msg_total_width = derived_info.msg_text_width + (2.0 * horiz_padding);
+            // if !self.logo.is_empty() && self.label_text.is_empty() {
+            //     derived_info.msg_total_width += derived_info.logo_width + horiz_padding - 1.0;
+            // }
+
+            // derived_info.msg_text_x =
+            //     msg_text_margin + (0.5 * derived_info.msg_text_width) + horiz_padding;
+        } else {
+            // Label padding and width
+            let label_text_margin = total_logo_width + 1.0;
+            derived_info.label_total_width = 0.0;
+            if !self.label_text.is_empty() {
+                derived_info.label_total_width =
+                    derived_info.label_text_width + (2.0 * horiz_padding) + total_logo_width;
             }
-        }
+            derived_info.label_text_x =
+                label_text_margin + (0.5 * derived_info.label_text_width) + horiz_padding;
 
-        derived_info.msg_total_width = derived_info.msg_text_width + (2.0 * horiz_padding);
-        if !self.logo.is_empty() && self.label_text.is_empty() {
-            derived_info.msg_total_width += derived_info.logo_width + horiz_padding - 1.0;
-        }
+            // Message padding and width
+            let mut msg_text_margin = derived_info.label_total_width;
+            if !self.msg_text.is_empty() {
+                msg_text_margin -= 1.0;
+            }
 
-        derived_info.label_text_x =
-            label_text_margin + (0.5 * derived_info.label_text_width) + horiz_padding;
-        derived_info.msg_text_x =
-            msg_text_margin + (0.5 * derived_info.msg_text_width) + horiz_padding;
+            if self.label_text.is_empty() {
+                if !self.logo.is_empty() {
+                    msg_text_margin += derived_info.logo_width + horiz_padding;
+                } else {
+                    msg_text_margin += 1.0;
+                }
+            }
+
+            derived_info.msg_total_width = derived_info.msg_text_width + (2.0 * horiz_padding);
+            if !self.logo.is_empty() && self.label_text.is_empty() {
+                derived_info.msg_total_width += derived_info.logo_width + horiz_padding - 1.0;
+            }
+
+            derived_info.msg_text_x =
+                msg_text_margin + (0.5 * derived_info.msg_text_width) + horiz_padding;
+        }
 
         // Scale back up for the SVG
         derived_info.label_text_width *= 10.0;
