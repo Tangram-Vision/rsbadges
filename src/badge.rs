@@ -79,9 +79,32 @@ struct BadgeTemplatePlastic<'a> {
     id_round: &'a str,
 }
 
+#[derive(Template, Debug)]
+#[template(path = "badge_template_flat_square.xml", escape = "xml")]
+struct BadgeTemplateFlatSquare<'a> {
+    label_text: &'a str,
+    msg_text: &'a str,
+    badge_link: &'a str,
+    label_link: &'a str,
+    msg_link: &'a str,
+    label_color: &'a str,
+    msg_color: &'a str,
+    logo: &'a str,
+    full_badge_title: &'a str,
+    label_title: &'a str,
+    msg_title: &'a str,
+    logo_width: usize,
+    logo_padding: usize,
+    label_text_width: usize,
+    msg_text_width: usize,
+    label_text_x: usize,
+    msg_text_x: usize,
+    left_width: usize,
+    right_width: usize,
+}
+
 // Docs: https://gitlab.redox-os.org/redox-os/rusttype/-/blob/master/dev/examples/ascii.rs
 fn load_font<'a>() -> Font<'a> {
-    // TODO: Deal with this
     let font_data = include_bytes!("../fonts/DejaVuSans.ttf");
     Font::try_from_bytes(font_data as &[u8]).expect("error constructing a Font from bytes")
 }
@@ -298,6 +321,33 @@ impl Badge {
 
         plastic_badge.render().unwrap()
     }
+
+    pub fn generate_flat_square_svg(&mut self) -> String {
+        self.derive_construction_info();
+        let flat_square_badge = BadgeTemplateFlatSquare {
+            label_text: &self.label_text,
+            msg_text: &self.msg_text,
+            badge_link: &self.badge_link,
+            label_link: &self.label_link,
+            msg_link: &self.msg_link,
+            label_color: &self.derived_info.label_color,
+            msg_color: &self.derived_info.msg_color,
+            logo: &self.logo,
+            full_badge_title: &self.badge_title,
+            label_title: &self.label_title,
+            msg_title: &self.msg_title,
+            logo_width: self.derived_info.logo_width as usize,
+            logo_padding: self.derived_info.logo_padding as usize,
+            label_text_width: self.derived_info.label_text_width as usize,
+            msg_text_width: self.derived_info.msg_text_width as usize,
+            label_text_x: self.derived_info.label_text_x as usize,
+            msg_text_x: self.derived_info.msg_text_x as usize,
+            left_width: self.derived_info.label_total_width as usize,
+            right_width: self.derived_info.msg_total_width as usize,
+        };
+
+        flat_square_badge.render().unwrap()
+    }
 }
 
 #[cfg(test)]
@@ -340,6 +390,25 @@ mod tests {
         let svg_path = ci_path.join(Path::new("plastic_badge.svg"));
         println!("Saving badge to {:#?}", svg_path);
         if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
+            println!("ERROR: Could not save badge: {}", c);
+        }
+    }
+
+    #[test]
+    fn create_flat_square_badge() {
+        let mut badge = Badge {
+            label_text: String::from("version"),
+            msg_text: String::from("1.2.3"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            ..Default::default()
+        };
+
+        let ci_path = std::env::temp_dir();
+
+        let svg_path = ci_path.join(Path::new("flat_square_badge.svg"));
+        println!("Saving badge to {:#?}", svg_path);
+        if let Err(c) = fs::write(svg_path, badge.generate_flat_square_svg()) {
             println!("ERROR: Could not save badge: {}", c);
         }
     }
