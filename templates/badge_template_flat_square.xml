@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink" width="{{ left_width + right_width }}" height="20" role="img" aria-label="style: flat-square">
+    xmlns:xlink="http://www.w3.org/1999/xlink" width="{{ left_width + right_width }}" height="{{ badge_height }}" role="img" aria-label="style: flat-square">
   {% if !full_badge_title.is_empty() %}
     <badge_title>{{ full_badge_title }}</badge_title>
   {% endif %}
 
     <g shape-rendering="crispEdges">
-        <rect width="{{ left_width }}" height="20" fill="{{ label_color }}">
+        <rect width="{{ left_width }}" height="{{ badge_height }}" fill="{{ label_color }}">
       {% if !label_title.is_empty() %}
             <badge_title>{{ label_title }}</badge_title>
       {% endif %}
         </rect>
-        <rect x="{{ left_width }}" width="{{ right_width }}" height="20" fill="{{ msg_color }}">
+        <rect x="{{ left_width }}" width="{{ right_width }}" height="{{ badge_height }}" fill="{{ msg_color }}">
       {% if !msg_title.is_empty() %}
             <badge_title>{{ msg_title }}</badge_title>
       {% endif %}
@@ -26,20 +26,20 @@
 
   {% if !badge_link.is_empty() %}
         <a xlink:href="{{ badge_link }}">
-            <rect width="{{ left_width }}" height="20" fill="rgba(0,0,0,0)"/>
+            <rect width="{{ left_width }}" height="{{ badge_height }}" fill="rgba(0,0,0,0)"/>
         </a>
         <a xlink:href="{{ badge_link }}">
-            <rect x="{{ left_width }}" width="{{ right_width }}" height="20" fill="rgba(0,0,0,0)"/>
+            <rect x="{{ left_width }}" width="{{ right_width }}" height="{{ badge_height }}" fill="rgba(0,0,0,0)"/>
         </a>
   {% else %}
     {% if !label_link.is_empty() %}
         <a xlink:href="{{ label_link }}">
-            <rect width="{{ left_width }}" height="20" fill="rgba(0,0,0,0)"/>
+            <rect width="{{ left_width }}" height="{{ badge_height }}" fill="rgba(0,0,0,0)"/>
         </a>
     {% endif %}
     {% if !msg_link.is_empty() %}
         <a xlink:href="{{ msg_link }}">
-            <rect x="{{ left_width }}" width="{{ right_width }}" height="20" fill="rgba(0,0,0,0)"/>
+            <rect x="{{ left_width }}" width="{{ right_width }}" height="{{ badge_height }}" fill="rgba(0,0,0,0)"/>
         </a>
     {% endif %}
   {% endif %}
