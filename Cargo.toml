@@ -1,14 +1,15 @@
 [package]
+authors = ["Brandon Minor <brandon@tangramvision.com>"]
+edition = "2018"
 name = "rsbadges"
 version = "0.1.0"
-authors = ["Brandon Minor <gallimatrix@gmail.com>"]
-edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+askama = "0.10"
 css-color = "0.1"
 getopts = "0.2"
-askama = "0.10"
 rand = "0.8"
 rusttype = "0.9"
+unicode-normalization = "0.1"

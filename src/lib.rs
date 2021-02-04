@@ -23,30 +23,4 @@
 
 mod badge;
 
-use badge::Badge;
-
-#[cfg(test)]
-mod tests {
-
-    use crate::badge::Badge;
-    use css_color::Rgba;
-    use std::fs;
-    use std::path::Path;
-    #[test]
-    fn create_flat_badge() {
-        let left_text = String::from("test");
-        let right_text = String::from("test");
-        let left_color: Rgba = "#555".parse().unwrap();
-        let right_color: Rgba = "#007ec6".parse().unwrap();
-        let badge = Badge::new(left_text, right_text, left_color, right_color);
-
-        let ci_path = std::env::current_dir().unwrap();
-
-        let commit_svg_path = ci_path.join(Path::new("badge_commits.svg"));
-        println!("Saving commit badge to {:#?}", commit_svg_path);
-        if let Err(c) = fs::write(commit_svg_path, badge.to_flat_badge()) {
-            println!("ERROR: Could not save badge_commits: {}", c);
-        }
-        // println!("{}", badge.to_plastic_badge());
-    }
-}
+pub use badge::Badge;
