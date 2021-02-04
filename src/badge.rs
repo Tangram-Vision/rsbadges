@@ -388,24 +388,22 @@ impl Badge {
 #[cfg(test)]
 mod tests {
 
-    use crate::badge::Badge;
+    use crate::badge::{Badge, Flavor};
     use std::fs;
     use std::path::Path;
-    #[test]
-    fn create_flat_badge() {
-        let mut badge = Badge {
-            label_text: String::from("version"),
-            msg_text: String::from("1.2.3"),
-            label_color: "#555".parse().unwrap(),
-            msg_color: "#007ec6".parse().unwrap(),
-            ..Default::default()
-        };
 
+    fn save_badge_to_tmp(filename: &str, badge: &mut Badge, flavor: Flavor) {
         let ci_path = std::env::temp_dir();
-
-        let svg_path = ci_path.join(Path::new("flat_badge.svg"));
+        // Flat badge
+        let svg_path = ci_path.join(Path::new(filename));
+        let svg = match flavor {
+            Flavor::Flat => badge.generate_flat_svg(),
+            Flavor::FlatSquare => badge.generate_flat_square_svg(),
+            Flavor::Plastic => badge.generate_plastic_svg(),
+            _ => "".to_string(),
+        };
         println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
+        if let Err(c) = fs::write(svg_path, svg) {
             println!("ERROR: Could not save badge: {}", c);
         }
     }
