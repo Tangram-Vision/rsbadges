@@ -281,7 +281,7 @@ impl Badge {
     }
 
     pub fn generate_flat_svg(&mut self) -> String {
-        self.derive_construction_info();
+        let derived_info = self.derive_construction_info(Flavor::Flat);
         let id_suffix: String = rand::thread_rng()
             .sample_iter(&Alphanumeric)
             .take(7)
@@ -295,20 +295,23 @@ impl Badge {
             badge_link: &self.badge_link,
             label_link: &self.label_link,
             msg_link: &self.msg_link,
-            label_color: &self.derived_info.label_color,
-            msg_color: &self.derived_info.msg_color,
+            label_color: &derived_info.label_color,
+            msg_color: &derived_info.msg_color,
             logo: &self.logo,
             full_badge_title: &self.badge_title,
             label_title: &self.label_title,
             msg_title: &self.msg_title,
-            logo_width: self.derived_info.logo_width as usize,
-            logo_padding: self.derived_info.logo_padding as usize,
-            label_text_width: self.derived_info.label_text_width as usize,
-            msg_text_width: self.derived_info.msg_text_width as usize,
-            label_text_x: self.derived_info.label_text_x as usize,
-            msg_text_x: self.derived_info.msg_text_x as usize,
-            left_width: self.derived_info.label_total_width as usize,
-            right_width: self.derived_info.msg_total_width as usize,
+            badge_height: derived_info.badge_height as usize,
+            logo_width: derived_info.logo_width as usize,
+            logo_padding: derived_info.logo_padding as usize,
+            logo_x: derived_info.logo_x as usize,
+            logo_y: derived_info.logo_y as usize,
+            label_text_width: derived_info.label_text_width as usize,
+            msg_text_width: derived_info.msg_text_width as usize,
+            label_text_x: derived_info.label_text_x as usize,
+            msg_text_x: derived_info.msg_text_x as usize,
+            left_width: derived_info.label_total_width as usize,
+            right_width: derived_info.msg_total_width as usize,
             id_smooth: &id_smooth,
             id_round: &id_round,
         };
@@ -317,7 +320,7 @@ impl Badge {
     }
 
     pub fn generate_plastic_svg(&mut self) -> String {
-        self.derive_construction_info();
+        let derived_info = self.derive_construction_info(Flavor::Plastic);
         let id_suffix: String = rand::thread_rng()
             .sample_iter(&Alphanumeric)
             .take(7)
@@ -331,20 +334,21 @@ impl Badge {
             badge_link: &self.badge_link,
             label_link: &self.label_link,
             msg_link: &self.msg_link,
-            label_color: &self.derived_info.label_color,
-            msg_color: &self.derived_info.msg_color,
+            label_color: &derived_info.label_color,
+            msg_color: &derived_info.msg_color,
             logo: &self.logo,
             full_badge_title: &self.badge_title,
             label_title: &self.label_title,
             msg_title: &self.msg_title,
-            logo_width: self.derived_info.logo_width as usize,
-            logo_padding: self.derived_info.logo_padding as usize,
-            label_text_width: self.derived_info.label_text_width as usize,
-            msg_text_width: self.derived_info.msg_text_width as usize,
-            label_text_x: self.derived_info.label_text_x as usize,
-            msg_text_x: self.derived_info.msg_text_x as usize,
-            left_width: self.derived_info.label_total_width as usize,
-            right_width: self.derived_info.msg_total_width as usize,
+            badge_height: derived_info.badge_height as usize,
+            logo_width: derived_info.logo_width as usize,
+            logo_padding: derived_info.logo_padding as usize,
+            label_text_width: derived_info.label_text_width as usize,
+            msg_text_width: derived_info.msg_text_width as usize,
+            label_text_x: derived_info.label_text_x as usize,
+            msg_text_x: derived_info.msg_text_x as usize,
+            left_width: derived_info.label_total_width as usize,
+            right_width: derived_info.msg_total_width as usize,
             id_smooth: &id_smooth,
             id_round: &id_round,
         };
@@ -353,27 +357,28 @@ impl Badge {
     }
 
     pub fn generate_flat_square_svg(&mut self) -> String {
-        self.derive_construction_info();
+        let derived_info = self.derive_construction_info(Flavor::FlatSquare);
         let flat_square_badge = BadgeTemplateFlatSquare {
             label_text: &self.label_text,
             msg_text: &self.msg_text,
             badge_link: &self.badge_link,
             label_link: &self.label_link,
             msg_link: &self.msg_link,
-            label_color: &self.derived_info.label_color,
-            msg_color: &self.derived_info.msg_color,
+            label_color: &derived_info.label_color,
+            msg_color: &derived_info.msg_color,
             logo: &self.logo,
             full_badge_title: &self.badge_title,
             label_title: &self.label_title,
             msg_title: &self.msg_title,
-            logo_width: self.derived_info.logo_width as usize,
-            logo_padding: self.derived_info.logo_padding as usize,
-            label_text_width: self.derived_info.label_text_width as usize,
-            msg_text_width: self.derived_info.msg_text_width as usize,
-            label_text_x: self.derived_info.label_text_x as usize,
-            msg_text_x: self.derived_info.msg_text_x as usize,
-            left_width: self.derived_info.label_total_width as usize,
-            right_width: self.derived_info.msg_total_width as usize,
+            badge_height: derived_info.badge_height as usize,
+            logo_width: derived_info.logo_width as usize,
+            logo_padding: derived_info.logo_padding as usize,
+            label_text_width: derived_info.label_text_width as usize,
+            msg_text_width: derived_info.msg_text_width as usize,
+            label_text_x: derived_info.label_text_x as usize,
+            msg_text_x: derived_info.msg_text_x as usize,
+            left_width: derived_info.label_total_width as usize,
+            right_width: derived_info.msg_total_width as usize,
         };
 
         flat_square_badge.render().unwrap()
