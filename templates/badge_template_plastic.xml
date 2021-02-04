@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" width="{{ left_width + right_width }}" height="20" role="img" aria-label="style: plastic">
+  {% if !full_badge_title.is_empty() %}
+  <badge_title>{{ full_badge_title }}</badge_title>
+  {% endif %}
+  <linearGradient id="{{ id_smooth }}" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".7"/>
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1"/>
+    <stop offset=".9" stop-color="#000" stop-opacity=".3"/>
+    <stop offset="1" stop-color="#000" stop-opacity=".5"/>
+  </linearGradient>
+
+  <clipPath id="{{ id_round }}">
+    <rect width="{{ left_width + right_width }}" height="20" rx="3" fill="#fff"/>
+  </clipPath>
+
+  <g clip-path="url(#{{ id_round }})">
+    <rect width="{{ left_width }}" height="20" fill="{{ label_color }}">
+      {% if !label_title.is_empty() %}
+      <badge_title>{{ label_title }}</badge_title>
+      {% endif %}
+    </rect>
+    <rect x="{{ left_width }}" width="{{ right_width }}" height="20" fill="{{ msg_color }}">
+      {% if !msg_title.is_empty() %}
+      <badge_title>{{ msg_title }}</badge_title>
+      {% endif %}
+    </rect>
+    <rect width="{{ left_width + right_width }}" height="20" fill="url(#{{ id_smooth }})"/>
+  </g>
+
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">
+    {% if !logo.is_empty() %}
+    <image x="5" y="2" width="{{ logo_width }}" height="14" xlink:href="{{ logo }}"/>
+    {% endif %}
+    <text aria-hidden="true" x="{{ label_text_x }}" y="140" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{ label_text_width }}" lengthAdjust="spacing">{{ label_text }}</text>
+    <text x="{{ label_text_x }}" y="130" transform="scale(0.1)" textLength="{{ label_text_width }}" lengthAdjust="spacing">{{ label_text }}</text>
+    <text aria-hidden="true" x="{{ msg_text_x }}" y="140" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{ msg_text_width }}" lengthAdjust="spacing">{{ msg_text }}</text>
+    <text x="{{ msg_text_x }}" y="130" transform="scale(0.1)" textLength="{{ msg_text_width }}" lengthAdjust="spacing">{{ msg_text}}</text>
+
+  {% if !badge_link.is_empty() %}
+    <a xlink:href="{{ badge_link }}">
+      <rect width="{{ left_width }}" height="20" fill="rgba(0,0,0,0)"/>
+    </a>
+    <a xlink:href="{{ badge_link }}">
+      <rect x="{{ left_width }}" width="{{ right_width }}" height="20" fill="rgba(0,0,0,0)"/>
+    </a>
+  {% else %}
+    {% if !label_link.is_empty() %}
+    <a xlink:href="{{ label_link }}">
+      <rect width="{{ left_width }}" height="20" fill="rgba(0,0,0,0)"/>
+    </a>
+    {% endif %}
+    {% if !msg_link.is_empty() %}
+    <a xlink:href="{{ msg_link }}">
+      <rect x="{{ left_width }}" width="{{ right_width }}" height="20" fill="rgba(0,0,0,0)"/>
+    </a>
+    {% endif %}
+  {% endif %}
+  </g>
+</svg>
