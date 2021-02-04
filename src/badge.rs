@@ -28,8 +28,34 @@ use unicode_normalization::UnicodeNormalization;
 
 // Keep these grouped...
 #[derive(Template, Debug)]
-#[template(path = "badge_template_plastic.xml.j2", escape = "xml")]
-struct BadgeTemplate<'a> {
+#[template(path = "badge_template_flat.xml", escape = "xml")]
+struct BadgeTemplateFlat<'a> {
+    label_text: &'a str,
+    msg_text: &'a str,
+    badge_link: &'a str,
+    label_link: &'a str,
+    msg_link: &'a str,
+    label_color: &'a str,
+    msg_color: &'a str,
+    logo: &'a str,
+    full_badge_title: &'a str,
+    label_title: &'a str,
+    msg_title: &'a str,
+    logo_width: usize,
+    logo_padding: usize,
+    label_text_width: usize,
+    msg_text_width: usize,
+    label_text_x: usize,
+    msg_text_x: usize,
+    left_width: usize,
+    right_width: usize,
+    id_smooth: &'a str,
+    id_round: &'a str,
+}
+
+#[derive(Template, Debug)]
+#[template(path = "badge_template_plastic.xml", escape = "xml")]
+struct BadgeTemplatePlastic<'a> {
     label_text: &'a str,
     msg_text: &'a str,
     badge_link: &'a str,
@@ -201,6 +227,42 @@ impl Badge {
         self.derived_info = derived_info;
     }
 
+    pub fn generate_flat_svg(&mut self) -> String {
+        self.derive_construction_info();
+        let id_suffix: String = rand::thread_rng()
+            .sample_iter(&Alphanumeric)
+            .take(7)
+            .map(char::from)
+            .collect();
+        let id_smooth = format!("smooth{}", id_suffix);
+        let id_round = format!("round{}", id_suffix);
+        let flat_badge = BadgeTemplateFlat {
+            label_text: &self.label_text,
+            msg_text: &self.msg_text,
+            badge_link: &self.badge_link,
+            label_link: &self.label_link,
+            msg_link: &self.msg_link,
+            label_color: &self.derived_info.label_color,
+            msg_color: &self.derived_info.msg_color,
+            logo: &self.logo,
+            full_badge_title: &self.badge_title,
+            label_title: &self.label_title,
+            msg_title: &self.msg_title,
+            logo_width: self.derived_info.logo_width as usize,
+            logo_padding: self.derived_info.logo_padding as usize,
+            label_text_width: self.derived_info.label_text_width as usize,
+            msg_text_width: self.derived_info.msg_text_width as usize,
+            label_text_x: self.derived_info.label_text_x as usize,
+            msg_text_x: self.derived_info.msg_text_x as usize,
+            left_width: self.derived_info.label_total_width as usize,
+            right_width: self.derived_info.msg_total_width as usize,
+            id_smooth: &id_smooth,
+            id_round: &id_round,
+        };
+
+        flat_badge.render().unwrap()
+    }
+
     pub fn generate_plastic_svg(&mut self) -> String {
         self.derive_construction_info();
         let id_suffix: String = rand::thread_rng()
@@ -210,7 +272,7 @@ impl Badge {
             .collect();
         let id_smooth = format!("smooth{}", id_suffix);
         let id_round = format!("round{}", id_suffix);
-        let plastic_badge = BadgeTemplate {
+        let plastic_badge = BadgeTemplatePlastic {
             label_text: &self.label_text,
             msg_text: &self.msg_text,
             badge_link: &self.badge_link,
@@ -245,6 +307,25 @@ mod tests {
     use std::fs;
     use std::path::Path;
     #[test]
+    fn create_flat_badge() {
+        let mut badge = Badge {
+            label_text: String::from("version"),
+            msg_text: String::from("1.2.3"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            ..Default::default()
+        };
+
+        let ci_path = std::env::temp_dir();
+
+        let svg_path = ci_path.join(Path::new("flat_badge.svg"));
+        println!("Saving badge to {:#?}", svg_path);
+        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
+            println!("ERROR: Could not save badge: {}", c);
+        }
+    }
+
+    #[test]
     fn create_plastic_badge() {
         let mut badge = Badge {
             label_text: String::from("version"),
@@ -259,12 +340,12 @@ mod tests {
         let svg_path = ci_path.join(Path::new("plastic_badge.svg"));
         println!("Saving badge to {:#?}", svg_path);
         if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
-            println!("ERROR: Could not save badge_commits: {}", c);
+            println!("ERROR: Could not save badge: {}", c);
         }
     }
 
     #[test]
-    fn create_plastic_badge_mandarin() {
+    fn create_flat_badge_mandarin() {
         let mut badge = Badge {
             label_text: String::from("版"),
             msg_text: String::from("不知道"),
@@ -275,15 +356,34 @@ mod tests {
 
         let ci_path = std::env::temp_dir();
 
-        let svg_path = ci_path.join(Path::new("plastic_badge_mandarin.svg"));
+        let svg_path = ci_path.join(Path::new("flat_badge_mandarin.svg"));
         println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
-            println!("ERROR: Could not save badge_commits: {}", c);
+        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
+            println!("ERROR: Could not save badge: {}", c);
         }
     }
 
     #[test]
-    fn create_plastic_badge_metal() {
+    fn create_flat_badge_arabic() {
+        let mut badge = Badge {
+            label_text: String::from("اختبار"),
+            msg_text: String::from("انا لا اعرف"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            ..Default::default()
+        };
+
+        let ci_path = std::env::temp_dir();
+
+        let svg_path = ci_path.join(Path::new("flat_badge_arabic.svg"));
+        println!("Saving badge to {:#?}", svg_path);
+        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
+            println!("ERROR: Could not save badge: {}", c);
+        }
+    }
+
+    #[test]
+    fn create_flat_badge_metal() {
         let mut badge = Badge {
             label_text: String::from("röck döts"),
             msg_text: String::from("metal"),
@@ -294,15 +394,15 @@ mod tests {
 
         let ci_path = std::env::temp_dir();
 
-        let svg_path = ci_path.join(Path::new("plastic_badge_metal.svg"));
+        let svg_path = ci_path.join(Path::new("flat_badge_metal.svg"));
         println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
-            println!("ERROR: Could not save badge_commits: {}", c);
+        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
+            println!("ERROR: Could not save badge: {}", c);
         }
     }
 
     #[test]
-    fn create_plastic_badge_with_badge_link() {
+    fn create_flat_badge_with_badge_link() {
         let mut badge = Badge {
             label_text: String::from("version"),
             msg_text: String::from("1.2.3"),
@@ -314,15 +414,15 @@ mod tests {
 
         let ci_path = std::env::temp_dir();
 
-        let svg_path = ci_path.join(Path::new("plastic_badge_link.svg"));
+        let svg_path = ci_path.join(Path::new("flat_badge_link.svg"));
         println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
-            println!("ERROR: Could not save badge_commits: {}", c);
+        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
+            println!("ERROR: Could not save badge: {}", c);
         }
     }
 
     #[test]
-    fn create_plastic_badge_with_label_msg_links() {
+    fn create_flat_badge_with_label_msg_links() {
         let mut badge = Badge {
             label_text: String::from("version"),
             msg_text: String::from("1.2.3"),
@@ -335,10 +435,10 @@ mod tests {
 
         let ci_path = std::env::temp_dir();
 
-        let svg_path = ci_path.join(Path::new("plastic_badge_two_link.svg"));
+        let svg_path = ci_path.join(Path::new("flat_badge_two_link.svg"));
         println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
-            println!("ERROR: Could not save badge_commits: {}", c);
+        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
+            println!("ERROR: Could not save badge: {}", c);
         }
     }
 }
