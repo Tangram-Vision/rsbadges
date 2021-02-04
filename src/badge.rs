@@ -94,7 +94,7 @@ pub struct Badge {
     pub derived_info: DerivedInfo,
 }
 
-impl<'a> Default for Badge {
+impl Default for Badge {
     fn default() -> Badge {
         Badge {
             label_text: String::from("test"),
@@ -254,7 +254,7 @@ mod tests {
             ..Default::default()
         };
 
-        let ci_path = std::env::current_dir().unwrap();
+        let ci_path = std::env::temp_dir();
 
         let svg_path = ci_path.join(Path::new("plastic_badge.svg"));
         println!("Saving badge to {:#?}", svg_path);
@@ -273,7 +273,7 @@ mod tests {
             ..Default::default()
         };
 
-        let ci_path = std::env::current_dir().unwrap();
+        let ci_path = std::env::temp_dir();
 
         let svg_path = ci_path.join(Path::new("plastic_badge_mandarin.svg"));
         println!("Saving badge to {:#?}", svg_path);
@@ -292,7 +292,7 @@ mod tests {
             ..Default::default()
         };
 
-        let ci_path = std::env::current_dir().unwrap();
+        let ci_path = std::env::temp_dir();
 
         let svg_path = ci_path.join(Path::new("plastic_badge_metal.svg"));
         println!("Saving badge to {:#?}", svg_path);
@@ -312,7 +312,7 @@ mod tests {
             ..Default::default()
         };
 
-        let ci_path = std::env::current_dir().unwrap();
+        let ci_path = std::env::temp_dir();
 
         let svg_path = ci_path.join(Path::new("plastic_badge_link.svg"));
         println!("Saving badge to {:#?}", svg_path);
@@ -333,7 +333,7 @@ mod tests {
             ..Default::default()
         };
 
-        let ci_path = std::env::current_dir().unwrap();
+        let ci_path = std::env::temp_dir();
 
         let svg_path = ci_path.join(Path::new("plastic_badge_two_link.svg"));
         println!("Saving badge to {:#?}", svg_path);
