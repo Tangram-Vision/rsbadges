@@ -161,7 +161,7 @@ fn parse_project_dir_from_args() -> Result<Badge, String> {
         msg_text,
         label_color,
         msg_color,
-        ..Default::default()
+        ..Badge::default()
     };
 
     println!("{:#?}", badge);
