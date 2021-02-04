@@ -145,7 +145,6 @@ pub struct Badge {
     pub label_title: String,
     pub msg_title: String,
     pub open_in_browser: bool,
-    pub derived_info: DerivedInfo,
 }
 
 impl Default for Badge {
@@ -164,7 +163,6 @@ impl Default for Badge {
             label_title: String::from(""),
             msg_title: String::from(""),
             open_in_browser: false,
-            derived_info: DerivedInfo::default(),
         }
     }
 }
