@@ -109,21 +109,27 @@ struct BadgeTemplateFlatSquare<'a> {
 }
 
 // Docs: https://gitlab.redox-os.org/redox-os/rusttype/-/blob/master/dev/examples/ascii.rs
-fn load_font<'a>() -> Font<'a> {
+fn load_regular_font<'a>() -> Font<'a> {
     let font_data = include_bytes!("../fonts/DejaVuSans.ttf");
     Font::try_from_bytes(font_data as &[u8]).expect("error constructing a Font from bytes")
 }
 
+fn load_bold_font<'a>() -> Font<'a> {
+    let font_data = include_bytes!("../fonts/DejaVuSans-Bold.ttf");
+    Font::try_from_bytes(font_data as &[u8]).expect("error constructing a Font from bytes")
+}
+
 fn get_text_dims(font: &Font, text: &str, font_size: f32, kerning_pix: f32) -> (f32, f32) {
+    let norm_text = text.nfc().collect::<String>();
     let scale = Scale::uniform(font_size);
-    let layout = font.layout(text, scale, point(0.0, 0.0));
+    let layout = font.layout(&norm_text, scale, point(0.0, 0.0));
     let mut glyphs_width = layout.fold(0.0, |acc, x| {
         acc + x.into_unpositioned().h_metrics().advance_width
     });
     let v_metrics = font.v_metrics(scale);
     let glyphs_height = (v_metrics.ascent - v_metrics.descent).ceil();
     // 1px padding
-    glyphs_width += text.len() as f32 * kerning_pix;
+    glyphs_width += norm_text.len() as f32 * kerning_pix;
     if glyphs_width as usize % 2 == 0 {
         glyphs_width += 1.0;
     }
