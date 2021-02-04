@@ -409,7 +409,7 @@ mod tests {
     }
 
     #[test]
-    fn create_plastic_badge() {
+    fn create_badges() {
         let mut badge = Badge {
             label_text: String::from("version"),
             msg_text: String::from("1.2.3"),
@@ -418,36 +418,29 @@ mod tests {
             ..Default::default()
         };
 
-        let ci_path = std::env::temp_dir();
-
-        let svg_path = ci_path.join(Path::new("plastic_badge.svg"));
-        println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_plastic_svg()) {
-            println!("ERROR: Could not save badge: {}", c);
-        }
+        save_badge_to_tmp("flat_badge.svg", &mut badge, Flavor::Flat);
+        save_badge_to_tmp("flat_square_badge.svg", &mut badge, Flavor::FlatSquare);
+        save_badge_to_tmp("plastic_badge.svg", &mut badge, Flavor::Plastic);
     }
 
     #[test]
-    fn create_flat_square_badge() {
+    fn create_badges_with_logos() {
         let mut badge = Badge {
             label_text: String::from("version"),
             msg_text: String::from("1.2.3"),
             label_color: "#555".parse().unwrap(),
             msg_color: "#007ec6".parse().unwrap(),
+            logo: String::from("https://simpleicons.org/icons/slack.svg"),
             ..Default::default()
         };
 
-        let ci_path = std::env::temp_dir();
-
-        let svg_path = ci_path.join(Path::new("flat_square_badge.svg"));
-        println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_flat_square_svg()) {
-            println!("ERROR: Could not save badge: {}", c);
-        }
+        save_badge_to_tmp("flat_logo.svg", &mut badge, Flavor::Flat);
+        save_badge_to_tmp("flat_square_logo.svg", &mut badge, Flavor::FlatSquare);
+        save_badge_to_tmp("plastic_logo.svg", &mut badge, Flavor::Plastic);
     }
 
     #[test]
-    fn create_flat_badge_mandarin() {
+    fn create_badge_chinese_characters() {
         let mut badge = Badge {
             label_text: String::from("版"),
             msg_text: String::from("不知道"),
@@ -456,17 +449,13 @@ mod tests {
             ..Default::default()
         };
 
-        let ci_path = std::env::temp_dir();
-
-        let svg_path = ci_path.join(Path::new("flat_badge_mandarin.svg"));
-        println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
-            println!("ERROR: Could not save badge: {}", c);
-        }
+        save_badge_to_tmp("flat_chinese.svg", &mut badge, Flavor::Flat);
+        save_badge_to_tmp("flat_square_chinese.svg", &mut badge, Flavor::FlatSquare);
+        save_badge_to_tmp("plastic_chinese.svg", &mut badge, Flavor::Plastic);
     }
 
     #[test]
-    fn create_flat_badge_arabic() {
+    fn create_badge_arabic_characters() {
         let mut badge = Badge {
             label_text: String::from("اختبار"),
             msg_text: String::from("انا لا اعرف"),
@@ -475,17 +464,13 @@ mod tests {
             ..Default::default()
         };
 
-        let ci_path = std::env::temp_dir();
-
-        let svg_path = ci_path.join(Path::new("flat_badge_arabic.svg"));
-        println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
-            println!("ERROR: Could not save badge: {}", c);
-        }
+        save_badge_to_tmp("flat_arabic.svg", &mut badge, Flavor::Flat);
+        save_badge_to_tmp("flat_square_arabic.svg", &mut badge, Flavor::FlatSquare);
+        save_badge_to_tmp("plastic_arabic.svg", &mut badge, Flavor::Plastic);
     }
 
     #[test]
-    fn create_flat_badge_metal() {
+    fn create_badge_metal() {
         let mut badge = Badge {
             label_text: String::from("röck döts"),
             msg_text: String::from("metal"),
@@ -494,17 +479,13 @@ mod tests {
             ..Default::default()
         };
 
-        let ci_path = std::env::temp_dir();
-
-        let svg_path = ci_path.join(Path::new("flat_badge_metal.svg"));
-        println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
-            println!("ERROR: Could not save badge: {}", c);
-        }
+        save_badge_to_tmp("flat_metal.svg", &mut badge, Flavor::Flat);
+        save_badge_to_tmp("flat_square_metal.svg", &mut badge, Flavor::FlatSquare);
+        save_badge_to_tmp("plastic_metal.svg", &mut badge, Flavor::Plastic);
     }
 
     #[test]
-    fn create_flat_badge_with_badge_link() {
+    fn create_badges_badge_link() {
         let mut badge = Badge {
             label_text: String::from("version"),
             msg_text: String::from("1.2.3"),
@@ -514,17 +495,13 @@ mod tests {
             ..Default::default()
         };
 
-        let ci_path = std::env::temp_dir();
-
-        let svg_path = ci_path.join(Path::new("flat_badge_link.svg"));
-        println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
-            println!("ERROR: Could not save badge: {}", c);
-        }
+        save_badge_to_tmp("flat_link.svg", &mut badge, Flavor::Flat);
+        save_badge_to_tmp("flat_square_link.svg", &mut badge, Flavor::FlatSquare);
+        save_badge_to_tmp("plastic_link.svg", &mut badge, Flavor::Plastic);
     }
 
     #[test]
-    fn create_flat_badge_with_label_msg_links() {
+    fn create_badges_with_label_msg_links() {
         let mut badge = Badge {
             label_text: String::from("version"),
             msg_text: String::from("1.2.3"),
@@ -535,12 +512,8 @@ mod tests {
             ..Default::default()
         };
 
-        let ci_path = std::env::temp_dir();
-
-        let svg_path = ci_path.join(Path::new("flat_badge_two_link.svg"));
-        println!("Saving badge to {:#?}", svg_path);
-        if let Err(c) = fs::write(svg_path, badge.generate_flat_svg()) {
-            println!("ERROR: Could not save badge: {}", c);
-        }
+        save_badge_to_tmp("flat_links.svg", &mut badge, Flavor::Flat);
+        save_badge_to_tmp("flat_square_links.svg", &mut badge, Flavor::FlatSquare);
+        save_badge_to_tmp("plastic_links.svg", &mut badge, Flavor::Plastic);
     }
 }
