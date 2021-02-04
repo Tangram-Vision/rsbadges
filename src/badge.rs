@@ -41,8 +41,11 @@ struct BadgeTemplateFlat<'a> {
     full_badge_title: &'a str,
     label_title: &'a str,
     msg_title: &'a str,
+    badge_height: usize,
     logo_width: usize,
     logo_padding: usize,
+    logo_x: usize,
+    logo_y: usize,
     label_text_width: usize,
     msg_text_width: usize,
     label_text_x: usize,
@@ -67,6 +70,7 @@ struct BadgeTemplatePlastic<'a> {
     full_badge_title: &'a str,
     label_title: &'a str,
     msg_title: &'a str,
+    badge_height: usize,
     logo_width: usize,
     logo_padding: usize,
     label_text_width: usize,
@@ -93,6 +97,7 @@ struct BadgeTemplateFlatSquare<'a> {
     full_badge_title: &'a str,
     label_title: &'a str,
     msg_title: &'a str,
+    badge_height: usize,
     logo_width: usize,
     logo_padding: usize,
     label_text_width: usize,
@@ -184,6 +189,7 @@ enum Flavor {
 
 #[derive(Default, Debug)]
 pub struct DerivedInfo {
+    badge_height: f32,
     label_text_width: f32,
     msg_text_width: f32,
     label_total_width: f32,
@@ -191,13 +197,15 @@ pub struct DerivedInfo {
     label_text_x: f32,
     msg_text_x: f32,
     logo_padding: f32,
+    logo_width: f32,
+    logo_x: f32,
+    logo_y: f32,
     label_color: String,
     msg_color: String,
-    logo_width: f32,
 }
 
 impl Badge {
-    fn derive_construction_info(&mut self) {
+    fn derive_construction_info(&mut self, flavor: Flavor) -> DerivedInfo {
         let mut derived_info = DerivedInfo::default();
 
         // Normalize text
@@ -209,19 +217,34 @@ impl Badge {
         derived_info.msg_text_width = get_text_dims(&font, &self.msg_text, 11.0, 0.8).0;
 
         // Padding and spacing calculations
-        derived_info.logo_padding = 0.0;
-        // TODO: Get logo width
+        let horiz_padding = 5.0;
+        derived_info.badge_height = match flavor {
+            Flavor::ForTheBadge => 28.0,
+            Flavor::Plastic => 18.0,
+            Flavor::Flat => 20.0,
+            Flavor::FlatSquare => 20.0,
+            Flavor::Social => 20.0,
+        };
+
+        let mut total_logo_width = 0.0;
         derived_info.logo_width = 0.0;
-        if !self.logo.is_empty() && self.label_text.is_empty() {
-            derived_info.logo_padding = 3.0;
+        derived_info.logo_padding = 0.0;
+        if !self.logo.is_empty() {
+            if !self.label_text.is_empty() {
+                derived_info.logo_padding = 3.0;
+            }
+            let logo_height = 14.0; // hardcoded
+            derived_info.logo_y = (derived_info.badge_height - logo_height) * 0.5;
+            derived_info.logo_x = horiz_padding;
+            derived_info.logo_width = 14.0;
+            total_logo_width = derived_info.logo_width + derived_info.logo_padding;
         }
 
-        let horiz_padding = 5.0;
-        let label_text_margin = derived_info.logo_width + 1.0;
+        let label_text_margin = total_logo_width + 1.0;
         derived_info.label_total_width = 0.0;
         if !self.label_text.is_empty() {
             derived_info.label_total_width =
-                derived_info.label_text_width + (2.0 * horiz_padding) + derived_info.logo_width;
+                derived_info.label_text_width + (2.0 * horiz_padding) + total_logo_width;
         }
         let mut msg_text_margin = derived_info.label_total_width;
         if !self.msg_text.is_empty() {
@@ -256,7 +279,7 @@ impl Badge {
         derived_info.label_color = color_to_string(self.label_color);
         derived_info.msg_color = color_to_string(self.msg_color);
 
-        self.derived_info = derived_info;
+        derived_info
     }
 
     pub fn generate_flat_svg(&mut self) -> String {
