@@ -173,6 +173,15 @@ fn color_to_string(color: css_color::Rgba) -> String {
     )
 }
 
+#[derive(Debug)]
+enum Flavor {
+    Plastic,
+    Flat,
+    FlatSquare,
+    Social,
+    ForTheBadge,
+}
+
 #[derive(Default, Debug)]
 pub struct DerivedInfo {
     label_text_width: f32,
