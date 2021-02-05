@@ -61,7 +61,6 @@ pub fn color_to_string(color: css_color::Rgba) -> String {
 
 pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {
     let body: String = ureq::get(logo_uri).call()?.into_string()?;
-    println!("{}\n", body);
     Ok(format!(
         "data:image/svg+xml;base64,{}",
         base64::encode(body.as_bytes())
