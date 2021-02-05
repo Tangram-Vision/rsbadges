@@ -21,9 +21,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
-mod badge_generation;
-mod badge_layout;
 mod badge_type;
+mod generate_layout;
+mod generate_svg;
 mod style;
 mod text_helper;
 

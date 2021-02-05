@@ -21,9 +21,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
-use super::badge_generation;
-use super::badge_layout;
 use super::badge_type::*;
+use super::generate_layout;
+use super::generate_svg;
 
 #[derive(Debug)]
 pub enum Style {
@@ -36,16 +36,16 @@ pub enum Style {
 impl Style {
     pub fn generate_svg(&self) -> String {
         let layout = match self {
-            Style::Flat(badge) => badge_layout::flat_or_square(badge),
-            Style::FlatSquare(badge) => badge_layout::flat_or_square(badge),
-            Style::Plastic(badge) => badge_layout::plastic(badge),
+            Style::Flat(badge) => generate_layout::flat_or_square(badge),
+            Style::FlatSquare(badge) => generate_layout::flat_or_square(badge),
+            Style::Plastic(badge) => generate_layout::plastic(badge),
             _ => Layout::default(),
         };
 
         match self {
-            Style::Flat(badge) => badge_generation::flat_svg(badge, layout),
-            Style::FlatSquare(badge) => badge_generation::flat_square_svg(badge, layout),
-            Style::Plastic(badge) => badge_generation::plastic_svg(badge, layout),
+            Style::Flat(badge) => generate_svg::flat_svg(badge, layout),
+            Style::FlatSquare(badge) => generate_svg::flat_square_svg(badge, layout),
+            Style::Plastic(badge) => generate_svg::plastic_svg(badge, layout),
             _ => String::from("Not implemented yet!"),
         }
     }
