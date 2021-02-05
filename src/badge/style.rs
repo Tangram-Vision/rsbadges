@@ -85,99 +85,119 @@ mod tests {
         );
         save_badge_to_tmp("plastic_badge.svg", Style::Plastic(badge).generate_svg());
     }
+
+    #[test]
+    fn create_badges_with_logos() {
+        let badge = Badge {
+            label_text: String::from("version"),
+            msg_text: String::from("1.2.3"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            logo: String::from("https://simpleicons.org/icons/slack.svg"),
+            ..Default::default()
+        };
+
+        save_badge_to_tmp("flat_logo.svg", Style::Flat(badge.clone()).generate_svg());
+        save_badge_to_tmp(
+            "flat_square_logo.svg",
+            Style::FlatSquare(badge.clone()).generate_svg(),
+        );
+        save_badge_to_tmp("plastic_logo.svg", Style::Plastic(badge).generate_svg());
+    }
+
+    #[test]
+    fn create_badge_chinese_characters() {
+        let badge = Badge {
+            label_text: String::from("版"),
+            msg_text: String::from("不知道"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            ..Default::default()
+        };
+
+        save_badge_to_tmp(
+            "flat_chinese.svg",
+            Style::Flat(badge.clone()).generate_svg(),
+        );
+        save_badge_to_tmp(
+            "flat_square_chinese.svg",
+            Style::FlatSquare(badge.clone()).generate_svg(),
+        );
+        save_badge_to_tmp("plastic_chinese.svg", Style::Plastic(badge).generate_svg());
+    }
+
+    #[test]
+    fn create_badge_arabic_characters() {
+        let badge = Badge {
+            label_text: String::from("اختبار"),
+            msg_text: String::from("انا لا اعرف"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            ..Default::default()
+        };
+
+        save_badge_to_tmp("flat_arabic.svg", Style::Flat(badge.clone()).generate_svg());
+        save_badge_to_tmp(
+            "flat_square_arabic.svg",
+            Style::FlatSquare(badge.clone()).generate_svg(),
+        );
+        save_badge_to_tmp("plastic_arabic.svg", Style::Plastic(badge).generate_svg());
+    }
+
+    #[test]
+    fn create_badge_metal() {
+        let badge = Badge {
+            label_text: String::from("röck döts"),
+            msg_text: String::from("metal"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            ..Default::default()
+        };
+
+        save_badge_to_tmp("flat_metal.svg", Style::Flat(badge.clone()).generate_svg());
+        save_badge_to_tmp(
+            "flat_square_metal.svg",
+            Style::FlatSquare(badge.clone()).generate_svg(),
+        );
+        save_badge_to_tmp("plastic_metal.svg", Style::Plastic(badge).generate_svg());
+    }
+
+    #[test]
+    fn create_badges_badge_link() {
+        let badge = Badge {
+            label_text: String::from("version"),
+            msg_text: String::from("1.2.3"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            badge_link: String::from("http://www.tangramvision.com"),
+            ..Default::default()
+        };
+
+        save_badge_to_tmp("flat_link.svg", Style::Flat(badge.clone()).generate_svg());
+        save_badge_to_tmp(
+            "flat_square_link.svg",
+            Style::FlatSquare(badge.clone()).generate_svg(),
+        );
+        save_badge_to_tmp("plastic_link.svg", Style::Plastic(badge).generate_svg());
+    }
+
+    #[test]
+    fn create_badges_with_label_msg_links() {
+        let badge = Badge {
+            label_text: String::from("version"),
+            msg_text: String::from("1.2.3"),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            label_link: String::from("http://www.tangramvision.com"),
+            msg_link: String::from("http://www.google.com"),
+            ..Default::default()
+        };
+
+        save_badge_to_tmp("flat_links.svg", Style::Flat(badge.clone()).generate_svg());
+        save_badge_to_tmp(
+            "flat_square_links.svg",
+            Style::FlatSquare(badge.clone()).generate_svg(),
+        );
+        save_badge_to_tmp("plastic_links.svg", Style::Plastic(badge).generate_svg());
+    }
 }
-
-//     #[test]
-//     fn create_badges_with_logos() {
-//         let mut badge = Badge {
-//             label_text: String::from("version"),
-//             msg_text: String::from("1.2.3"),
-//             label_color: "#555".parse().unwrap(),
-//             msg_color: "#007ec6".parse().unwrap(),
-//             logo: String::from("https://simpleicons.org/icons/slack.svg"),
-//             ..Default::default()
-//         };
-
-//         save_badge_to_tmp("flat_logo.svg", &mut badge, Flavor::Flat);
-//         save_badge_to_tmp("flat_square_logo.svg", &mut badge, Flavor::FlatSquare);
-//         save_badge_to_tmp("plastic_logo.svg", &mut badge, Flavor::Plastic);
-//     }
-
-//     #[test]
-//     fn create_badge_chinese_characters() {
-//         let mut badge = Badge {
-//             label_text: String::from("版"),
-//             msg_text: String::from("不知道"),
-//             label_color: "#555".parse().unwrap(),
-//             msg_color: "#007ec6".parse().unwrap(),
-//             ..Default::default()
-//         };
-
-//         save_badge_to_tmp("flat_chinese.svg", &mut badge, Flavor::Flat);
-//         save_badge_to_tmp("flat_square_chinese.svg", &mut badge, Flavor::FlatSquare);
-//         save_badge_to_tmp("plastic_chinese.svg", &mut badge, Flavor::Plastic);
-//     }
-
-//     #[test]
-//     fn create_badge_arabic_characters() {
-//         let mut badge = Badge {
-//             label_text: String::from("اختبار"),
-//             msg_text: String::from("انا لا اعرف"),
-//             label_color: "#555".parse().unwrap(),
-//             msg_color: "#007ec6".parse().unwrap(),
-//             ..Default::default()
-//         };
-
-//         save_badge_to_tmp("flat_arabic.svg", &mut badge, Flavor::Flat);
-//         save_badge_to_tmp("flat_square_arabic.svg", &mut badge, Flavor::FlatSquare);
-//         save_badge_to_tmp("plastic_arabic.svg", &mut badge, Flavor::Plastic);
-//     }
-
-//     #[test]
-//     fn create_badge_metal() {
-//         let mut badge = Badge {
-//             label_text: String::from("röck döts"),
-//             msg_text: String::from("metal"),
-//             label_color: "#555".parse().unwrap(),
-//             msg_color: "#007ec6".parse().unwrap(),
-//             ..Default::default()
-//         };
-
-//         save_badge_to_tmp("flat_metal.svg", &mut badge, Flavor::Flat);
-//         save_badge_to_tmp("flat_square_metal.svg", &mut badge, Flavor::FlatSquare);
-//         save_badge_to_tmp("plastic_metal.svg", &mut badge, Flavor::Plastic);
-//     }
-
-//     #[test]
-//     fn create_badges_badge_link() {
-//         let mut badge = Badge {
-//             label_text: String::from("version"),
-//             msg_text: String::from("1.2.3"),
-//             label_color: "#555".parse().unwrap(),
-//             msg_color: "#007ec6".parse().unwrap(),
-//             badge_link: String::from("http://www.tangramvision.com"),
-//             ..Default::default()
-//         };
-
-//         save_badge_to_tmp("flat_link.svg", &mut badge, Flavor::Flat);
-//         save_badge_to_tmp("flat_square_link.svg", &mut badge, Flavor::FlatSquare);
-//         save_badge_to_tmp("plastic_link.svg", &mut badge, Flavor::Plastic);
-//     }
-
-//     #[test]
-//     fn create_badges_with_label_msg_links() {
-//         let mut badge = Badge {
-//             label_text: String::from("version"),
-//             msg_text: String::from("1.2.3"),
-//             label_color: "#555".parse().unwrap(),
-//             msg_color: "#007ec6".parse().unwrap(),
-//             label_link: String::from("http://www.tangramvision.com"),
-//             msg_link: String::from("http://www.google.com"),
-//             ..Default::default()
-//         };
-
-//         save_badge_to_tmp("flat_links.svg", &mut badge, Flavor::Flat);
-//         save_badge_to_tmp("flat_square_links.svg", &mut badge, Flavor::FlatSquare);
-//         save_badge_to_tmp("plastic_links.svg", &mut badge, Flavor::Plastic);
-//     }
-// }
