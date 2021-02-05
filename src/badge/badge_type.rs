@@ -21,7 +21,58 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
-mod badge;
+#[derive(Debug, Clone)]
+pub struct Badge {
+    pub label_text: String,
+    pub msg_text: String,
+    pub badge_link: String,
+    pub label_link: String,
+    pub msg_link: String,
+    pub label_color: css_color::Rgba,
+    pub msg_color: css_color::Rgba,
+    pub logo: String,
+    pub embed_logo: bool,
+    pub badge_title: String,
+    pub label_title: String,
+    pub msg_title: String,
+    pub open_in_browser: bool,
+}
 
-pub use badge::Badge;
-pub use badge::Style;
+impl Default for Badge {
+    fn default() -> Badge {
+        Badge {
+            label_text: String::from("test"),
+            msg_text: String::from("test"),
+            badge_link: String::from(""),
+            label_link: String::from(""),
+            msg_link: String::from(""),
+            label_color: "#555".parse().unwrap(),
+            msg_color: "#007ec6".parse().unwrap(),
+            logo: String::from(""),
+            embed_logo: false,
+            badge_title: String::from(""),
+            label_title: String::from(""),
+            msg_title: String::from(""),
+            open_in_browser: false,
+        }
+    }
+}
+
+#[derive(Default, Debug)]
+pub struct Layout {
+    pub label_text_norm: String,
+    pub msg_text_norm: String,
+    pub badge_height: f32,
+    pub label_text_width: f32,
+    pub msg_text_width: f32,
+    pub label_total_width: f32,
+    pub msg_total_width: f32,
+    pub label_text_x: f32,
+    pub msg_text_x: f32,
+    pub logo_padding: f32,
+    pub logo_width: f32,
+    pub logo_x: f32,
+    pub logo_y: f32,
+    pub label_color: String,
+    pub msg_color: String,
+}
