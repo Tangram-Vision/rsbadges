@@ -7,8 +7,10 @@ version = "1.0.0"
 
 [dependencies]
 askama = "0.10"
+base64 = "0.13"
 css-color = "0.1"
 getopts = "0.2"
 rand = "0.8"
 rusttype = "0.9"
 unicode-normalization = "0.1"
+ureq = "2.0.1"
