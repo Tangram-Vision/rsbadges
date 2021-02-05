@@ -22,6 +22,7 @@
 // OF SUCH DAMAGE.
 
 use super::badge_type::{Badge, Layout};
+use super::text_helper;
 use askama::Template;
 use rand::{distributions::Alphanumeric, Rng};
 
@@ -62,6 +63,12 @@ pub fn flat_svg(badge: &Badge, layout: Layout) -> String {
         .collect();
     let id_smooth = format!("smooth{}", id_suffix);
     let id_round = format!("round{}", id_suffix);
+    let logo_uri: String;
+    if badge.embed_logo {
+        logo_uri = text_helper::attempt_logo_dl(&badge.logo);
+    } else {
+        logo_uri = badge.logo.clone();
+    }
     let flat_badge = BadgeTemplateFlat {
         label_text: &layout.label_text_norm,
         msg_text: &layout.msg_text_norm,
@@ -70,7 +77,7 @@ pub fn flat_svg(badge: &Badge, layout: Layout) -> String {
         msg_link: &badge.msg_link,
         label_color: &layout.label_color,
         msg_color: &layout.msg_color,
-        logo: &badge.logo,
+        logo: &logo_uri,
         full_badge_title: &badge.badge_title,
         label_title: &badge.label_title,
         msg_title: &badge.msg_title,
@@ -127,6 +134,12 @@ pub fn plastic_svg(badge: &Badge, layout: Layout) -> String {
         .collect();
     let id_smooth = format!("smooth{}", id_suffix);
     let id_round = format!("round{}", id_suffix);
+    let logo_uri: String;
+    if badge.embed_logo {
+        logo_uri = text_helper::attempt_logo_dl(&badge.logo);
+    } else {
+        logo_uri = badge.logo.clone();
+    }
     let plastic_badge = BadgeTemplatePlastic {
         label_text: &layout.label_text_norm,
         msg_text: &layout.msg_text_norm,
@@ -135,7 +148,7 @@ pub fn plastic_svg(badge: &Badge, layout: Layout) -> String {
         msg_link: &badge.msg_link,
         label_color: &layout.label_color,
         msg_color: &layout.msg_color,
-        logo: &badge.logo,
+        logo: &logo_uri,
         full_badge_title: &badge.badge_title,
         label_title: &badge.label_title,
         msg_title: &badge.msg_title,
@@ -181,6 +194,12 @@ struct BadgeTemplateFlatSquare<'a> {
 }
 
 pub fn flat_square_svg(badge: &Badge, layout: Layout) -> String {
+    let logo_uri: String;
+    if badge.embed_logo {
+        logo_uri = text_helper::attempt_logo_dl(&badge.logo);
+    } else {
+        logo_uri = badge.logo.clone();
+    }
     let flat_square_badge = BadgeTemplateFlatSquare {
         label_text: &layout.label_text_norm,
         msg_text: &layout.msg_text_norm,
@@ -189,7 +208,7 @@ pub fn flat_square_svg(badge: &Badge, layout: Layout) -> String {
         msg_link: &badge.msg_link,
         label_color: &layout.label_color,
         msg_color: &layout.msg_color,
-        logo: &badge.logo,
+        logo: &logo_uri,
         full_badge_title: &badge.badge_title,
         label_title: &badge.label_title,
         msg_title: &badge.msg_title,
