@@ -65,7 +65,7 @@ pub fn flat_svg(badge: &Badge, layout: Layout) -> String {
     let id_round = format!("round{}", id_suffix);
     let logo_uri: String;
     if badge.embed_logo {
-        logo_uri = text_helper::attempt_logo_dl(&badge.logo);
+        logo_uri = text_helper::attempt_logo_download(&badge.logo);
     } else {
         logo_uri = badge.logo.clone();
     }
@@ -136,7 +136,7 @@ pub fn plastic_svg(badge: &Badge, layout: Layout) -> String {
     let id_round = format!("round{}", id_suffix);
     let logo_uri: String;
     if badge.embed_logo {
-        logo_uri = text_helper::attempt_logo_dl(&badge.logo);
+        logo_uri = text_helper::attempt_logo_download(&badge.logo);
     } else {
         logo_uri = badge.logo.clone();
     }
@@ -196,7 +196,7 @@ struct BadgeTemplateFlatSquare<'a> {
 pub fn flat_square_svg(badge: &Badge, layout: Layout) -> String {
     let logo_uri: String;
     if badge.embed_logo {
-        logo_uri = text_helper::attempt_logo_dl(&badge.logo);
+        logo_uri = text_helper::attempt_logo_download(&badge.logo);
     } else {
         logo_uri = badge.logo.clone();
     }

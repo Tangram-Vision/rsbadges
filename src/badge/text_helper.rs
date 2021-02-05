@@ -67,7 +67,7 @@ pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {
     ))
 }
 
-pub fn attempt_logo_dl(logo_uri: &str) -> String {
+pub fn attempt_logo_download(logo_uri: &str) -> String {
     match create_embedded_logo(logo_uri) {
         Ok(logo_data) => logo_data,
         Err(e) => {
