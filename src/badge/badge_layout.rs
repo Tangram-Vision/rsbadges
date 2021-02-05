@@ -122,7 +122,7 @@ pub fn flat_or_square(badge: &Badge) -> Layout {
         if !badge.label_text.is_empty() {
             layout.logo_padding = 3.0;
         }
-        let logo_height = 14.0; // hardcoded
+        let logo_height = 14.0;
         layout.logo_y = (layout.badge_height - logo_height) * 0.5;
         layout.logo_x = horiz_padding;
         layout.logo_width = 14.0;
