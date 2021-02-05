@@ -1,6 +1,7 @@
 [package]
 authors = ["Brandon Minor <brandon@tangramvision.com>"]
 edition = "2018"
+license = "BSD-3-Clause"
 name = "rsbadges"
 version = "0.1.0"
 
