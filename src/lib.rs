@@ -24,3 +24,4 @@
 mod badge;
 
 pub use badge::Badge;
+pub use badge::Style;
