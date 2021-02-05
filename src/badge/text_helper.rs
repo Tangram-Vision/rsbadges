@@ -58,3 +58,25 @@ pub fn color_to_string(color: css_color::Rgba) -> String {
         color.blue * 255.0
     )
 }
+
+pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {
+    let body: String = ureq::get(logo_uri).call()?.into_string()?;
+    println!("{}\n", body);
+    Ok(format!(
+        "data:image/svg+xml;base64,{}",
+        base64::encode(body.as_bytes())
+    ))
+}
+
+pub fn attempt_logo_dl(logo_uri: &str) -> String {
+    match create_embedded_logo(logo_uri) {
+        Ok(logo_data) => logo_data,
+        Err(e) => {
+            println!(
+                "Could not retrieve URI {} to embed into badge. Err: {}",
+                logo_uri, e
+            );
+            String::from(logo_uri)
+        }
+    }
+}
