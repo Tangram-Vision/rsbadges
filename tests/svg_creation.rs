@@ -19,7 +19,7 @@ fn create_badges() {
         msg_text: String::from("1.2.3"),
         label_color: "#555".parse().unwrap(),
         msg_color: "#007ec6".parse().unwrap(),
-        ..Default::default()
+        ..Badge::default()
     };
 
     save_badge_to_tmp("flat_badge.svg", Style::Flat(badge.clone()).generate_svg());
@@ -38,7 +38,7 @@ fn create_badges_with_logos() {
         label_color: "#555".parse().unwrap(),
         msg_color: "#007ec6".parse().unwrap(),
         logo: String::from("https://simpleicons.org/icons/slack.svg"),
-        ..Default::default()
+        ..Badge::default()
     };
 
     save_badge_to_tmp("flat_logo.svg", Style::Flat(badge.clone()).generate_svg());
@@ -50,13 +50,39 @@ fn create_badges_with_logos() {
 }
 
 #[test]
+fn create_badges_with_logo_embedded() {
+    let badge = Badge {
+        label_text: String::from("version"),
+        msg_text: String::from("1.2.3"),
+        label_color: "#555".parse().unwrap(),
+        msg_color: "#007ec6".parse().unwrap(),
+        logo: String::from("https://simpleicons.org/icons/slack.svg"),
+        embed_logo: true,
+        ..Badge::default()
+    };
+
+    save_badge_to_tmp(
+        "flat_logo_embed.svg",
+        Style::Flat(badge.clone()).generate_svg(),
+    );
+    save_badge_to_tmp(
+        "flat_square_logo_embed.svg",
+        Style::FlatSquare(badge.clone()).generate_svg(),
+    );
+    save_badge_to_tmp(
+        "plastic_logo_embed.svg",
+        Style::Plastic(badge).generate_svg(),
+    );
+}
+
+#[test]
 fn create_badge_chinese_characters() {
     let badge = Badge {
         label_text: String::from("版"),
         msg_text: String::from("不知道"),
         label_color: "#555".parse().unwrap(),
         msg_color: "#007ec6".parse().unwrap(),
-        ..Default::default()
+        ..Badge::default()
     };
 
     save_badge_to_tmp(
@@ -77,7 +103,7 @@ fn create_badge_arabic_characters() {
         msg_text: String::from("انا لا اعرف"),
         label_color: "#555".parse().unwrap(),
         msg_color: "#007ec6".parse().unwrap(),
-        ..Default::default()
+        ..Badge::default()
     };
 
     save_badge_to_tmp("flat_arabic.svg", Style::Flat(badge.clone()).generate_svg());
@@ -95,7 +121,7 @@ fn create_badge_metal() {
         msg_text: String::from("metal"),
         label_color: "#555".parse().unwrap(),
         msg_color: "#007ec6".parse().unwrap(),
-        ..Default::default()
+        ..Badge::default()
     };
 
     save_badge_to_tmp("flat_metal.svg", Style::Flat(badge.clone()).generate_svg());
@@ -114,7 +140,7 @@ fn create_badges_badge_link() {
         label_color: "#555".parse().unwrap(),
         msg_color: "#007ec6".parse().unwrap(),
         badge_link: String::from("http://www.tangramvision.com"),
-        ..Default::default()
+        ..Badge::default()
     };
 
     save_badge_to_tmp("flat_link.svg", Style::Flat(badge.clone()).generate_svg());
@@ -134,7 +160,7 @@ fn create_badges_with_label_msg_links() {
         msg_color: "#007ec6".parse().unwrap(),
         label_link: String::from("http://www.tangramvision.com"),
         msg_link: String::from("http://www.google.com"),
-        ..Default::default()
+        ..Badge::default()
     };
 
     save_badge_to_tmp("flat_links.svg", Style::Flat(badge.clone()).generate_svg());
