@@ -32,82 +32,95 @@ fn parse_project_dir_from_args() -> Result<Badge, String> {
     let mut opts = Options::new();
     // Required Args
     opts.optopt(
-        "",
+        "a",
         "label",
-        "the text to show on the left side of the badge",
-        "build",
+        "The text to show on the left side of the badge.",
+        "<string>",
     );
     opts.optopt(
-        "",
-        "msg",
-        "the text to show on the right side of the badge",
-        "passed",
-    );
-    opts.optopt(
-        "",
+        "b",
         "label-color",
-        "the background color of the left side of the badge",
-        "#555",
+        "The background color of the left side of the badge. Supports all valid CSS formats. See \
+        https://www.w3schools.com/colors/colors_picker.asp for examples.",
+        "<css_color>",
     );
     opts.optopt(
-        "",
+        "c",
+        "label-link",
+        "The url to redirect to when the left side of the badge is clicked.",
+        "<url>",
+    );
+    opts.optopt(
+        "x",
+        "msg",
+        "The text to show on the right side of the badge.",
+        "<string>",
+    );
+    opts.optopt(
+        "y",
         "msg-color",
-        "the background color of the right side of the badge",
-        "#007ec6",
+        "The background color of the right side of the badge.",
+        "<css_color>",
+    );
+    opts.optopt(
+        "z",
+        "msg-link",
+        "The url to redirect to when the right side of the badge is clicked.",
+        "<url>",
+    );
+
+    opts.optopt(
+        "l",
+        "logo",
+        "A URI reference to a logo to display in the badge.",
+        "<url or local path>",
+    );
+    opts.optopt(
+        "s",
+        "save-to-svg-at",
+        "The file path where this badge should be saved. File name should end in SVG \
+        (but this is not enforced)",
+        "<filepath>",
+    );
+    opts.optflag(
+        "b",
+        "open-in-browser",
+        "Flag. Display the badge in a browser tab.",
+    );
+    opts.optflag("h", "help", "Flag. Print arguments to console.");
+    opts.optflag(
+        "e",
+        "embed-logo",
+        "Flag. Include the specified logo data directly \
+        in the badge. This prevents a URL call whenever the SVG is loaded. \
+        Only works if --logo is a HTTP/HTTPS URI or a valid file path.",
     );
     opts.optopt(
         "",
         "badge-link",
-        "the url to redirect to when the badge is clicked",
-        "",
+        "The url to redirect to when any part of the badge is clicked. \
+        Overwrites --label-link and --msg-link.",
+        "<url>",
     );
+    // See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title.
     opts.optopt(
         "",
-        "label-link",
-        "the url to redirect to when the left side of the badge is clicked",
-        "",
-    );
-    opts.optopt(
-        "",
-        "msg-link",
-        "the url to redirect to when the right side of the badge is clicked",
-        "",
-    );
-    opts.optopt(
-        "",
-        "logo",
-        "a URI reference to a logo to display in the badge",
-        "",
-    );
-    opts.optopt(
-        "",
-        "embed-logo",
-        "if the logo is specified then include the image data directly
-        in the badge (this will prevent a URL fetch and may work around
-             the fact that some open_in_browsers do not fetch external image
-             references); only works if --logo is a HTTP/HTTPS URI or a file path",
-        "false",
-    );
-    opts.optopt(
-        "",
-        "badge_title",
-        "the badge title to associate with the entire badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
-        "",
+        "badge-title",
+        "The title to associate with the entire badge.",
+        "<string>",
     );
     opts.optopt(
         "",
         "label-title",
-        "the badge title to associate with the left side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
-        "",
+        "The title to associate with the left side of the badge.",
+        "<string>",
     );
     opts.optopt(
         "",
         "msg-title",
-        "the badge title to associate with the right side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
-        "",
+        "The title to associate with the right side of the badge.",
+        "<string>",
     );
-    opts.optflag("", "open-in-browser", "display the badge in a browser tab");
-    opts.optflag("h", "help", "print arguments to console");
 
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
@@ -115,7 +128,7 @@ fn parse_project_dir_from_args() -> Result<Badge, String> {
     };
 
     if matches.opt_present("h") {
-        let brief = format!("Usage: {} FILE [options]", program);
+        let brief = format!("Usage: {} [options]", program);
         println!("{}", opts.usage(&brief));
         std::process::exit(1);
     }
