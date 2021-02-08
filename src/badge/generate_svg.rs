@@ -56,7 +56,7 @@ struct BadgeTemplateFlat<'a> {
     id_round: &'a str,
 }
 
-pub fn flat_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
+pub(crate) fn flat_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
     let id_suffix: String = rand::thread_rng()
         .sample_iter(&Alphanumeric)
         .take(7)
@@ -127,7 +127,7 @@ struct BadgeTemplatePlastic<'a> {
     id_round: &'a str,
 }
 
-pub fn plastic_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
+pub(crate) fn plastic_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
     let id_suffix: String = rand::thread_rng()
         .sample_iter(&Alphanumeric)
         .take(7)
@@ -195,7 +195,7 @@ struct BadgeTemplateFlatSquare<'a> {
     right_width: usize,
 }
 
-pub fn flat_square_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
+pub(crate) fn flat_square_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
     let mut logo_uri = badge.logo.clone();
     if badge.embed_logo {
         logo_uri = format_helper::attempt_logo_download(&badge.logo)?;

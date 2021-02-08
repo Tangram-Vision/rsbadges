@@ -61,7 +61,7 @@ impl Default for Badge {
 }
 
 #[derive(Default, Debug)]
-pub struct Layout {
+pub(crate) struct Layout {
     pub label_text_norm: String,
     pub msg_text_norm: String,
     pub badge_height: f32,

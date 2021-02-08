@@ -24,7 +24,7 @@
 use super::badge_type::*;
 use super::format_helper::*;
 
-pub fn plastic(badge: &Badge) -> Result<Layout, BadgeError> {
+pub(crate) fn plastic(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 
     // Normalize text
@@ -98,7 +98,7 @@ pub fn plastic(badge: &Badge) -> Result<Layout, BadgeError> {
     Ok(layout)
 }
 
-pub fn flat_or_square(badge: &Badge) -> Result<Layout, BadgeError> {
+pub(crate) fn flat_or_square(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 
     // Normalize text
