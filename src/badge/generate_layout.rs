@@ -22,13 +22,13 @@
 // OF SUCH DAMAGE.
 
 use super::badge_type::*;
-use super::text_helper::*;
+use super::format_helper::*;
 
-pub fn plastic(badge: &Badge) -> Layout {
+pub fn plastic(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 
     // Normalize text
-    let font = load_regular_font();
+    let font = load_regular_font()?;
     let (label_text_norm, label_text_width) = get_text_dims(&font, &badge.label_text, 11.0, 0.8);
     layout.label_text_norm = label_text_norm;
     layout.label_text_width = label_text_width;
@@ -92,17 +92,17 @@ pub fn plastic(badge: &Badge) -> Layout {
     layout.msg_text_x *= 10.0;
 
     // Color conversion to string
-    layout.label_color = color_to_string(badge.label_color);
-    layout.msg_color = color_to_string(badge.msg_color);
+    layout.label_color = verify_color(&badge.label_color)?;
+    layout.msg_color = verify_color(&badge.msg_color)?;
 
-    layout
+    Ok(layout)
 }
 
-pub fn flat_or_square(badge: &Badge) -> Layout {
+pub fn flat_or_square(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 
     // Normalize text
-    let font = load_regular_font();
+    let font = load_regular_font()?;
     let (label_text_norm, label_text_width) = get_text_dims(&font, &badge.label_text, 11.0, 0.8);
     layout.label_text_norm = label_text_norm;
     layout.label_text_width = label_text_width;
@@ -166,8 +166,8 @@ pub fn flat_or_square(badge: &Badge) -> Layout {
     layout.msg_text_x *= 10.0;
 
     // Color conversion to string
-    layout.label_color = color_to_string(badge.label_color);
-    layout.msg_color = color_to_string(badge.msg_color);
+    layout.label_color = verify_color(&badge.label_color)?;
+    layout.msg_color = verify_color(&badge.msg_color)?;
 
-    layout
+    Ok(layout)
 }
