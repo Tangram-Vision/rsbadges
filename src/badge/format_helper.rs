@@ -83,15 +83,9 @@ pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {
     ))
 }
 
-pub fn attempt_logo_download(logo_uri: &str) -> String {
+pub fn attempt_logo_download(logo_uri: &str) -> Result<String, BadgeError> {
     match create_embedded_logo(logo_uri) {
-        Ok(logo_data) => logo_data,
-        Err(e) => {
-            println!(
-                "Could not retrieve URI {} to embed into badge. Err: {}",
-                logo_uri, e
-            );
-            String::from(logo_uri)
-        }
+        Ok(logo_data) => Ok(logo_data),
+        Err(_) => Err(BadgeError::CannotEmbedLogo(String::from(logo_uri))),
     }
 }
