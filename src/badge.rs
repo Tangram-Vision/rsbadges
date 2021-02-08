@@ -22,10 +22,10 @@
 // OF SUCH DAMAGE.
 
 mod badge_type;
+mod format_helper;
 mod generate_layout;
 mod generate_svg;
 mod style;
-mod text_helper;
 
-pub use badge_type::Badge;
+pub use badge_type::{Badge, BadgeError};
 pub use style::Style;

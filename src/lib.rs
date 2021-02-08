@@ -23,5 +23,14 @@
 
 mod badge;
 
-pub use badge::Badge;
-pub use badge::Style;
+pub use badge::{Badge, BadgeError, Style};
+use std::fs;
+use std::path::Path;
+
+pub fn save_svg(filepath: &str, svg: &str) -> Result<(), String> {
+    let svg_path = Path::new(filepath);
+    if let Err(c) = fs::write(svg_path, svg) {
+        println!("ERROR: Could not save badge: {}", c);
+    }
+    Ok(())
+}
