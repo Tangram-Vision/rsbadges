@@ -76,6 +76,23 @@ fn create_badge_with_logo() {
 }
 
 #[test]
+fn create_badge_with_logo_local() {
+    let path = std::env::current_dir().unwrap();
+    let font_path = path.join(Path::new("tests/rust.svg"));
+    let badge = Badge {
+        label_text: String::from("version"),
+        msg_text: String::from("1.2.3"),
+        logo: String::from(font_path.to_str().unwrap()),
+        ..Badge::default()
+    };
+    let svg = match Style::Flat(badge).generate_svg() {
+        Ok(f) => f,
+        Err(_) => unreachable!(),
+    };
+    save_svg_to_tmp("flat_badge_logo_local.svg", svg);
+}
+
+#[test]
 fn create_badge_embed_logo() {
     let badge = Badge {
         logo: String::from("https://simpleicons.org/icons/rust.svg"),
@@ -87,6 +104,25 @@ fn create_badge_embed_logo() {
         Err(_) => unreachable!(),
     };
     save_svg_to_tmp("flat_badge_logo_embedded.svg", svg);
+}
+
+#[test]
+fn create_badge_embed_logo_local_src() {
+    let path = std::env::current_dir().unwrap();
+    let font_path = path.join(Path::new("tests/rust.svg"));
+    let badge = Badge {
+        logo: String::from(font_path.to_str().unwrap()),
+        embed_logo: true,
+        ..Badge::default()
+    };
+    let svg = match Style::Flat(badge).generate_svg() {
+        Ok(f) => f,
+        Err(e) => {
+            println!("{}", e);
+            unreachable!()
+        }
+    };
+    save_svg_to_tmp("flat_badge_logo_local_embedded.svg", svg);
 }
 
 #[test]
