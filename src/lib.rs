@@ -23,28 +23,97 @@
 
 //! Create shields.io-like badges from the comfort and safety of Rust
 //!
-//! RSBadges is a Rust-friendly badges generator. It acts as a library and a command line
-//! interface. Most everything on a badge can be customized:
+//! RSBadges is a Rust-friendly badge generator. The interface strives to be minimal
+//! while still providing a feature-rich API. Both the label (the left side) and the
+//! message (the right side) of the badge can be customized fully, with the ability to
 //!
-//! - Badge text, for either side
-//! - Badge links, for either side
-//! - Badge color, for either side
-//! - Added logo with the option to embed if desired
+//! - set text
+//! - set color using any valid CSS color code
+//! - embed a link into each side or a link for the whole badge
+//! - add a logo to the label and embed that logo's data into the SVG
+//! - set the style of badge, as described in [Shields.io](http://shields.io)
 //!
-//!  # Example usage
+//! RSBadges can be used as an API or a command line interface (CLI).
+//!
+//! # API
+//!
+//! First, instantiate a [Badge] struct to set all of the generic options for a badge SVG.
+//! This fully-populated Badge is then wrapped in a [Style] enum, which indicates which
+//! style of badge to eventually generate.
 //!
 //! ```
 //! use rsbadges::{Badge, Style};
 //! let badge = Badge{
 //!     label_text: String::from("Custom_label"),
 //!     msg_text: String::from("Custom_msg"),
+//!     label_color: String::from("red"),
 //!     ..Badge::default()
 //! };
 //! // Create a plastic badge using the data created above.
 //! let badge_style = Style::Plastic(badge);
+//! ```
+//!
+//! Badge and Style together are sufficient to
+//! tell RSBadges how to construct the right badge, which it does through `generate_svg()`:
+//!
+//! ```
+//! # use rsbadges::{Badge, Style};
+//! # let badge = Badge{
+//! #     label_text: String::from("Custom_label"),
+//! #     msg_text: String::from("Custom_msg"),
+//! #     label_color: String::from("red"),
+//! #     ..Badge::default()
+//! # };
+//! # // Create a plastic badge using the data created above.
+//! # let badge_style = Style::Plastic(badge);
 //! let badge_svg = badge_style.generate_svg().unwrap();
+//! ```
+//!
+//! The resulting SVG String can be saved to file using the convenience function `save_svg()`:
+//!
+//! ```
+//! # use rsbadges::{Badge, Style};
+//! # let badge = Badge{
+//! #     label_text: String::from("Custom_label"),
+//! #     msg_text: String::from("Custom_msg"),
+//! #     label_color: String::from("red"),
+//! #     ..Badge::default()
+//! # };
+//! # // Create a plastic badge using the data created above.
+//! # let badge_style = Style::Plastic(badge);
+//! # let badge_svg = badge_style.generate_svg().unwrap();
 //! rsbadges::save_svg("~/Downloads/badge.svg", &badge_svg);
 //! ```
+//!
+//! See the [Badge] and [Style] documentation for more.
+//!
+//! # CLI
+//!
+//! The CLI features all of the customization options from the API, along with a
+//! few quality-of-life improvements for command line use and evaluation, such as
+//!
+//! - Opening a created badge SVG in browser after creation
+//! - Specifying a save directory for the SVG
+//!
+//! Just like the API, `label-color` and `msg-color` take any valid CSS color
+//! as input. Don't worry if you get it wrong; RSBadges will let you know.
+//!
+//! | Short      | Long                                   | Default
+//! | ---------  | ------------------------------------   | -------
+//! | `-a`       | `--label <string>`                     | "test"
+//! | `-b`       | `--label-color <css_color>`            | "#555"
+//! | `-c`       | `--label-link <url>`                   | ""
+//! | `-x`       | `--msg <string>`                       | "test"
+//! | `-y`       | `--msg-color <css_color>`              | "#007ec6"
+//! | `-z`       | `--msg-link <url>`                     | ""
+//! | `-l`       | `--logo <url or local path>`           | ""
+//! | `-f`       | `--save-to-svg-at <filepath/file.svg>` | ""
+//! | `-s`       | `--style <plastic,flat,flatsquare>`    | "flat"
+//! | `-o`       | `--open-in-browser`                    | false
+//! | `-h`       | `--help`                               | false
+//! | `-e`       | `--embed-logo`                         | false
+//!
+//! Run the CLI with the `-h` flag to see all possible arguments and flags.
 //!
 
 #![warn(missing_docs)] // warn if there are missing docs
