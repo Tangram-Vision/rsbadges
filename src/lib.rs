@@ -30,8 +30,8 @@
 //! - Set text
 //! - Set color using any valid CSS color code
 //! - Embed a link into each side or a link for the whole badge
-//! - Add a logo from a local source or a URL
-//! - Embed that logo's data into the SVG directly
+//! - Add a logo (in SVG format) from a local source or a URL
+//! - Embed that logo's data into the badge directly
 //! - Set the style of badge, as described in [Shields.io](http://shields.io)
 //!
 //! RSBadges can be used as an API or a command line interface (CLI).
