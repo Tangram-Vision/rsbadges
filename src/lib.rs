@@ -42,8 +42,8 @@
 //! };
 //! // Create a plastic badge using the data created above.
 //! let badge_style = Style::Plastic(badge);
-//! let badge_svg = badge_style.generate_svg();
-//! rsbadges::save_svg("~/Downloads/badge.svg", badge_svg);
+//! let badge_svg = badge_style.generate_svg().unwrap();
+//! rsbadges::save_svg("~/Downloads/badge.svg", &badge_svg);
 //! ```
 //!
 
