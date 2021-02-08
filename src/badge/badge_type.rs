@@ -21,6 +21,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
+use thiserror::Error;
+
 #[derive(Debug, Clone)]
 pub struct Badge {
     pub label_text: String,
@@ -75,4 +77,22 @@ pub struct Layout {
     pub logo_y: f32,
     pub label_color: String,
     pub msg_color: String,
+}
+
+#[derive(Error, Debug, PartialEq)]
+pub enum BadgeError {
+    #[error("Unable to parse command line arguments. {0}")]
+    BadCommandLineArgs(String),
+    #[error("The provided color {0} is not a valid CSS color format.")]
+    ColorNotValid(String),
+    #[error("Unable to save the badge SVG to {0}.")]
+    CannotSaveToFile(String),
+    #[error("Unable to download and embed the logo. Attempted to load from {0}.")]
+    CannotEmbedLogo(String),
+    #[error("Unable to find the font file.")]
+    CannotLocateFont,
+    #[error("Unable to load the font file.")]
+    CannotLoadFont,
+    #[error("{0} is an invalid style. Valid styles: \n- plastic\n- flat\n- flatsquare.")]
+    InvalidStyle(String),
 }
