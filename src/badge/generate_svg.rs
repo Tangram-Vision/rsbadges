@@ -25,6 +25,7 @@ use super::badge_type::*;
 use super::format_helper;
 use askama::Template;
 use rand::{distributions::Alphanumeric, Rng};
+use regex::Regex;
 
 #[derive(Template, Debug)]
 #[template(path = "badge_template_flat.xml", escape = "xml")]
@@ -93,8 +94,10 @@ pub fn flat_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
         id_smooth: &id_smooth,
         id_round: &id_round,
     };
-
-    flat_badge.render().unwrap()
+    let re = Regex::new("[\r\n]*").unwrap();
+    Ok(String::from(
+        re.replace_all(&flat_badge.render().unwrap(), ""),
+    ))
 }
 
 #[derive(Template, Debug)]
@@ -161,7 +164,10 @@ pub fn plastic_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> 
         id_round: &id_round,
     };
 
-    plastic_badge.render().unwrap()
+    let re = Regex::new("[\r\n]*").unwrap();
+    Ok(String::from(
+        re.replace_all(&plastic_badge.render().unwrap(), ""),
+    ))
 }
 
 #[derive(Template, Debug)]
@@ -217,5 +223,8 @@ pub fn flat_square_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeErr
         right_width: layout.msg_total_width as usize,
     };
 
-    flat_square_badge.render().unwrap()
+    let re = Regex::new("[\r\n]*").unwrap();
+    Ok(String::from(
+        re.replace_all(&flat_square_badge.render().unwrap(), ""),
+    ))
 }
