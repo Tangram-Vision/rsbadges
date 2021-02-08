@@ -42,7 +42,7 @@ fn create_badge_with_logo() {
     let badge = Badge {
         label_text: String::from("version"),
         msg_text: String::from("1.2.3"),
-        logo: String::from("https://simpleicons.org/icons/slack.svg"),
+        logo: String::from("https://simpleicons.org/icons/rust.svg"),
         ..Badge::default()
     };
     let svg = match Style::Flat(badge).generate_svg() {
@@ -55,7 +55,7 @@ fn create_badge_with_logo() {
 #[test]
 fn create_badge_embed_logo() {
     let badge = Badge {
-        logo: String::from("https://simpleicons.org/icons/slack.svg"),
+        logo: String::from("https://simpleicons.org/icons/rust.svg"),
         embed_logo: true,
         ..Badge::default()
     };
