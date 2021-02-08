@@ -31,17 +31,10 @@ struct RSBadgesOptions {
     save_to_path: String,
 }
 
-fn main() {
+fn main() -> Result<(), BadgeError> {
     println!("\n");
-    let options = match parse_project_dir_from_args() {
-        Ok(r) => r,
-        Err(e) => {
-            println!("{}", e);
-            std::process::exit(1);
-        }
-    };
-
-    let svg = options.style.generate_svg().unwrap();
+    let options = parse_project_dir_from_args()?;
+    let svg = options.style.generate_svg()?;
 
     println!("Generated SVG:\n------\n{}\n------\n", svg);
 
@@ -49,12 +42,8 @@ fn main() {
     let mut saved = false;
     if !options.save_to_path.is_empty() {
         println!("Saving a badge copy at {:#?}", options.save_to_path);
-        if let Err(e) = rsbadges::save_svg(&options.save_to_path, &svg) {
-            println!("{}", e);
-            std::process::exit(1);
-        } else {
-            saved = true;
-        }
+        rsbadges::save_svg(&options.save_to_path, &svg)?;
+        saved = true;
     }
 
     // Open in browser, if we can
@@ -68,19 +57,20 @@ fn main() {
             let svg_path = match ci_path_full.to_str() {
                 Some(path) => path,
                 None => {
-                    println!("Path is not valid! Cannot save tmp file for browser display.");
-                    std::process::exit(1);
+                    return Err(BadgeError::CannotSaveToFile(String::from(
+                        "Path is not valid! Cannot save tmp file for browser display.",
+                    )));
                 }
             };
             println!(
                 "Saving a temporary badge copy for browser display at {:#?}",
                 svg_path
             );
-            if let Ok(()) = rsbadges::save_svg(svg_path, &svg) {
-                webbrowser::open(svg_path).expect("Could not open browser.");
-            }
+            rsbadges::save_svg(svg_path, &svg)?;
+            webbrowser::open(svg_path).expect("Could not open browser.");
         }
     }
+    Ok(())
 }
 
 fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
