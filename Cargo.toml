@@ -7,18 +7,15 @@ readme = "README.md"
 repository = "https://gitlab.com/tangram-vision/rsbadges"
 version = "1.0.0"
 
-[features]
-cmd-line = ["webbrowser", "getopts"]
-
 [dependencies]
 askama = "0.10"
 base64 = "0.13"
 css-color = "0.1"
-getopts = {version = "0.2", optional = true}
+getopts = "0.2"
 rand = "0.8"
 regex = "1.4"
 rusttype = "0.9"
 thiserror = "1.0"
 unicode-normalization = "0.1"
 ureq = "2.0"
-webbrowser = {version = "0.5", optional = true}
+webbrowser = "0.5"
