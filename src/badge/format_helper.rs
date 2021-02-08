@@ -31,7 +31,6 @@ use unicode_normalization::UnicodeNormalization;
 pub fn load_regular_font<'a>() -> Result<Font<'a>, BadgeError> {
     let path = std::env::current_dir().unwrap();
     let font_path = path.join(Path::new("fonts/DejaVuSans.ttf"));
-    println!("{}", font_path.display());
     let font_data = match std::fs::read(font_path) {
         Ok(f) => f,
         Err(_) => return Err(BadgeError::CannotLocateFont),
