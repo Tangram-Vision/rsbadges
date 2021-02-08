@@ -158,7 +158,6 @@ fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
         Overwrites --label-link and --msg-link.",
         "<url>",
     );
-    // See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title.
     opts.optopt(
         "",
         "badge-title",
@@ -235,7 +234,6 @@ fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
         badge_title,
         label_title,
         msg_title,
-        open_in_browser: false,
     };
 
     // Get our style
