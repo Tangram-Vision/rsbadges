@@ -27,10 +27,11 @@ pub use badge::{Badge, BadgeError, Style};
 use std::fs;
 use std::path::Path;
 
-pub fn save_svg(filepath: &str, svg: &str) -> Result<(), String> {
+pub fn save_svg(filepath: &str, svg: &str) -> Result<(), BadgeError> {
     let svg_path = Path::new(filepath);
     if let Err(c) = fs::write(svg_path, svg) {
-        println!("ERROR: Could not save badge: {}", c);
+        println!("Error: {}", c);
+        return Err(BadgeError::CannotSaveToFile(String::from(filepath)));
     }
     Ok(())
 }
