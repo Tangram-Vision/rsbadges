@@ -21,8 +21,11 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
+#[cfg(feature = "cmd-line")]
 use getopts::Options;
+#[cfg(feature = "cmd-line")]
 use rsbadges::{Badge, BadgeError, Style};
+#[cfg(feature = "cmd-line")]
 use std::env;
 
 struct RSBadgesOptions {
@@ -31,6 +34,17 @@ struct RSBadgesOptions {
     save_to_path: String,
 }
 
+#[cfg(not(feature = "cmd-line"))]
+fn main() {
+    println!("----------------");
+    println!("  In order to use the command line functionality of RSBadges, ");
+    println!("  build or run this crate with the `cmd-line` feature:");
+    println!("");
+    println!("  $ cargo run --features cmd-line");
+    println!("----------------");
+}
+
+#[cfg(feature = "cmd-line")]
 fn main() -> Result<(), BadgeError> {
     println!("\n");
     let options = parse_project_dir_from_args()?;
@@ -73,6 +87,7 @@ fn main() -> Result<(), BadgeError> {
     Ok(())
 }
 
+#[cfg(feature = "cmd-line")]
 fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
