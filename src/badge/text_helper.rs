@@ -24,12 +24,22 @@
 use super::badge_type::BadgeError;
 use css_color::Rgba;
 use rusttype::{point, Font, Scale};
+use std::path::Path;
 use unicode_normalization::UnicodeNormalization;
 
 // Docs: https://gitlab.redox-os.org/redox-os/rusttype/-/blob/master/dev/examples/ascii.rs
-pub fn load_regular_font<'a>() -> Font<'a> {
-    let font_data = include_bytes!("../../fonts/DejaVuSans.ttf");
-    Font::try_from_bytes(font_data as &[u8]).expect("error constructing a Font from bytes")
+pub fn load_regular_font<'a>() -> Result<Font<'a>, BadgeError> {
+    let path = std::env::current_dir().unwrap();
+    let font_path = path.join(Path::new("fonts/DejaVuSans.ttf"));
+    println!("{}", font_path.display());
+    let font_data = match std::fs::read(font_path) {
+        Ok(f) => f,
+        Err(_) => return Err(BadgeError::CannotLocateFont),
+    };
+    match Font::try_from_vec(font_data) {
+        Some(f) => Ok(f),
+        None => Err(BadgeError::CannotLoadFont),
+    }
 }
 
 // pub fn load_bold_font<'a>() -> Font<'a> {
