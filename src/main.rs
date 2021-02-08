@@ -28,6 +28,7 @@ use rsbadges::{Badge, BadgeError, Style};
 #[cfg(feature = "cmd-line")]
 use std::env;
 
+#[cfg(feature = "cmd-line")]
 struct RSBadgesOptions {
     style: Style,
     open_in_browser: bool,
