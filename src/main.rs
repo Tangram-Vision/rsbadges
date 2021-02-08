@@ -25,7 +25,8 @@ use getopts::Options;
 use rsbadges::Badge;
 use std::env;
 
-fn parse_project_dir_from_args() -> Result<Badge, String> {
+
+fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
 
@@ -68,7 +69,6 @@ fn parse_project_dir_from_args() -> Result<Badge, String> {
         "The url to redirect to when the right side of the badge is clicked.",
         "<url>",
     );
-
     opts.optopt(
         "l",
         "logo",
@@ -76,14 +76,20 @@ fn parse_project_dir_from_args() -> Result<Badge, String> {
         "<url or local path>",
     );
     opts.optopt(
-        "s",
+        "f",
         "save-to-svg-at",
         "The file path where this badge should be saved. File name should end in SVG \
         (but this is not enforced)",
         "<filepath>",
     );
+    opts.optopt(
+        "s",
+        "style",
+        "The Shields.io style to use during badge generation.",
+        "<plastic/flat/flatsquare>",
+    );
     opts.optflag(
-        "b",
+        "o",
         "open-in-browser",
         "Flag. Display the badge in a browser tab.",
     );
@@ -93,7 +99,9 @@ fn parse_project_dir_from_args() -> Result<Badge, String> {
         "embed-logo",
         "Flag. Include the specified logo data directly \
         in the badge. This prevents a URL call whenever the SVG is loaded. \
-        Only works if --logo is a HTTP/HTTPS URI or a valid file path.",
+        Only works if --logo is a HTTP/HTTPS URI or a valid file path. If the \
+        file cannot be successfully downloaded, rsbadges will just use the full \
+        URI instead (negating this flag).",
     );
     opts.optopt(
         "",
@@ -124,7 +132,7 @@ fn parse_project_dir_from_args() -> Result<Badge, String> {
 
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
-        Err(f) => return Err(f.to_string()),
+        Err(f) => return Err(BadgeError::BadCommandLineArgs(f.to_string())),
     };
 
     if matches.opt_present("h") {
@@ -136,54 +144,72 @@ fn parse_project_dir_from_args() -> Result<Badge, String> {
     // Get the default Badge settings
     let badge_default = Badge::default();
 
-    let label_text = match matches.opt_str("label") {
-        Some(val) => val,
-        None => badge_default.label_text,
-    };
-    let msg_text = match matches.opt_str("msg") {
-        Some(val) => val,
-        None => badge_default.msg_text,
-    };
-    let label_color = match matches.opt_str("label-color") {
-        Some(val) => match val.parse::<css_color::Rgba>() {
-            Ok(color) => color,
-            Err(_) => {
-                return Err(format!(
-                    "Could not parse label-color argument; {} is not a valid CSS color.",
-                    val
-                ));
-            }
-        },
-        None => badge_default.label_color,
-    };
-    let msg_color = match matches.opt_str("msg-color") {
-        Some(val) => match val.parse() {
-            Ok(color) => color,
-            Err(_) => {
-                return Err(format!(
-                    "Could not parse msg-color argument; {} is not a valid CSS color.",
-                    val
-                ));
-            }
-        },
-        None => badge_default.msg_color,
-    };
+    let label_text = matches.opt_str("label").unwrap_or(badge_default.label_text);
+    let label_color = matches
+        .opt_str("label-color")
+        .unwrap_or(badge_default.label_color);
+    let label_link = matches
+        .opt_str("label-link")
+        .unwrap_or(badge_default.label_link);
+    let msg_text = matches.opt_str("msg").unwrap_or(badge_default.msg_text);
+    let msg_color = matches
+        .opt_str("msg-color")
+        .unwrap_or(badge_default.msg_color);
+    let msg_link = matches
+        .opt_str("msg-link")
+        .unwrap_or(badge_default.msg_link);
+
+    let badge_link = matches
+        .opt_str("badge-link")
+        .unwrap_or(badge_default.badge_link);
+    let logo = matches.opt_str("logo").unwrap_or(badge_default.logo);
+    let embed_logo = matches.opt_present("e");
+    let badge_title = matches
+        .opt_str("badge-title")
+        .unwrap_or(badge_default.badge_title);
+    let label_title = matches
+        .opt_str("label-title")
+        .unwrap_or(badge_default.label_title);
+    let msg_title = matches
+        .opt_str("msg-title")
+        .unwrap_or(badge_default.msg_title);
 
     let badge = Badge {
         label_text,
         msg_text,
+        badge_link,
+        label_link,
+        msg_link,
         label_color,
         msg_color,
-        ..Badge::default()
+        logo,
+        embed_logo,
+        badge_title,
+        label_title,
+        msg_title,
+        open_in_browser: false,
     };
 
-    println!("{:#?}", badge);
-    Ok(badge)
-}
+    // Get our style
+    let style_str = matches
+        .opt_str("style")
+        .unwrap_or_else(|| String::from("flat"));
+    let style = match style_str.as_str() {
+        "plastic" => Style::Plastic(badge),
+        "flat" => Style::Flat(badge),
+        "flatsquare" => Style::FlatSquare(badge),
+        _ => return Err(BadgeError::InvalidStyle(style_str)),
+    };
 
-fn main() {
-    if let Err(e) = parse_project_dir_from_args() {
-        println!("{}", e);
-        std::process::exit(1);
-    }
+    let open_in_browser = matches.opt_present("o");
+    let save_to_path = match matches.opt_str("save-to-svg-at") {
+        Some(val) => val,
+        None => String::from(""),
+    };
+
+    Ok(RSBadgesOptions {
+        style,
+        open_in_browser,
+        save_to_path,
+    })
 }
