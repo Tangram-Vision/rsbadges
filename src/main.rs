@@ -39,7 +39,7 @@ fn main() {
     println!("----------------");
     println!("  In order to use the command line functionality of RSBadges, ");
     println!("  build or run this crate with the `cmd-line` feature:");
-    println!("");
+    println!();
     println!("  $ cargo run --features cmd-line");
     println!("----------------");
 }
