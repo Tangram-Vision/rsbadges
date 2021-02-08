@@ -127,7 +127,7 @@ fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
         "save-to-svg-at",
         "The file path where this badge should be saved. File name should end in SVG \
         (but this is not enforced)",
-        "<filepath>",
+        "<filepath/file.svg>",
     );
     opts.optopt(
         "s",
