@@ -27,7 +27,7 @@ use thiserror::Error;
 
 /// Holds generic info about a badge.
 ///
-/// The Badge struct holds all of the options that could be set in for a badge SVG.
+/// The Badge struct holds all of the options that could be set for a badge SVG.
 /// It is meant to be as superficial as possible; errors are checked on
 /// the generation of the SVG itself, not the Badge object.
 ///
