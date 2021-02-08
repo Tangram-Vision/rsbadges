@@ -107,7 +107,8 @@ fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
     opts.optopt(
         "y",
         "msg-color",
-        "The background color of the right side of the badge.",
+        "The background color of the right side of the badge. Supports all valid CSS formats. See \
+        https://www.w3schools.com/colors/colors_picker.asp for examples.",
         "<css_color>",
     );
     opts.optopt(
@@ -133,12 +134,12 @@ fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
         "s",
         "style",
         "The Shields.io style to use during badge generation.",
-        "<plastic/flat/flatsquare>",
+        "<plastic|flat|flatsquare>",
     );
     opts.optflag(
         "o",
         "open-in-browser",
-        "Flag. Display the badge in a browser tab.",
+        "Flag. Display the badge in a browser.",
     );
     opts.optflag("h", "help", "Flag. Print arguments to console.");
     opts.optflag(
@@ -146,9 +147,9 @@ fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
         "embed-logo",
         "Flag. Include the specified logo data directly \
         in the badge. This prevents a URL call whenever the SVG is loaded. \
-        Only works if --logo is a HTTP/HTTPS URI or a valid file path. If the \
-        file cannot be successfully downloaded, rsbadges will just use the full \
-        URI instead (negating this flag).",
+        Only works if --logo is a HTTP/HTTPS URI or a valid file path. Will \
+        return an error if the logo cannot be embedded; run without the flag \
+        set to create a SVG regardless.",
     );
     opts.optopt(
         "",
