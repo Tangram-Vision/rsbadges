@@ -75,16 +75,24 @@ pub fn verify_color(color: &str) -> Result<String, BadgeError> {
 }
 
 pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {
-    let body: String = ureq::get(logo_uri).call()?.into_string()?;
-    Ok(format!(
-        "data:image/svg+xml;base64,{}",
-        base64::encode(body.as_bytes())
-    ))
+    Ok(ureq::get(logo_uri).call()?.into_string()?)
 }
 
 pub fn attempt_logo_download(logo_uri: &str) -> Result<String, BadgeError> {
-    match create_embedded_logo(logo_uri) {
-        Ok(logo_data) => Ok(logo_data),
-        Err(_) => Err(BadgeError::CannotEmbedLogo(String::from(logo_uri))),
-    }
+    // Check for local copy
+    let local_path = Path::new(logo_uri);
+
+    let data = match std::fs::read_to_string(local_path) {
+        Ok(f) => f,
+        Err(_) => match create_embedded_logo(logo_uri) {
+            Ok(logo_data) => logo_data,
+            Err(_) => return Err(BadgeError::CannotEmbedLogo(String::from(logo_uri))),
+        },
+    };
+
+    // If not local, download
+    Ok(format!(
+        "data:image/svg+xml;base64,{}",
+        base64::encode(data.as_bytes())
+    ))
 }
