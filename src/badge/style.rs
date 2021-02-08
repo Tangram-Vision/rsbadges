@@ -34,19 +34,21 @@ pub enum Style {
 }
 
 impl Style {
-    pub fn generate_svg(&self) -> String {
+    pub fn generate_svg(&self) -> Result<String, BadgeError> {
         let layout = match self {
-            Style::Flat(badge) => generate_layout::flat_or_square(badge),
-            Style::FlatSquare(badge) => generate_layout::flat_or_square(badge),
-            Style::Plastic(badge) => generate_layout::plastic(badge),
+            Style::Flat(badge) => generate_layout::flat_or_square(badge)?,
+            Style::FlatSquare(badge) => generate_layout::flat_or_square(badge)?,
+            Style::Plastic(badge) => generate_layout::plastic(badge)?,
             _ => Layout::default(),
         };
 
-        match self {
-            Style::Flat(badge) => generate_svg::flat_svg(badge, layout),
-            Style::FlatSquare(badge) => generate_svg::flat_square_svg(badge, layout),
-            Style::Plastic(badge) => generate_svg::plastic_svg(badge, layout),
+        let style = match self {
+            Style::Flat(badge) => generate_svg::flat_svg(badge, layout)?,
+            Style::FlatSquare(badge) => generate_svg::flat_square_svg(badge, layout)?,
+            Style::Plastic(badge) => generate_svg::plastic_svg(badge, layout)?,
             _ => String::from("Not implemented yet!"),
-        }
+        };
+
+        Ok(style)
     }
 }
