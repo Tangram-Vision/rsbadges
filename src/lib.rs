@@ -27,11 +27,12 @@
 //! while still providing a feature-rich API. Both the label (the left side) and the
 //! message (the right side) of the badge can be customized fully, with the ability to
 //!
-//! - set text
-//! - set color using any valid CSS color code
-//! - embed a link into each side or a link for the whole badge
-//! - add a logo to the label and embed that logo's data into the SVG
-//! - set the style of badge, as described in [Shields.io](http://shields.io)
+//! - Set text
+//! - Set color using any valid CSS color code
+//! - Embed a link into each side or a link for the whole badge
+//! - Add a logo from a local source or a URL
+//! - Embed that logo's data into the SVG directly
+//! - Set the style of badge, as described in [Shields.io](http://shields.io)
 //!
 //! RSBadges can be used as an API or a command line interface (CLI).
 //!
