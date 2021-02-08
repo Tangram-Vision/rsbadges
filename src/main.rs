@@ -120,7 +120,7 @@ fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
     opts.optopt(
         "l",
         "logo",
-        "A URI reference to a logo to display in the badge.",
+        "A URI reference to a logo to display in the badge. Logo must be in SVG format.",
         "<url or local path>",
     );
     opts.optopt(
