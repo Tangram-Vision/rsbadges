@@ -21,6 +21,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
+use super::badge_type::BadgeError;
+use css_color::Rgba;
 use rusttype::{point, Font, Scale};
 use unicode_normalization::UnicodeNormalization;
 
@@ -50,13 +52,17 @@ pub fn get_text_dims(font: &Font, text: &str, font_size: f32, kerning_pix: f32) 
     (norm_text, glyphs_width)
 }
 
-pub fn color_to_string(color: css_color::Rgba) -> String {
-    format!(
+pub fn verify_color(color: &str) -> Result<String, BadgeError> {
+    let valid_color: Rgba = match color.parse() {
+        Ok(c) => c,
+        Err(_) => return Err(BadgeError::ColorNotValid(String::from(color))),
+    };
+    Ok(format!(
         "rgb({}, {}, {})",
-        color.red * 255.0,
-        color.green * 255.0,
-        color.blue * 255.0
-    )
+        valid_color.red * 255.0,
+        valid_color.green * 255.0,
+        valid_color.blue * 255.0
+    ))
 }
 
 pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {
