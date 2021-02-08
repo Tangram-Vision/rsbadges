@@ -68,7 +68,7 @@ pub struct Badge {
     pub msg_color: String,
     /// The url to redirect to when the right side of the badge is clicked.
     pub msg_link: String,
-    /// A URI reference to a logo to display in the badge.
+    /// A URI reference to a logo to display in the badge. Must be in SVG format.
     pub logo: String,
     /// Include the specified logo data directly in the badge.
     /// This prevents a URL call whenever the SVG is loaded.
