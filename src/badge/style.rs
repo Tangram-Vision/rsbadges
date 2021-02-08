@@ -30,7 +30,6 @@ pub enum Style {
     Plastic(Badge),
     Flat(Badge),
     FlatSquare(Badge),
-    ForTheBadge(Badge),
 }
 
 impl Style {
@@ -39,14 +38,12 @@ impl Style {
             Style::Flat(badge) => generate_layout::flat_or_square(badge)?,
             Style::FlatSquare(badge) => generate_layout::flat_or_square(badge)?,
             Style::Plastic(badge) => generate_layout::plastic(badge)?,
-            _ => Layout::default(),
         };
 
         let style = match self {
             Style::Flat(badge) => generate_svg::flat_svg(badge, layout)?,
             Style::FlatSquare(badge) => generate_svg::flat_square_svg(badge, layout)?,
             Style::Plastic(badge) => generate_svg::plastic_svg(badge, layout)?,
-            _ => String::from("Not implemented yet!"),
         };
 
         Ok(style)
