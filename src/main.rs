@@ -22,100 +22,168 @@
 // OF SUCH DAMAGE.
 
 use getopts::Options;
-use rsbadges::Badge;
+use rsbadges::{Badge, BadgeError, Style};
 use std::env;
 
-fn parse_project_dir_from_args() -> Result<Badge, String> {
+struct RSBadgesOptions {
+    style: Style,
+    open_in_browser: bool,
+    save_to_path: String,
+}
+
+fn main() -> Result<(), BadgeError> {
+    println!("\n");
+    let options = parse_project_dir_from_args()?;
+    let svg = options.style.generate_svg()?;
+
+    println!("Generated SVG:\n------\n{}\n------\n", svg);
+
+    // Save our file
+    let mut saved = false;
+    if !options.save_to_path.is_empty() {
+        println!("Saving a badge copy at {:#?}", options.save_to_path);
+        rsbadges::save_svg(&options.save_to_path, &svg)?;
+        saved = true;
+    }
+
+    // Open in browser, if we can
+    if options.open_in_browser {
+        if saved {
+            webbrowser::open(&options.save_to_path).expect("Could not open browser.");
+        } else {
+            use std::path::Path;
+            let ci_path = std::env::temp_dir();
+            let ci_path_full = ci_path.join(Path::new("badge.svg"));
+            let svg_path = match ci_path_full.to_str() {
+                Some(path) => path,
+                None => {
+                    return Err(BadgeError::CannotSaveToFile(String::from(
+                        "Path is not valid! Cannot save tmp file for browser display.",
+                    )));
+                }
+            };
+            println!(
+                "Saving a temporary badge copy for browser display at {:#?}",
+                svg_path
+            );
+            rsbadges::save_svg(svg_path, &svg)?;
+            webbrowser::open(svg_path).expect("Could not open browser.");
+        }
+    }
+    Ok(())
+}
+
+fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
 
     let mut opts = Options::new();
     // Required Args
     opts.optopt(
-        "",
+        "a",
         "label",
-        "the text to show on the left side of the badge",
-        "build",
+        "The text to show on the left side of the badge.",
+        "<string>",
     );
     opts.optopt(
-        "",
-        "msg",
-        "the text to show on the right side of the badge",
-        "passed",
-    );
-    opts.optopt(
-        "",
+        "b",
         "label-color",
-        "the background color of the left side of the badge",
-        "#555",
+        "The background color of the left side of the badge. Supports all valid CSS formats. See \
+        https://www.w3schools.com/colors/colors_picker.asp for examples.",
+        "<css_color>",
     );
     opts.optopt(
-        "",
+        "c",
+        "label-link",
+        "The url to redirect to when the left side of the badge is clicked.",
+        "<url>",
+    );
+    opts.optopt(
+        "x",
+        "msg",
+        "The text to show on the right side of the badge.",
+        "<string>",
+    );
+    opts.optopt(
+        "y",
         "msg-color",
-        "the background color of the right side of the badge",
-        "#007ec6",
+        "The background color of the right side of the badge. Supports all valid CSS formats. See \
+        https://www.w3schools.com/colors/colors_picker.asp for examples.",
+        "<css_color>",
+    );
+    opts.optopt(
+        "z",
+        "msg-link",
+        "The url to redirect to when the right side of the badge is clicked.",
+        "<url>",
+    );
+    opts.optopt(
+        "l",
+        "logo",
+        "A URI reference to a logo to display in the badge. Logo must be in SVG format.",
+        "<url or local path>",
+    );
+    opts.optopt(
+        "f",
+        "save-to-svg-at",
+        "The file path where this badge should be saved. File name should end in SVG \
+        (but this is not enforced)",
+        "<filepath/file.svg>",
+    );
+    opts.optopt(
+        "s",
+        "style",
+        "The Shields.io style to use during badge generation.",
+        "<plastic|flat|flatsquare>",
+    );
+    opts.optflag(
+        "o",
+        "open-in-browser",
+        "Flag. Display the badge in a browser.",
+    );
+    opts.optflag("h", "help", "Flag. Print arguments to console.");
+    opts.optflag(
+        "e",
+        "embed-logo",
+        "Flag. Include the specified logo data directly \
+        in the badge. This prevents a URL call whenever the SVG is loaded. \
+        Only works if --logo is a HTTP/HTTPS URI or a valid file path. Will \
+        return an error if the logo cannot be embedded; run without the flag \
+        set to create a SVG regardless.",
     );
     opts.optopt(
         "",
         "badge-link",
-        "the url to redirect to when the badge is clicked",
-        "",
+        "The url to redirect to when any part of the badge is clicked. \
+        Overwrites --label-link and --msg-link.",
+        "<url>",
     );
     opts.optopt(
         "",
-        "label-link",
-        "the url to redirect to when the left side of the badge is clicked",
-        "",
-    );
-    opts.optopt(
-        "",
-        "msg-link",
-        "the url to redirect to when the right side of the badge is clicked",
-        "",
-    );
-    opts.optopt(
-        "",
-        "logo",
-        "a URI reference to a logo to display in the badge",
-        "",
-    );
-    opts.optopt(
-        "",
-        "embed-logo",
-        "if the logo is specified then include the image data directly
-        in the badge (this will prevent a URL fetch and may work around
-             the fact that some open_in_browsers do not fetch external image
-             references); only works if --logo is a HTTP/HTTPS URI or a file path",
-        "false",
-    );
-    opts.optopt(
-        "",
-        "badge_title",
-        "the badge title to associate with the entire badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
-        "",
+        "badge-title",
+        "The title to associate with the entire badge.",
+        "<string>",
     );
     opts.optopt(
         "",
         "label-title",
-        "the badge title to associate with the left side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
-        "",
+        "The title to associate with the left side of the badge.",
+        "<string>",
     );
     opts.optopt(
         "",
         "msg-title",
-        "the badge title to associate with the right side of the badge. See https://developer.mozilla.org/en-US/docs/Web/SVG/Element/badge_title",
-        "",
+        "The title to associate with the right side of the badge.",
+        "<string>",
     );
-    opts.optflag("", "open-in-browser", "display the badge in a browser tab");
-    opts.optflag("h", "help", "print arguments to console");
 
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
-        Err(f) => return Err(f.to_string()),
+        Err(f) => return Err(BadgeError::BadCommandLineArgs(f.to_string())),
     };
 
     if matches.opt_present("h") {
-        let brief = format!("Usage: {} FILE [options]", program);
+        let brief = format!("Usage: {} [options]", program);
         println!("{}", opts.usage(&brief));
         std::process::exit(1);
     }
@@ -123,54 +191,71 @@ fn parse_project_dir_from_args() -> Result<Badge, String> {
     // Get the default Badge settings
     let badge_default = Badge::default();
 
-    let label_text = match matches.opt_str("label") {
-        Some(val) => val,
-        None => badge_default.label_text,
-    };
-    let msg_text = match matches.opt_str("msg") {
-        Some(val) => val,
-        None => badge_default.msg_text,
-    };
-    let label_color = match matches.opt_str("label-color") {
-        Some(val) => match val.parse::<css_color::Rgba>() {
-            Ok(color) => color,
-            Err(_) => {
-                return Err(format!(
-                    "Could not parse label-color argument; {} is not a valid CSS color.",
-                    val
-                ));
-            }
-        },
-        None => badge_default.label_color,
-    };
-    let msg_color = match matches.opt_str("msg-color") {
-        Some(val) => match val.parse() {
-            Ok(color) => color,
-            Err(_) => {
-                return Err(format!(
-                    "Could not parse msg-color argument; {} is not a valid CSS color.",
-                    val
-                ));
-            }
-        },
-        None => badge_default.msg_color,
-    };
+    let label_text = matches.opt_str("label").unwrap_or(badge_default.label_text);
+    let label_color = matches
+        .opt_str("label-color")
+        .unwrap_or(badge_default.label_color);
+    let label_link = matches
+        .opt_str("label-link")
+        .unwrap_or(badge_default.label_link);
+    let msg_text = matches.opt_str("msg").unwrap_or(badge_default.msg_text);
+    let msg_color = matches
+        .opt_str("msg-color")
+        .unwrap_or(badge_default.msg_color);
+    let msg_link = matches
+        .opt_str("msg-link")
+        .unwrap_or(badge_default.msg_link);
+
+    let badge_link = matches
+        .opt_str("badge-link")
+        .unwrap_or(badge_default.badge_link);
+    let logo = matches.opt_str("logo").unwrap_or(badge_default.logo);
+    let embed_logo = matches.opt_present("e");
+    let badge_title = matches
+        .opt_str("badge-title")
+        .unwrap_or(badge_default.badge_title);
+    let label_title = matches
+        .opt_str("label-title")
+        .unwrap_or(badge_default.label_title);
+    let msg_title = matches
+        .opt_str("msg-title")
+        .unwrap_or(badge_default.msg_title);
 
     let badge = Badge {
         label_text,
         msg_text,
+        badge_link,
+        label_link,
+        msg_link,
         label_color,
         msg_color,
-        ..Badge::default()
+        logo,
+        embed_logo,
+        badge_title,
+        label_title,
+        msg_title,
     };
 
-    println!("{:#?}", badge);
-    Ok(badge)
-}
+    // Get our style
+    let style_str = matches
+        .opt_str("style")
+        .unwrap_or_else(|| String::from("flat"));
+    let style = match style_str.as_str() {
+        "plastic" => Style::Plastic(badge),
+        "flat" => Style::Flat(badge),
+        "flatsquare" => Style::FlatSquare(badge),
+        _ => return Err(BadgeError::InvalidStyle(style_str)),
+    };
 
-fn main() {
-    if let Err(e) = parse_project_dir_from_args() {
-        println!("{}", e);
-        std::process::exit(1);
-    }
+    let open_in_browser = matches.opt_present("o");
+    let save_to_path = match matches.opt_str("save-to-svg-at") {
+        Some(val) => val,
+        None => String::from(""),
+    };
+
+    Ok(RSBadgesOptions {
+        style,
+        open_in_browser,
+        save_to_path,
+    })
 }

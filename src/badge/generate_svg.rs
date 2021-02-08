@@ -21,10 +21,11 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
-use super::badge_type::{Badge, Layout};
-use super::text_helper;
+use super::badge_type::*;
+use super::format_helper;
 use askama::Template;
 use rand::{distributions::Alphanumeric, Rng};
+use regex::Regex;
 
 #[derive(Template, Debug)]
 #[template(path = "badge_template_flat.xml", escape = "xml")]
@@ -55,7 +56,7 @@ struct BadgeTemplateFlat<'a> {
     id_round: &'a str,
 }
 
-pub fn flat_svg(badge: &Badge, layout: Layout) -> String {
+pub(crate) fn flat_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
     let id_suffix: String = rand::thread_rng()
         .sample_iter(&Alphanumeric)
         .take(7)
@@ -63,11 +64,9 @@ pub fn flat_svg(badge: &Badge, layout: Layout) -> String {
         .collect();
     let id_smooth = format!("smooth{}", id_suffix);
     let id_round = format!("round{}", id_suffix);
-    let logo_uri: String;
+    let mut logo_uri = badge.logo.clone();
     if badge.embed_logo {
-        logo_uri = text_helper::attempt_logo_download(&badge.logo);
-    } else {
-        logo_uri = badge.logo.clone();
+        logo_uri = format_helper::attempt_logo_download(&badge.logo)?;
     }
     let flat_badge = BadgeTemplateFlat {
         label_text: &layout.label_text_norm,
@@ -95,8 +94,10 @@ pub fn flat_svg(badge: &Badge, layout: Layout) -> String {
         id_smooth: &id_smooth,
         id_round: &id_round,
     };
-
-    flat_badge.render().unwrap()
+    let re = Regex::new("[\r\n]*").unwrap();
+    Ok(String::from(
+        re.replace_all(&flat_badge.render().unwrap(), ""),
+    ))
 }
 
 #[derive(Template, Debug)]
@@ -126,7 +127,7 @@ struct BadgeTemplatePlastic<'a> {
     id_round: &'a str,
 }
 
-pub fn plastic_svg(badge: &Badge, layout: Layout) -> String {
+pub(crate) fn plastic_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
     let id_suffix: String = rand::thread_rng()
         .sample_iter(&Alphanumeric)
         .take(7)
@@ -134,11 +135,9 @@ pub fn plastic_svg(badge: &Badge, layout: Layout) -> String {
         .collect();
     let id_smooth = format!("smooth{}", id_suffix);
     let id_round = format!("round{}", id_suffix);
-    let logo_uri: String;
+    let mut logo_uri = badge.logo.clone();
     if badge.embed_logo {
-        logo_uri = text_helper::attempt_logo_download(&badge.logo);
-    } else {
-        logo_uri = badge.logo.clone();
+        logo_uri = format_helper::attempt_logo_download(&badge.logo)?;
     }
     let plastic_badge = BadgeTemplatePlastic {
         label_text: &layout.label_text_norm,
@@ -165,7 +164,10 @@ pub fn plastic_svg(badge: &Badge, layout: Layout) -> String {
         id_round: &id_round,
     };
 
-    plastic_badge.render().unwrap()
+    let re = Regex::new("[\r\n]*").unwrap();
+    Ok(String::from(
+        re.replace_all(&plastic_badge.render().unwrap(), ""),
+    ))
 }
 
 #[derive(Template, Debug)]
@@ -193,12 +195,10 @@ struct BadgeTemplateFlatSquare<'a> {
     right_width: usize,
 }
 
-pub fn flat_square_svg(badge: &Badge, layout: Layout) -> String {
-    let logo_uri: String;
+pub(crate) fn flat_square_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
+    let mut logo_uri = badge.logo.clone();
     if badge.embed_logo {
-        logo_uri = text_helper::attempt_logo_download(&badge.logo);
-    } else {
-        logo_uri = badge.logo.clone();
+        logo_uri = format_helper::attempt_logo_download(&badge.logo)?;
     }
     let flat_square_badge = BadgeTemplateFlatSquare {
         label_text: &layout.label_text_norm,
@@ -223,5 +223,8 @@ pub fn flat_square_svg(badge: &Badge, layout: Layout) -> String {
         right_width: layout.msg_total_width as usize,
     };
 
-    flat_square_badge.render().unwrap()
+    let re = Regex::new("[\r\n]*").unwrap();
+    Ok(String::from(
+        re.replace_all(&flat_square_badge.render().unwrap(), ""),
+    ))
 }

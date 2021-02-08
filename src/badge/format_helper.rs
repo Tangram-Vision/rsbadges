@@ -21,13 +21,24 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
+use super::badge_type::BadgeError;
+use css_color::Rgba;
 use rusttype::{point, Font, Scale};
+use std::path::Path;
 use unicode_normalization::UnicodeNormalization;
 
 // Docs: https://gitlab.redox-os.org/redox-os/rusttype/-/blob/master/dev/examples/ascii.rs
-pub fn load_regular_font<'a>() -> Font<'a> {
-    let font_data = include_bytes!("../../fonts/DejaVuSans.ttf");
-    Font::try_from_bytes(font_data as &[u8]).expect("error constructing a Font from bytes")
+pub fn load_regular_font<'a>() -> Result<Font<'a>, BadgeError> {
+    let path = std::env::current_dir().unwrap();
+    let font_path = path.join(Path::new("fonts/DejaVuSans.ttf"));
+    let font_data = match std::fs::read(font_path) {
+        Ok(f) => f,
+        Err(_) => return Err(BadgeError::CannotLocateFont),
+    };
+    match Font::try_from_vec(font_data) {
+        Some(f) => Ok(f),
+        None => Err(BadgeError::CannotLoadFont),
+    }
 }
 
 // pub fn load_bold_font<'a>() -> Font<'a> {
@@ -50,32 +61,38 @@ pub fn get_text_dims(font: &Font, text: &str, font_size: f32, kerning_pix: f32) 
     (norm_text, glyphs_width)
 }
 
-pub fn color_to_string(color: css_color::Rgba) -> String {
-    format!(
-        "rgb({}, {}, {})",
-        color.red * 255.0,
-        color.green * 255.0,
-        color.blue * 255.0
-    )
-}
-
-pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {
-    let body: String = ureq::get(logo_uri).call()?.into_string()?;
+pub fn verify_color(color: &str) -> Result<String, BadgeError> {
+    let valid_color: Rgba = match color.parse() {
+        Ok(c) => c,
+        Err(_) => return Err(BadgeError::ColorNotValid(String::from(color))),
+    };
     Ok(format!(
-        "data:image/svg+xml;base64,{}",
-        base64::encode(body.as_bytes())
+        "rgb({}, {}, {})",
+        valid_color.red * 255.0,
+        valid_color.green * 255.0,
+        valid_color.blue * 255.0
     ))
 }
 
-pub fn attempt_logo_download(logo_uri: &str) -> String {
-    match create_embedded_logo(logo_uri) {
-        Ok(logo_data) => logo_data,
-        Err(e) => {
-            println!(
-                "Could not retrieve URI {} to embed into badge. Err: {}",
-                logo_uri, e
-            );
-            String::from(logo_uri)
-        }
-    }
+pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {
+    Ok(ureq::get(logo_uri).call()?.into_string()?)
+}
+
+pub fn attempt_logo_download(logo_uri: &str) -> Result<String, BadgeError> {
+    // Check for local copy
+    let local_path = Path::new(logo_uri);
+
+    let data = match std::fs::read_to_string(local_path) {
+        Ok(f) => f,
+        Err(_) => match create_embedded_logo(logo_uri) {
+            Ok(logo_data) => logo_data,
+            Err(_) => return Err(BadgeError::CannotEmbedLogo(String::from(logo_uri))),
+        },
+    };
+
+    // If not local, download
+    Ok(format!(
+        "data:image/svg+xml;base64,{}",
+        base64::encode(data.as_bytes())
+    ))
 }
