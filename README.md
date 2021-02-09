@@ -4,23 +4,9 @@
 
 ### Flat
 
-![flat](/assets/flat_badge.svg)
-
-### Flat Square
-
-![flat_square](/assets/flat_square_badge.svg)
-
-### Plastic
-
-![plastic](/assets/plastic_badge.svg)
-
-### ForTheBadge
-
-![for_the_badge](/assets/for_the_badge.svg)
-
-### Social
-
-![social](/assets/social_logo_embedded.svg)
+| Flat | Flat Square | Plastic | ForTheBadge | Social |
+|----|----|----|--|----|
+| ![flat](/assets/flat_badge.svg)  | ![flat_square](/assets/flat_square_badge.svg) | ![plastic](/assets/plastic_badge.svg) | ![for_the_badge](/assets/for_the_badge.svg) | ![social](/assets/social_logo_embedded.svg) |
 
 
 RSBadges is a Rust-friendly badge generator. The interface strives to be minimal
