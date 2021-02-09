@@ -59,11 +59,16 @@ fn create_badges_with_all_fields_populated() {
     };
     save_svg_to_tmp("plastic_badge.svg", svg);
     // https://img.shields.io/static/v1?label=version&message=1.2.3&style=for-the-badge
-    svg = match Style::ForTheBadge(badge).generate_svg() {
+    svg = match Style::ForTheBadge(badge.clone()).generate_svg() {
         Ok(f) => f,
         Err(_) => unreachable!(),
     };
     save_svg_to_tmp("for_the_badge.svg", svg);
+    svg = match Style::Social(badge).generate_svg() {
+        Ok(f) => f,
+        Err(_) => unreachable!(),
+    };
+    save_svg_to_tmp("social.svg", svg);
 }
 
 #[test]
@@ -111,11 +116,17 @@ fn create_badge_embed_logo() {
     };
     save_svg_to_tmp("flat_badge_logo_embedded.svg", svg);
     // https://img.shields.io/static/v1?label=test&message=test&style=for-the-badge&logo=rust
-    svg = match Style::ForTheBadge(badge).generate_svg() {
+    svg = match Style::ForTheBadge(badge.clone()).generate_svg() {
         Ok(f) => f,
         Err(_) => unreachable!(),
     };
+    // https://img.shields.io/static/v1?label=version&message=1.2.3&style=social
     save_svg_to_tmp("for_the_badge_logo_embedded.svg", svg);
+    svg = match Style::Social(badge).generate_svg() {
+        Ok(f) => f,
+        Err(_) => unreachable!(),
+    };
+    save_svg_to_tmp("social_logo_embedded.svg", svg);
 }
 
 #[test]
