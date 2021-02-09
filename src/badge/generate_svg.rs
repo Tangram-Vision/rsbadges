@@ -236,3 +236,66 @@ pub(crate) fn flat_square_svg(badge: &Badge, layout: Layout) -> Result<String, B
         re.replace_all(&flat_square_badge.render().unwrap(), ""),
     ))
 }
+
+#[derive(Template, Debug)]
+#[template(path = "badge_template_forthebadge.xml", escape = "xml")]
+struct BadgeTemplateForTheBadge<'a> {
+    label_text: &'a str,
+    msg_text: &'a str,
+    badge_link: &'a str,
+    label_link: &'a str,
+    msg_link: &'a str,
+    label_color: &'a str,
+    msg_color: &'a str,
+    logo: &'a str,
+    full_badge_title: &'a str,
+    label_title: &'a str,
+    msg_title: &'a str,
+    badge_height: f32,
+    logo_width: f32,
+    logo_padding: f32,
+    logo_x: f32,
+    logo_y: f32,
+    label_text_width: f32,
+    msg_text_width: f32,
+    label_text_x: f32,
+    msg_text_x: f32,
+    left_width: f32,
+    right_width: f32,
+}
+
+pub(crate) fn for_the_badge_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
+    let mut logo_uri = badge.logo.clone();
+    if badge.embed_logo {
+        logo_uri = format_helper::attempt_logo_download(&badge.logo)?;
+    }
+    let forthebadge_badge = BadgeTemplateForTheBadge {
+        label_text: &layout.label_text_norm,
+        msg_text: &layout.msg_text_norm,
+        badge_link: &badge.badge_link,
+        label_link: &badge.label_link,
+        msg_link: &badge.msg_link,
+        label_color: &layout.label_color,
+        msg_color: &layout.msg_color,
+        logo: &logo_uri,
+        full_badge_title: &badge.badge_title,
+        label_title: &badge.label_title,
+        msg_title: &badge.msg_title,
+        badge_height: layout.badge_height,
+        logo_width: layout.logo_width,
+        logo_padding: layout.logo_padding,
+        logo_x: layout.logo_x,
+        logo_y: layout.logo_y,
+        label_text_width: layout.label_text_width,
+        msg_text_width: layout.msg_text_width,
+        label_text_x: layout.label_text_x,
+        msg_text_x: layout.msg_text_x,
+        left_width: layout.label_total_width,
+        right_width: layout.msg_total_width,
+    };
+
+    let re = Regex::new("[\r\n]*").unwrap();
+    Ok(String::from(
+        re.replace_all(&forthebadge_badge.render().unwrap(), ""),
+    ))
+}
