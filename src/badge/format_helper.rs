@@ -28,22 +28,9 @@ use std::path::Path;
 use unicode_normalization::UnicodeNormalization;
 
 // Docs: https://gitlab.redox-os.org/redox-os/rusttype/-/blob/master/dev/examples/ascii.rs
-pub fn load_regular_font<'a>() -> Result<Font<'a>, BadgeError> {
+pub fn load_font<'a>(font_file: &str) -> Result<Font<'a>, BadgeError> {
     let path = std::env::current_dir().unwrap();
-    let font_path = path.join(Path::new("fonts/verdana.ttf"));
-    let font_data = match std::fs::read(font_path) {
-        Ok(f) => f,
-        Err(_) => return Err(BadgeError::CannotLocateFont),
-    };
-    match Font::try_from_vec(font_data) {
-        Some(f) => Ok(f),
-        None => Err(BadgeError::CannotLoadFont),
-    }
-}
-
-pub fn load_bold_font<'a>() -> Result<Font<'a>, BadgeError> {
-    let path = std::env::current_dir().unwrap();
-    let font_path = path.join(Path::new("fonts/verdana_bold.ttf"));
+    let font_path = path.join(Path::new(font_file));
     let font_data = match std::fs::read(font_path) {
         Ok(f) => f,
         Err(_) => return Err(BadgeError::CannotLocateFont),
