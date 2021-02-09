@@ -34,6 +34,26 @@ pub fn save_svg_to_tmp(filename: &str, svg: String) {
     }
 }
 
+pub fn all_styles(badge: Badge) -> std::vec::Vec<Style> {
+    vec![
+        Style::Flat(badge.clone()),
+        Style::FlatSquare(badge.clone()),
+        Style::Plastic(badge.clone()),
+        Style::ForTheBadge(badge.clone()),
+        Style::Social(badge),
+    ]
+}
+
+pub fn badge_prefix(style: &Style) -> String {
+    match style {
+        Style::Flat(_) => String::from("flat_"),
+        Style::FlatSquare(_) => String::from("flat_square_"),
+        Style::Plastic(_) => String::from("plastic_"),
+        Style::ForTheBadge(_) => String::from("forthebadge_"),
+        Style::Social(_) => String::from("social_"),
+    }
+}
+
 #[test]
 fn create_badges_with_all_fields_populated() {
     let badge = Badge {
@@ -43,32 +63,13 @@ fn create_badges_with_all_fields_populated() {
         msg_color: String::from("#007ec6"),
         ..Badge::default()
     };
-    let mut svg = match Style::Flat(badge.clone()).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("flat_badge.svg", svg);
-    svg = match Style::FlatSquare(badge.clone()).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("flat_square_badge.svg", svg);
-    svg = match Style::Plastic(badge.clone()).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("plastic_badge.svg", svg);
-    // For comparison: https://img.shields.io/static/v1?label=version&message=1.2.3&style=for-the-badge
-    svg = match Style::ForTheBadge(badge.clone()).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("for_the_badge.svg", svg);
-    svg = match Style::Social(badge).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("social.svg", svg);
+    for style in all_styles(badge).iter() {
+        let svg = match style.generate_svg() {
+            Ok(f) => f,
+            Err(_) => unreachable!(),
+        };
+        save_svg_to_tmp(&(badge_prefix(style) + "badge.svg"), svg);
+    }
 }
 
 #[test]
@@ -79,11 +80,13 @@ fn create_badge_with_logo() {
         logo: String::from("https://simpleicons.org/icons/rust.svg"),
         ..Badge::default()
     };
-    let svg = match Style::Flat(badge).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("flat_badge_logo.svg", svg);
+    for style in all_styles(badge).iter() {
+        let svg = match style.generate_svg() {
+            Ok(f) => f,
+            Err(_) => unreachable!(),
+        };
+        save_svg_to_tmp(&(badge_prefix(style) + "badge_logo.svg"), svg);
+    }
 }
 
 #[test]
@@ -96,11 +99,13 @@ fn create_badge_with_logo_local() {
         logo: String::from(font_path.to_str().unwrap()),
         ..Badge::default()
     };
-    let svg = match Style::Flat(badge).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("flat_badge_logo_local.svg", svg);
+    for style in all_styles(badge).iter() {
+        let svg = match style.generate_svg() {
+            Ok(f) => f,
+            Err(_) => unreachable!(),
+        };
+        save_svg_to_tmp(&(badge_prefix(style) + "badge_logo_local.svg"), svg);
+    }
 }
 
 #[test]
@@ -112,23 +117,13 @@ fn create_badge_embed_logo() {
         embed_logo: true,
         ..Badge::default()
     };
-    let mut svg = match Style::Flat(badge.clone()).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("flat_badge_logo_embedded.svg", svg);
-    // For comparison: https://img.shields.io/static/v1?label=test&message=test&style=for-the-badge&logo=rust
-    svg = match Style::ForTheBadge(badge.clone()).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("for_the_badge_logo_embedded.svg", svg);
-    // For comparison: https://img.shields.io/static/v1?label=version&message=1.2.3&style=social
-    svg = match Style::Social(badge).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("social_logo_embedded.svg", svg);
+    for style in all_styles(badge).iter() {
+        let svg = match style.generate_svg() {
+            Ok(f) => f,
+            Err(_) => unreachable!(),
+        };
+        save_svg_to_tmp(&(badge_prefix(style) + "badge_logo_embedded.svg"), svg);
+    }
 }
 
 #[test]
@@ -140,14 +135,13 @@ fn create_badge_embed_logo_local_src() {
         embed_logo: true,
         ..Badge::default()
     };
-    let svg = match Style::Flat(badge).generate_svg() {
-        Ok(f) => f,
-        Err(e) => {
-            println!("{}", e);
-            unreachable!()
-        }
-    };
-    save_svg_to_tmp("flat_badge_logo_local_embedded.svg", svg);
+    for style in all_styles(badge).iter() {
+        let svg = match style.generate_svg() {
+            Ok(f) => f,
+            Err(_) => unreachable!(),
+        };
+        save_svg_to_tmp(&(badge_prefix(style) + "badge_logo_logo_embedded.svg"), svg);
+    }
 }
 
 #[test]
@@ -158,11 +152,13 @@ fn create_badge_chinese_characters() {
         msg_color: String::from("firebrick"),
         ..Badge::default()
     };
-    let svg = match Style::Flat(badge).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("flat_badge_chinese.svg", svg);
+    for style in all_styles(badge).iter() {
+        let svg = match style.generate_svg() {
+            Ok(f) => f,
+            Err(_) => unreachable!(),
+        };
+        save_svg_to_tmp(&(badge_prefix(style) + "badge_chinese.svg"), svg);
+    }
 }
 
 #[test]
@@ -172,11 +168,13 @@ fn create_badge_arabic_characters() {
         msg_text: String::from("انا لا اعرف"),
         ..Badge::default()
     };
-    let svg = match Style::Flat(badge).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("flat_badge_arabic.svg", svg);
+    for style in all_styles(badge).iter() {
+        let svg = match style.generate_svg() {
+            Ok(f) => f,
+            Err(_) => unreachable!(),
+        };
+        save_svg_to_tmp(&(badge_prefix(style) + "badge_logo_logo_arabic.svg"), svg);
+    }
 }
 
 #[test]
@@ -187,11 +185,13 @@ fn create_badge_metal() {
         msg_color: String::from("black"),
         ..Badge::default()
     };
-    let svg = match Style::ForTheBadge(badge).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("for_the_badge_metal.svg", svg);
+    for style in all_styles(badge).iter() {
+        let svg = match style.generate_svg() {
+            Ok(f) => f,
+            Err(_) => unreachable!(),
+        };
+        save_svg_to_tmp(&(badge_prefix(style) + "badge_metal.svg"), svg);
+    }
 }
 
 #[test]
@@ -200,11 +200,13 @@ fn create_badge_badge_link() {
         badge_link: String::from("http://www.crates.io"),
         ..Badge::default()
     };
-    let svg = match Style::Flat(badge).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("flat_badge_full_link.svg", svg);
+    for style in all_styles(badge).iter() {
+        let svg = match style.generate_svg() {
+            Ok(f) => f,
+            Err(_) => unreachable!(),
+        };
+        save_svg_to_tmp(&(badge_prefix(style) + "badge_link_full.svg"), svg);
+    }
 }
 
 #[test]
@@ -217,9 +219,11 @@ fn create_badge_with_separate_label_msg_links() {
         label_color: String::from("forestgreen"),
         ..Badge::default()
     };
-    let svg = match Style::FlatSquare(badge).generate_svg() {
-        Ok(f) => f,
-        Err(_) => unreachable!(),
-    };
-    save_svg_to_tmp("flat_square_badge_two_links.svg", svg);
+    for style in all_styles(badge).iter() {
+        let svg = match style.generate_svg() {
+            Ok(f) => f,
+            Err(_) => unreachable!(),
+        };
+        save_svg_to_tmp(&(badge_prefix(style) + "badge_link_dual.svg"), svg);
+    }
 }
