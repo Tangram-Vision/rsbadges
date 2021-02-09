@@ -29,7 +29,7 @@ First, instantiate a Badge struct to set all of the generic options for a badge 
 This fully-populated Badge is then wrapped in a Style enum, which indicates which
 style of badge to eventually generate.
 
-```
+```rust
 use rsbadges::{Badge, Style};
 let badge = Badge {
     label_text: String::from("Custom_label"),
