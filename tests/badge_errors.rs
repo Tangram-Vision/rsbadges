@@ -37,7 +37,11 @@ fn error_color_not_valid() {
         Err(BadgeError::ColorNotValid(_)) => {}
         _ => unreachable!(),
     }
-    match Style::Plastic(badge).generate_svg() {
+    match Style::Plastic(badge.clone()).generate_svg() {
+        Err(BadgeError::ColorNotValid(_)) => {}
+        _ => unreachable!(),
+    }
+    match Style::ForTheBadge(badge).generate_svg() {
         Err(BadgeError::ColorNotValid(_)) => {}
         _ => unreachable!(),
     }
@@ -54,7 +58,11 @@ fn error_color_not_valid() {
         Err(BadgeError::ColorNotValid(_)) => {}
         _ => unreachable!(),
     }
-    match Style::Plastic(badge).generate_svg() {
+    match Style::Plastic(badge.clone()).generate_svg() {
+        Err(BadgeError::ColorNotValid(_)) => {}
+        _ => unreachable!(),
+    }
+    match Style::ForTheBadge(badge).generate_svg() {
         Err(BadgeError::ColorNotValid(_)) => {}
         _ => unreachable!(),
     }
@@ -73,7 +81,11 @@ fn error_cannot_embed_logo() {
         Err(BadgeError::CannotEmbedLogo(_)) => {}
         _ => unreachable!(),
     }
-    match Style::Plastic(badge).generate_svg() {
+    match Style::Plastic(badge.clone()).generate_svg() {
+        Err(BadgeError::CannotEmbedLogo(_)) => {}
+        _ => unreachable!(),
+    }
+    match Style::ForTheBadge(badge).generate_svg() {
         Err(BadgeError::CannotEmbedLogo(_)) => {}
         _ => unreachable!(),
     }
