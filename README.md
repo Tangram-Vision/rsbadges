@@ -1,14 +1,24 @@
 # RSBadges
 
-Create shields.io-like badges from the comfort and safety of Rust
+## Create shields.io-like badges from the comfort and safety of Rust
+
+### Flat
 
 ![flat](/assets/flat_badge.svg)
 
+### Flat Square
+
 ![flat_square](/assets/flat_square_badge.svg)
+
+### Plastic
 
 ![plastic](/assets/plastic_badge.svg)
 
+### ForTheBadge
+
 ![for_the_badge](/assets/for_the_badge.svg)
+
+### Social
 
 ![social](/assets/social_logo_embedded.svg)
 
