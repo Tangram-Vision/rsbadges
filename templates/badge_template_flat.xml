@@ -35,14 +35,14 @@
     <text aria-hidden="true" x="{{ msg_text_x }}" y="150" fill="#010101" fill-opacity=".3" transform="scale(0.1)" textLength="{{ msg_text_width }}" lengthAdjust="spacing">{{ msg_text }}</text>
     <text x="{{ msg_text_x }}" y="140" transform="scale(0.1)" textLength="{{ msg_text_width }}" lengthAdjust="spacing">{{ msg_text}}</text>
 
-  {% if !badge_link.is_empty() %}
+    {% if !badge_link.is_empty() %}
     <a xlink:href="{{ badge_link }}">
       <rect width="{{ left_width }}" height="{{ badge_height }}" fill="rgba(0,0,0,0)"/>
     </a>
     <a xlink:href="{{ badge_link }}">
       <rect x="{{ left_width }}" width="{{ right_width }}" height="{{ badge_height }}" fill="rgba(0,0,0,0)"/>
     </a>
-  {% else %}
+    {% else %}
     {% if !label_link.is_empty() %}
     <a xlink:href="{{ label_link }}">
       <rect width="{{ left_width }}" height="{{ badge_height }}" fill="rgba(0,0,0,0)"/>
@@ -53,6 +53,6 @@
       <rect x="{{ left_width }}" width="{{ right_width }}" height="{{ badge_height }}" fill="rgba(0,0,0,0)"/>
     </a>
     {% endif %}
-  {% endif %}
+    {% endif %}
   </g>
 </svg>
