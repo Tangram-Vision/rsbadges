@@ -156,6 +156,9 @@ pub enum BadgeError {
     CannotLoadFont,
     /// RSBadges has received a request to create a badge type it does not know about.
     /// This can only happen from the command line, since a Style is an enum via the API.
-    #[error("{0} is an invalid style. Valid styles: \n- plastic\n- flat\n- flatsquare.")]
+    #[error(
+        "{0} is an invalid style. Valid styles: \n- plastic\n- flat\n- flatsquare.\n\
+        - forthebadge"
+    )]
     InvalidStyle(String),
 }

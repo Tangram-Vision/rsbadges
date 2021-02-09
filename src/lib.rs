@@ -109,7 +109,7 @@
 //! | `-z`       | `--msg-link <url>`                     | ""
 //! | `-l`       | `--logo <url or local path>`           | ""
 //! | `-f`       | `--save-to-svg-at <filepath/file.svg>` | ""
-//! | `-s`       | `--style <plastic,flat,flatsquare>`    | "flat"
+//! | `-s`       | `--style <plastic,flat,flatsquare,forthebadge>`    | "flat"
 //! | `-o`       | `--open-in-browser`                    | false
 //! | `-h`       | `--help`                               | false
 //! | `-e`       | `--embed-logo`                         | false
