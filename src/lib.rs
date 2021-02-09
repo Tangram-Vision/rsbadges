@@ -99,20 +99,20 @@
 //! Just like the API, `label-color` and `msg-color` take any valid CSS color
 //! as input. Don't worry if you get it wrong; RSBadges will let you know.
 //!
-//! | Short      | Long                                   | Default
-//! | ---------  | ------------------------------------   | -------
-//! | `-a`       | `--label <string>`                     | "test"
-//! | `-b`       | `--label-color <css_color>`            | "#555"
-//! | `-c`       | `--label-link <url>`                   | ""
-//! | `-x`       | `--msg <string>`                       | "test"
-//! | `-y`       | `--msg-color <css_color>`              | "#007ec6"
-//! | `-z`       | `--msg-link <url>`                     | ""
-//! | `-l`       | `--logo <url or local path>`           | ""
-//! | `-f`       | `--save-to-svg-at <filepath/file.svg>` | ""
-//! | `-s`       | `--style <plastic,flat,flatsquare,forthebadge>`    | "flat"
-//! | `-o`       | `--open-in-browser`                    | false
-//! | `-h`       | `--help`                               | false
-//! | `-e`       | `--embed-logo`                         | false
+//! | Short      | Long                                                      | Default
+//! | ---------  | ------------------------------------                      | -------
+//! | `-a`       | `--label <string>`                                        | "test"
+//! | `-b`       | `--label-color <css_color>`                               | "#555"
+//! | `-c`       | `--label-link <url>`                                      | ""
+//! | `-x`       | `--msg <string>`                                          | "test"
+//! | `-y`       | `--msg-color <css_color>`                                 | "#007ec6"
+//! | `-z`       | `--msg-link <url>`                                        | ""
+//! | `-l`       | `--logo <url or local path>`                              | ""
+//! | `-f`       | `--save-to-svg-at <filepath/file.svg>`                    | ""
+//! | `-s`       | `--style <plastic,flat,flatsquare,forthebadge,social>`    | "flat"
+//! | `-o`       | `--open-in-browser`                                       | false
+//! | `-h`       | `--help`                                                  | false
+//! | `-e`       | `--embed-logo`                                            | false
 //!
 //! Run the CLI with the `-h` flag to see all possible arguments and flags.
 //!

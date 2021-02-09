@@ -28,8 +28,8 @@ use super::generate_svg;
 /// A badge container used to format and generate a badge SVG.
 ///
 /// As the [Badge] struct holds generic badge data, the Style enum instructs how to
-/// generate that data into a badge SVG. There are currently four Styles: `Plastic`,
-/// `Flat`, `FlatSquare`, and `ForTheBadge`. This naming follows the convention set by
+/// generate that data into a badge SVG. There are currently five Styles: `Plastic`,
+/// `Flat`, `FlatSquare`, `ForTheBadge`, and `Social`. This naming follows the convention set by
 /// [Shields.io](http://shields.io).
 ///
 /// Once a Style object has been instantiated, a badge can be created using the
