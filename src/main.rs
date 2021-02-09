@@ -134,7 +134,7 @@ fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
         "s",
         "style",
         "The Shields.io style to use during badge generation.",
-        "<plastic|flat|flatsquare>",
+        "<plastic,flat,flatsquare,forthebadge>",
     );
     opts.optflag(
         "o",
@@ -244,6 +244,7 @@ fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
         "plastic" => Style::Plastic(badge),
         "flat" => Style::Flat(badge),
         "flatsquare" => Style::FlatSquare(badge),
+        "forthebadge" => Style::ForTheBadge(badge),
         _ => return Err(BadgeError::InvalidStyle(style_str)),
     };
 
