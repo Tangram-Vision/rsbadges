@@ -3,12 +3,12 @@ authors = ["Brandon Minor <brandon@tangramvision.com>"]
 categories = ["command-line-interface", "command-line-utilities", "graphics"]
 description = "Create code badges from the comfort and safety of Rust"
 edition = "2018"
-homepage = "https://gitlab.com/tangram-vision/rsbadges"
+homepage = "https://gitlab.com/tangram-vision-oss/rsbadges"
 keywords = ["badge", "badges", "svg", "shields.io", "logo", "tangram"]
 license = "BSD-3-Clause"
 name = "rsbadges"
 readme = "README.md"
-repository = "https://gitlab.com/tangram-vision/rsbadges"
+repository = "https://gitlab.com/tangram-vision-oss/rsbadges"
 version = "1.0.0"
 
 [dependencies]
