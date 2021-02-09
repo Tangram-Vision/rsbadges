@@ -23,40 +23,37 @@
 
 use rsbadges::{Badge, BadgeError, Style};
 
+pub fn all_styles(badge: Badge) -> std::vec::Vec<Style> {
+    vec![
+        Style::Flat(badge.clone()),
+        Style::FlatSquare(badge.clone()),
+        Style::Plastic(badge.clone()),
+        Style::ForTheBadge(badge.clone()),
+        Style::Social(badge),
+    ]
+}
+
 #[test]
 fn error_color_not_valid() {
     let badge = Badge {
         label_color: String::from("#t"),
         ..Badge::default()
     };
-    match Style::Flat(badge.clone()).generate_svg() {
-        Err(BadgeError::ColorNotValid(_)) => {}
-        _ => unreachable!(),
+    for style in all_styles(badge) {
+        match style.generate_svg() {
+            Err(BadgeError::ColorNotValid(_)) => {}
+            _ => unreachable!(),
+        }
     }
-    match Style::FlatSquare(badge.clone()).generate_svg() {
-        Err(BadgeError::ColorNotValid(_)) => {}
-        _ => unreachable!(),
-    }
-    match Style::Plastic(badge).generate_svg() {
-        Err(BadgeError::ColorNotValid(_)) => {}
-        _ => unreachable!(),
-    }
-
     let badge = Badge {
         msg_color: String::from("rgb(300.0)"),
         ..Badge::default()
     };
-    match Style::Flat(badge.clone()).generate_svg() {
-        Err(BadgeError::ColorNotValid(_)) => {}
-        _ => unreachable!(),
-    }
-    match Style::FlatSquare(badge.clone()).generate_svg() {
-        Err(BadgeError::ColorNotValid(_)) => {}
-        _ => unreachable!(),
-    }
-    match Style::Plastic(badge).generate_svg() {
-        Err(BadgeError::ColorNotValid(_)) => {}
-        _ => unreachable!(),
+    for style in all_styles(badge) {
+        match style.generate_svg() {
+            Err(BadgeError::ColorNotValid(_)) => {}
+            _ => unreachable!(),
+        }
     }
 }
 
@@ -67,14 +64,10 @@ fn error_cannot_embed_logo() {
         embed_logo: true,
         ..Badge::default()
     };
-    // Flat and FlatSquare use the same code here, so no
-    // need to test twice
-    match Style::Flat(badge.clone()).generate_svg() {
-        Err(BadgeError::CannotEmbedLogo(_)) => {}
-        _ => unreachable!(),
-    }
-    match Style::Plastic(badge).generate_svg() {
-        Err(BadgeError::CannotEmbedLogo(_)) => {}
-        _ => unreachable!(),
+    for style in all_styles(badge) {
+        match style.generate_svg() {
+            Err(BadgeError::CannotEmbedLogo(_)) => {}
+            _ => unreachable!(),
+        }
     }
 }

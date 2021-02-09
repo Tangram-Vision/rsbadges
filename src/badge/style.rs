@@ -28,8 +28,8 @@ use super::generate_svg;
 /// A badge container used to format and generate a badge SVG.
 ///
 /// As the [Badge] struct holds generic badge data, the Style enum instructs how to
-/// generate that data into a badge SVG. There are currently three Styles: `Plastic`,
-/// `Flat`, and `FlatSquare`. This naming follows the convention set by
+/// generate that data into a badge SVG. There are currently five Styles: `Plastic`,
+/// `Flat`, `FlatSquare`, `ForTheBadge`, and `Social`. This naming follows the convention set by
 /// [Shields.io](http://shields.io).
 ///
 /// Once a Style object has been instantiated, a badge can be created using the
@@ -39,7 +39,7 @@ use super::generate_svg;
 ///
 /// ```
 /// use rsbadges::{Badge, Style};
-/// let badge = Badge{
+/// let badge = Badge {
 ///     label_text: String::from("Custom_label"),
 ///     msg_text: String::from("Custom_msg"),
 ///     ..Badge::default()
@@ -58,6 +58,10 @@ pub enum Style {
     Flat(Badge),
     /// The "flat square" badge style
     FlatSquare(Badge),
+    /// The "for the badge" badge style
+    ForTheBadge(Badge),
+    /// The "social" badge style
+    Social(Badge),
 }
 
 impl Style {
@@ -71,10 +75,10 @@ impl Style {
     /// Since this is where data verification takes place, a number of errors are
     /// possible:
     ///
-    /// - [BadgeError::ColorNotValid]
-    /// - [BadgeError::CannotEmbedLogo]
-    /// - [BadgeError::CannotLocateFont]
-    /// - [BadgeError::CannotLoadFont]
+    /// - [ColorNotValid](BadgeError::ColorNotValid)
+    /// - [CannotEmbedLogo](BadgeError::CannotEmbedLogo)
+    /// - [CannotLocateFont](BadgeError::CannotLocateFont)
+    /// - [CannotLoadFont](BadgeError::CannotLoadFont)
     ///
     /// See [BadgeError] for a full description of each.
     ///
@@ -83,12 +87,16 @@ impl Style {
             Style::Flat(badge) => generate_layout::flat_or_square(badge)?,
             Style::FlatSquare(badge) => generate_layout::flat_or_square(badge)?,
             Style::Plastic(badge) => generate_layout::plastic(badge)?,
+            Style::ForTheBadge(badge) => generate_layout::for_the_badge(badge)?,
+            Style::Social(badge) => generate_layout::social(badge)?,
         };
 
         let style = match self {
             Style::Flat(badge) => generate_svg::flat_svg(badge, layout)?,
             Style::FlatSquare(badge) => generate_svg::flat_square_svg(badge, layout)?,
             Style::Plastic(badge) => generate_svg::plastic_svg(badge, layout)?,
+            Style::ForTheBadge(badge) => generate_svg::for_the_badge_svg(badge, layout)?,
+            Style::Social(badge) => generate_svg::social_svg(badge, layout)?,
         };
 
         Ok(style)

@@ -28,9 +28,9 @@ use std::path::Path;
 use unicode_normalization::UnicodeNormalization;
 
 // Docs: https://gitlab.redox-os.org/redox-os/rusttype/-/blob/master/dev/examples/ascii.rs
-pub fn load_regular_font<'a>() -> Result<Font<'a>, BadgeError> {
+pub fn load_font<'a>(font_file: &str) -> Result<Font<'a>, BadgeError> {
     let path = std::env::current_dir().unwrap();
-    let font_path = path.join(Path::new("fonts/DejaVuSans.ttf"));
+    let font_path = path.join(Path::new(font_file));
     let font_data = match std::fs::read(font_path) {
         Ok(f) => f,
         Err(_) => return Err(BadgeError::CannotLocateFont),
@@ -40,11 +40,6 @@ pub fn load_regular_font<'a>() -> Result<Font<'a>, BadgeError> {
         None => Err(BadgeError::CannotLoadFont),
     }
 }
-
-// pub fn load_bold_font<'a>() -> Font<'a> {
-//     let font_data = include_bytes!("../../fonts/DejaVuSans-Bold.ttf");
-//     Font::try_from_bytes(font_data as &[u8]).expect("error constructing a Font from bytes")
-// }
 
 pub fn get_text_dims(font: &Font, text: &str, font_size: f32, kerning_pix: f32) -> (String, f32) {
     let norm_text = text.nfc().collect::<String>();
@@ -72,6 +67,15 @@ pub fn verify_color(color: &str) -> Result<String, BadgeError> {
         valid_color.green * 255.0,
         valid_color.blue * 255.0
     ))
+}
+// Thanks, Shepmaster.
+// https://stackoverflow.com/questions/38406793/why-is-capitalizing-the-first-letter-of-a-string-so-convoluted-in-rust
+pub fn uppercase_first_letter(s: &str) -> String {
+    let mut c = s.chars();
+    match c.next() {
+        None => String::new(),
+        Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
+    }
 }
 
 pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {

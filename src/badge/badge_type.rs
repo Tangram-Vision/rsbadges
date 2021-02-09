@@ -36,22 +36,11 @@ use thiserror::Error;
 ///
 /// ```
 /// # use rsbadges::Badge;
-/// let badge = Badge{
+/// let badge = Badge {
 ///     label_text: String::from("Custom_label"),
 ///     msg_text: String::from("Custom_msg"),
 ///     ..Badge::default()
 /// };
-/// ```
-///
-/// `label_color` and `msg_color` take any valid CSS color code. See
-/// [the CSS color picker](https://www.w3schools.com/colors/colors_picker.asp)
-/// for examples.
-///
-/// ```
-/// let valid_rgb_color = "rgb(40, 20, 50)";
-/// let valid_hsl_color = "hsl(15, 100%, 50%)";
-/// let valid_hex_color = "#00bfff";
-/// let valid_html_color = "white";
 /// ```
 ///
 #[derive(Debug, Clone)]
@@ -59,20 +48,48 @@ pub struct Badge {
     /// The text to show on the left side of the badge.
     pub label_text: String,
     /// The background color of the left side of the badge.
+    ///
+    /// This argument takes any valid CSS color code. See
+    /// [the CSS color picker](https://www.w3schools.com/colors/colors_picker.asp)
+    /// for examples.
+    ///
+    /// ```
+    /// // All of these formats would work for `label_text`
+    /// let valid_rgb_color = String::from("rgb(40, 20, 50)");
+    /// let valid_hsl_color = String::from("hsl(15, 100%, 50%)");
+    /// let valid_hex_color = String::from("#00bfff");
+    /// let valid_html_color = String::from("white");
+    /// ```
+    ///
     pub label_color: String,
     /// The url to redirect to when the left side of the badge is clicked.
     pub label_link: String,
     /// The text to show on the right side of the badge.
     pub msg_text: String,
-    /// The background color of the right side of the badge.
+    /// The background color of the right side of the badge. See [label_text](Badge::label_text) for more info.
     pub msg_color: String,
     /// The url to redirect to when the right side of the badge is clicked.
     pub msg_link: String,
     /// A URI reference to a logo to display in the badge. Must be in SVG format.
+    ///
+    /// This argument will accept both logo URLs and local logo files.
+    /// Visit https://simpleicons.org/ for a rich library of icons to choose from.
+    ///
+    /// ```
+    /// // Both of these options would work for `logo`
+    /// let logo_url = String::from("https://simpleicons.org/icons/rust.svg");
+    /// let logo_local = String::from("~/Downloads/rust.svg");
+    /// ```
     pub logo: String,
     /// Include the specified logo data directly in the badge.
     /// This prevents a URL call whenever the SVG is loaded.
-    /// Only works if --logo is a HTTP/HTTPS URI or a valid file path.
+    /// Only works if [logo](Badge::logo) is a HTTP/HTTPS URI or a valid file path.
+    ///
+    /// When validating the logo, RSBadges looks for the file on your local machine, and if that fails,
+    /// it makes an attempt to download.
+    ///
+    /// Success in either case causes the logo's data to be injected into the badge SVG directly.
+    /// This means the logo can be seen regardless of the logo file being present or retrievable.
     pub embed_logo: bool,
     /// The url to redirect to when any part of the badge is clicked.
     /// Overwrites --label-link and --msg-link.
@@ -116,6 +133,9 @@ pub(crate) struct Layout {
     pub msg_total_width: f32,
     pub label_text_x: f32,
     pub msg_text_x: f32,
+    pub msg_bubble_x: f32,
+    pub label_rect_width: f32,
+    pub msg_rect_width: f32,
     pub logo_padding: f32,
     pub logo_width: f32,
     pub logo_x: f32,
@@ -156,6 +176,9 @@ pub enum BadgeError {
     CannotLoadFont,
     /// RSBadges has received a request to create a badge type it does not know about.
     /// This can only happen from the command line, since a Style is an enum via the API.
-    #[error("{0} is an invalid style. Valid styles: \n- plastic\n- flat\n- flatsquare.")]
+    #[error(
+        "{0} is an invalid style. Valid styles: \n- plastic\n- flat\n- flatsquare.\n\
+        - forthebadge\n- social"
+    )]
     InvalidStyle(String),
 }

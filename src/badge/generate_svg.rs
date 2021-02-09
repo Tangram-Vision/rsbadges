@@ -41,17 +41,17 @@ struct BadgeTemplateFlat<'a> {
     full_badge_title: &'a str,
     label_title: &'a str,
     msg_title: &'a str,
-    badge_height: usize,
-    logo_width: usize,
-    logo_padding: usize,
-    logo_x: usize,
-    logo_y: usize,
-    label_text_width: usize,
-    msg_text_width: usize,
-    label_text_x: usize,
-    msg_text_x: usize,
-    left_width: usize,
-    right_width: usize,
+    badge_height: f32,
+    logo_width: f32,
+    logo_padding: f32,
+    logo_x: f32,
+    logo_y: f32,
+    label_text_width: f32,
+    msg_text_width: f32,
+    label_text_x: f32,
+    msg_text_x: f32,
+    left_width: f32,
+    right_width: f32,
     id_smooth: &'a str,
     id_round: &'a str,
 }
@@ -80,17 +80,17 @@ pub(crate) fn flat_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeErr
         full_badge_title: &badge.badge_title,
         label_title: &badge.label_title,
         msg_title: &badge.msg_title,
-        badge_height: layout.badge_height as usize,
-        logo_width: layout.logo_width as usize,
-        logo_padding: layout.logo_padding as usize,
-        logo_x: layout.logo_x as usize,
-        logo_y: layout.logo_y as usize,
-        label_text_width: layout.label_text_width as usize,
-        msg_text_width: layout.msg_text_width as usize,
-        label_text_x: layout.label_text_x as usize,
-        msg_text_x: layout.msg_text_x as usize,
-        left_width: layout.label_total_width as usize,
-        right_width: layout.msg_total_width as usize,
+        badge_height: layout.badge_height,
+        logo_width: layout.logo_width,
+        logo_padding: layout.logo_padding,
+        logo_x: layout.logo_x,
+        logo_y: layout.logo_y,
+        label_text_width: layout.label_text_width,
+        msg_text_width: layout.msg_text_width,
+        label_text_x: layout.label_text_x,
+        msg_text_x: layout.msg_text_x,
+        left_width: layout.label_total_width,
+        right_width: layout.msg_total_width,
         id_smooth: &id_smooth,
         id_round: &id_round,
     };
@@ -114,15 +114,17 @@ struct BadgeTemplatePlastic<'a> {
     full_badge_title: &'a str,
     label_title: &'a str,
     msg_title: &'a str,
-    badge_height: usize,
-    logo_width: usize,
-    logo_padding: usize,
-    label_text_width: usize,
-    msg_text_width: usize,
-    label_text_x: usize,
-    msg_text_x: usize,
-    left_width: usize,
-    right_width: usize,
+    badge_height: f32,
+    logo_width: f32,
+    logo_padding: f32,
+    logo_x: f32,
+    logo_y: f32,
+    label_text_width: f32,
+    msg_text_width: f32,
+    label_text_x: f32,
+    msg_text_x: f32,
+    left_width: f32,
+    right_width: f32,
     id_smooth: &'a str,
     id_round: &'a str,
 }
@@ -151,15 +153,17 @@ pub(crate) fn plastic_svg(badge: &Badge, layout: Layout) -> Result<String, Badge
         full_badge_title: &badge.badge_title,
         label_title: &badge.label_title,
         msg_title: &badge.msg_title,
-        badge_height: layout.badge_height as usize,
-        logo_width: layout.logo_width as usize,
-        logo_padding: layout.logo_padding as usize,
-        label_text_width: layout.label_text_width as usize,
-        msg_text_width: layout.msg_text_width as usize,
-        label_text_x: layout.label_text_x as usize,
-        msg_text_x: layout.msg_text_x as usize,
-        left_width: layout.label_total_width as usize,
-        right_width: layout.msg_total_width as usize,
+        badge_height: layout.badge_height,
+        logo_width: layout.logo_width,
+        logo_padding: layout.logo_padding,
+        logo_x: layout.logo_x,
+        logo_y: layout.logo_y,
+        label_text_width: layout.label_text_width,
+        msg_text_width: layout.msg_text_width,
+        label_text_x: layout.label_text_x,
+        msg_text_x: layout.msg_text_x,
+        left_width: layout.label_total_width,
+        right_width: layout.msg_total_width,
         id_smooth: &id_smooth,
         id_round: &id_round,
     };
@@ -184,15 +188,17 @@ struct BadgeTemplateFlatSquare<'a> {
     full_badge_title: &'a str,
     label_title: &'a str,
     msg_title: &'a str,
-    badge_height: usize,
-    logo_width: usize,
-    logo_padding: usize,
-    label_text_width: usize,
-    msg_text_width: usize,
-    label_text_x: usize,
-    msg_text_x: usize,
-    left_width: usize,
-    right_width: usize,
+    badge_height: f32,
+    logo_width: f32,
+    logo_padding: f32,
+    logo_x: f32,
+    logo_y: f32,
+    label_text_width: f32,
+    msg_text_width: f32,
+    label_text_x: f32,
+    msg_text_x: f32,
+    left_width: f32,
+    right_width: f32,
 }
 
 pub(crate) fn flat_square_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
@@ -212,19 +218,164 @@ pub(crate) fn flat_square_svg(badge: &Badge, layout: Layout) -> Result<String, B
         full_badge_title: &badge.badge_title,
         label_title: &badge.label_title,
         msg_title: &badge.msg_title,
-        badge_height: layout.badge_height as usize,
-        logo_width: layout.logo_width as usize,
-        logo_padding: layout.logo_padding as usize,
-        label_text_width: layout.label_text_width as usize,
-        msg_text_width: layout.msg_text_width as usize,
-        label_text_x: layout.label_text_x as usize,
-        msg_text_x: layout.msg_text_x as usize,
-        left_width: layout.label_total_width as usize,
-        right_width: layout.msg_total_width as usize,
+        badge_height: layout.badge_height,
+        logo_width: layout.logo_width,
+        logo_padding: layout.logo_padding,
+        logo_x: layout.logo_x,
+        logo_y: layout.logo_y,
+        label_text_width: layout.label_text_width,
+        msg_text_width: layout.msg_text_width,
+        label_text_x: layout.label_text_x,
+        msg_text_x: layout.msg_text_x,
+        left_width: layout.label_total_width,
+        right_width: layout.msg_total_width,
     };
 
     let re = Regex::new("[\r\n]*").unwrap();
     Ok(String::from(
         re.replace_all(&flat_square_badge.render().unwrap(), ""),
+    ))
+}
+
+#[derive(Template, Debug)]
+#[template(path = "badge_template_forthebadge.xml", escape = "xml")]
+struct BadgeTemplateForTheBadge<'a> {
+    label_text: &'a str,
+    msg_text: &'a str,
+    badge_link: &'a str,
+    label_link: &'a str,
+    msg_link: &'a str,
+    label_color: &'a str,
+    msg_color: &'a str,
+    logo: &'a str,
+    full_badge_title: &'a str,
+    label_title: &'a str,
+    msg_title: &'a str,
+    badge_height: f32,
+    logo_width: f32,
+    logo_padding: f32,
+    logo_x: f32,
+    logo_y: f32,
+    label_text_width: f32,
+    msg_text_width: f32,
+    label_text_x: f32,
+    msg_text_x: f32,
+    left_width: f32,
+    right_width: f32,
+}
+
+pub(crate) fn for_the_badge_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
+    let mut logo_uri = badge.logo.clone();
+    if badge.embed_logo {
+        logo_uri = format_helper::attempt_logo_download(&badge.logo)?;
+    }
+    let forthebadge_badge = BadgeTemplateForTheBadge {
+        label_text: &layout.label_text_norm,
+        msg_text: &layout.msg_text_norm,
+        badge_link: &badge.badge_link,
+        label_link: &badge.label_link,
+        msg_link: &badge.msg_link,
+        label_color: &layout.label_color,
+        msg_color: &layout.msg_color,
+        logo: &logo_uri,
+        full_badge_title: &badge.badge_title,
+        label_title: &badge.label_title,
+        msg_title: &badge.msg_title,
+        badge_height: layout.badge_height,
+        logo_width: layout.logo_width,
+        logo_padding: layout.logo_padding,
+        logo_x: layout.logo_x,
+        logo_y: layout.logo_y,
+        label_text_width: layout.label_text_width,
+        msg_text_width: layout.msg_text_width,
+        label_text_x: layout.label_text_x,
+        msg_text_x: layout.msg_text_x,
+        left_width: layout.label_total_width,
+        right_width: layout.msg_total_width,
+    };
+
+    let re = Regex::new("[\r\n]*").unwrap();
+    Ok(String::from(
+        re.replace_all(&forthebadge_badge.render().unwrap(), ""),
+    ))
+}
+
+#[derive(Template, Debug)]
+#[template(path = "badge_template_social.xml", escape = "xml")]
+struct BadgeTemplateSocial<'a> {
+    label_text: &'a str,
+    msg_text: &'a str,
+    badge_link: &'a str,
+    label_link: &'a str,
+    msg_link: &'a str,
+    label_color: &'a str,
+    msg_color: &'a str,
+    logo: &'a str,
+    full_badge_title: &'a str,
+    label_title: &'a str,
+    msg_title: &'a str,
+    badge_height: f32,
+    logo_width: f32,
+    logo_padding: f32,
+    logo_x: f32,
+    logo_y: f32,
+    label_text_width: f32,
+    msg_text_width: f32,
+    label_text_x: f32,
+    msg_text_x: f32,
+    left_width: f32,
+    right_width: f32,
+    id_smooth: &'a str,
+    id_round: &'a str,
+    msg_bubble_x: f32,
+    label_rect_width: f32,
+    msg_rect_width: f32,
+}
+
+pub(crate) fn social_svg(badge: &Badge, layout: Layout) -> Result<String, BadgeError> {
+    let id_suffix: String = rand::thread_rng()
+        .sample_iter(&Alphanumeric)
+        .take(7)
+        .map(char::from)
+        .collect();
+    let id_smooth = format!("smooth{}", id_suffix);
+    let id_round = format!("round{}", id_suffix);
+    let mut logo_uri = badge.logo.clone();
+    if badge.embed_logo {
+        logo_uri = format_helper::attempt_logo_download(&badge.logo)?;
+    }
+    let social_badge = BadgeTemplateSocial {
+        label_text: &layout.label_text_norm,
+        msg_text: &layout.msg_text_norm,
+        badge_link: &badge.badge_link,
+        label_link: &badge.label_link,
+        msg_link: &badge.msg_link,
+        label_color: &layout.label_color,
+        msg_color: &layout.msg_color,
+        logo: &logo_uri,
+        full_badge_title: &badge.badge_title,
+        label_title: &badge.label_title,
+        msg_title: &badge.msg_title,
+        badge_height: layout.badge_height,
+        logo_width: layout.logo_width,
+        logo_padding: layout.logo_padding,
+        logo_x: layout.logo_x,
+        logo_y: layout.logo_y,
+        label_text_width: layout.label_text_width,
+        msg_text_width: layout.msg_text_width,
+        label_text_x: layout.label_text_x,
+        msg_text_x: layout.msg_text_x,
+        left_width: layout.label_total_width,
+        right_width: layout.msg_total_width,
+        id_smooth: &id_smooth,
+        id_round: &id_round,
+        msg_bubble_x: layout.msg_bubble_x,
+        label_rect_width: layout.label_rect_width,
+        msg_rect_width: layout.msg_rect_width,
+    };
+
+    let re = Regex::new("[\r\n]*").unwrap();
+    Ok(String::from(
+        re.replace_all(&social_badge.render().unwrap(), ""),
     ))
 }

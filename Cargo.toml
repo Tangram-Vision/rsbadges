@@ -1,6 +1,9 @@
 [package]
 authors = ["Brandon Minor <brandon@tangramvision.com>"]
+description = "Create code badges from the comfort and safety of Rust"
 edition = "2018"
+homepage = "https://gitlab.com/tangram-vision/rsbadges"
+keywords = ["badge", "badges", "svg", "shields.io", "logo", "tangram"]
 license = "BSD-3-Clause"
 name = "rsbadges"
 readme = "README.md"
