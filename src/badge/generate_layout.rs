@@ -243,16 +243,6 @@ pub(crate) fn for_the_badge(badge: &Badge) -> Result<Layout, BadgeError> {
     Ok(layout)
 }
 
-// Thanks, Shepmaster.
-// https://stackoverflow.com/questions/38406793/why-is-capitalizing-the-first-letter-of-a-string-so-convoluted-in-rust
-fn uppercase_first_letter(s: &str) -> String {
-    let mut c = s.chars();
-    match c.next() {
-        None => String::new(),
-        Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
-    }
-}
-
 pub(crate) fn social(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 

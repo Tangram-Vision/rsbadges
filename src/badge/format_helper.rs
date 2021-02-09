@@ -68,6 +68,15 @@ pub fn verify_color(color: &str) -> Result<String, BadgeError> {
         valid_color.blue * 255.0
     ))
 }
+// Thanks, Shepmaster.
+// https://stackoverflow.com/questions/38406793/why-is-capitalizing-the-first-letter-of-a-string-so-convoluted-in-rust
+pub fn uppercase_first_letter(s: &str) -> String {
+    let mut c = s.chars();
+    match c.next() {
+        None => String::new(),
+        Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
+    }
+}
 
 pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {
     Ok(ureq::get(logo_uri).call()?.into_string()?)
