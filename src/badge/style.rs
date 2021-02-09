@@ -39,7 +39,7 @@ use super::generate_svg;
 ///
 /// ```
 /// use rsbadges::{Badge, Style};
-/// let badge = Badge{
+/// let badge = Badge {
 ///     label_text: String::from("Custom_label"),
 ///     msg_text: String::from("Custom_msg"),
 ///     ..Badge::default()
@@ -75,10 +75,10 @@ impl Style {
     /// Since this is where data verification takes place, a number of errors are
     /// possible:
     ///
-    /// - [BadgeError::ColorNotValid]
-    /// - [BadgeError::CannotEmbedLogo]
-    /// - [BadgeError::CannotLocateFont]
-    /// - [BadgeError::CannotLoadFont]
+    /// - [ColorNotValid](BadgeError::ColorNotValid)
+    /// - [CannotEmbedLogo](BadgeError::CannotEmbedLogo)
+    /// - [CannotLocateFont](BadgeError::CannotLocateFont)
+    /// - [CannotLoadFont](BadgeError::CannotLoadFont)
     ///
     /// See [BadgeError] for a full description of each.
     ///

@@ -34,7 +34,8 @@
 //! - Embed that logo's data into the badge directly
 //! - Set the style of badge, as described in [Shields.io](http://shields.io)
 //!
-//! RSBadges can be used as an API or a command line interface (CLI).
+//! RSBadges can be used as an API or a command line interface (CLI). See the [Badge] and [Style]
+//! docs for more details on arguments and capabilities.
 //!
 //! # API
 //!
@@ -44,7 +45,7 @@
 //!
 //! ```
 //! use rsbadges::{Badge, Style};
-//! let badge = Badge{
+//! let badge = Badge {
 //!     label_text: String::from("Custom_label"),
 //!     msg_text: String::from("Custom_msg"),
 //!     label_color: String::from("red"),
@@ -59,7 +60,7 @@
 //!
 //! ```
 //! # use rsbadges::{Badge, Style};
-//! # let badge = Badge{
+//! # let badge = Badge {
 //! #     label_text: String::from("Custom_label"),
 //! #     msg_text: String::from("Custom_msg"),
 //! #     label_color: String::from("red"),
@@ -74,7 +75,7 @@
 //!
 //! ```
 //! # use rsbadges::{Badge, Style};
-//! # let badge = Badge{
+//! # let badge = Badge {
 //! #     label_text: String::from("Custom_label"),
 //! #     msg_text: String::from("Custom_msg"),
 //! #     label_color: String::from("red"),
@@ -96,8 +97,8 @@
 //! - Opening a created badge SVG in browser after creation
 //! - Specifying a save directory for the SVG
 //!
-//! Just like the API, `label-color` and `msg-color` take any valid CSS color
-//! as input. Don't worry if you get it wrong; RSBadges will let you know.
+//! Valid argument formats match those found in the API (see [Badge]).
+//! Don't worry if you get it wrong; RSBadges will let you know.
 //!
 //! | Short      | Long                                                      | Default
 //! | ---------  | ------------------------------------                      | -------
