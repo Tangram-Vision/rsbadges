@@ -2,9 +2,9 @@
 
 ## Create shields.io-like badges from the comfort and safety of Rust
 
-| Flat                             | Flat Square                                   | Plastic                               | ForTheBadge                                 | Social                                      |
-|----------------------------------|-----------------------------------------------|---------------------------------------|---------------------------------------------|---------------------------------------------|
-| ![flat](/assets/flat_badge.svg)  | ![flat_square](/assets/flat_square_badge.svg) | ![plastic](/assets/plastic_badge.svg) | ![for_the_badge](/assets/for_the_badge.svg) | ![social](/assets/social_logo_embedded.svg) |
+| Flat                       | Flat Square                             | Plastic                         | ForTheBadge                                 | Social                        |
+|----------------------------|-----------------------------------------|---------------------------------|---------------------------------------------|-------------------------------|
+| ![flat](/assets/flat.svg)  | ![flat_square](/assets/flat_square.svg) | ![plastic](/assets/plastic.svg) | ![for_the_badge](/assets/for_the_badge.svg) | ![social](/assets/social.svg) |
 
 
 RSBadges is a Rust-friendly badge generator. The interface strives to be minimal
@@ -66,7 +66,7 @@ few quality-of-life improvements for command line use and evaluation, such as
 - Opening a created badge SVG in browser after creation
 - Specifying a save directory for the SVG
 
-Valid argument formats match those found in the API (see [Badge]).
+Valid argument formats match those found in the API (see the Badge type documentation).
 Don't worry if you get it wrong; RSBadges will let you know.
 
 | Short      | Long                                                      | Default

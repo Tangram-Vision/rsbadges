@@ -106,6 +106,8 @@ fn create_badge_with_logo_local() {
 #[test]
 fn create_badge_embed_logo() {
     let badge = Badge {
+        label_text: String::from("rust"),
+        msg_text: String::from("so hot right now"),
         logo: String::from("https://simpleicons.org/icons/rust.svg"),
         embed_logo: true,
         ..Badge::default()
@@ -153,6 +155,7 @@ fn create_badge_chinese_characters() {
     let badge = Badge {
         label_text: String::from("版"),
         msg_text: String::from("不知道"),
+        msg_color: String::from("firebrick"),
         ..Badge::default()
     };
     let svg = match Style::Flat(badge).generate_svg() {
@@ -181,13 +184,14 @@ fn create_badge_metal() {
     let badge = Badge {
         label_text: String::from("röck döts"),
         msg_text: String::from("very metal indeed"),
+        msg_color: String::from("black"),
         ..Badge::default()
     };
-    let svg = match Style::Flat(badge).generate_svg() {
+    let svg = match Style::ForTheBadge(badge).generate_svg() {
         Ok(f) => f,
         Err(_) => unreachable!(),
     };
-    save_svg_to_tmp("flat_badge_metal.svg", svg);
+    save_svg_to_tmp("for_the_badge_metal.svg", svg);
 }
 
 #[test]
@@ -206,13 +210,16 @@ fn create_badge_badge_link() {
 #[test]
 fn create_badge_with_separate_label_msg_links() {
     let badge = Badge {
+        label_text: String::from("link here"),
+        msg_text: String::from("and a link here"),
         label_link: String::from("http://www.tangramvision.com"),
         msg_link: String::from("http://www.crates.io"),
+        label_color: String::from("forestgreen"),
         ..Badge::default()
     };
-    let svg = match Style::Flat(badge).generate_svg() {
+    let svg = match Style::FlatSquare(badge).generate_svg() {
         Ok(f) => f,
         Err(_) => unreachable!(),
     };
-    save_svg_to_tmp("flat_badge_two_links.svg", svg);
+    save_svg_to_tmp("flat_square_badge_two_links.svg", svg);
 }
