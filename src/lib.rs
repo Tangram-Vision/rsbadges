@@ -21,7 +21,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
-//! Create shields.io-like badges from the comfort and safety of Rust
+//! Create code badges from the comfort and safety of Rust
 //!
 //! RSBadges is a Rust-friendly badge generator. The interface strives to be minimal
 //! while still providing a feature-rich API. Both the label (the left side) and the

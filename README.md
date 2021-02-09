@@ -1,6 +1,6 @@
 # RSBadges
 
-## Create shields.io-like badges from the comfort and safety of Rust
+## Create code badges from the comfort and safety of Rust
 
 | Flat                       | Flat Square                             | Plastic                         | ForTheBadge                                 | Social                        |
 |----------------------------|-----------------------------------------|---------------------------------|---------------------------------------------|-------------------------------|
