@@ -44,13 +44,13 @@ let badge_style = Style::Plastic(badge);
 Badge and Style together are sufficient to
 tell RSBadges how to construct the right badge, which it does through `generate_svg()`:
 
-```
+```rust
 let badge_svg = badge_style.generate_svg().unwrap();
 ```
 
 The resulting SVG String can be saved to file using the convenience function `save_svg()`:
 
-```
+```rust
 rsbadges::save_svg("~/Downloads/badge.svg", &badge_svg);
 ```
 
