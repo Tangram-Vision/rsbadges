@@ -60,6 +60,8 @@ pub enum Style {
     FlatSquare(Badge),
     /// The "for the badge" badge style
     ForTheBadge(Badge),
+    /// The "social" badge style
+    Social(Badge),
 }
 
 impl Style {
@@ -86,6 +88,7 @@ impl Style {
             Style::FlatSquare(badge) => generate_layout::flat_or_square(badge)?,
             Style::Plastic(badge) => generate_layout::plastic(badge)?,
             Style::ForTheBadge(badge) => generate_layout::for_the_badge(badge)?,
+            Style::Social(badge) => generate_layout::social(badge)?,
         };
 
         let style = match self {
@@ -93,6 +96,7 @@ impl Style {
             Style::FlatSquare(badge) => generate_svg::flat_square_svg(badge, layout)?,
             Style::Plastic(badge) => generate_svg::plastic_svg(badge, layout)?,
             Style::ForTheBadge(badge) => generate_svg::for_the_badge_svg(badge, layout)?,
+            Style::Social(badge) => generate_svg::social_svg(badge, layout)?,
         };
 
         Ok(style)
