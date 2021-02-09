@@ -30,7 +30,7 @@ use unicode_normalization::UnicodeNormalization;
 // Docs: https://gitlab.redox-os.org/redox-os/rusttype/-/blob/master/dev/examples/ascii.rs
 pub fn load_regular_font<'a>() -> Result<Font<'a>, BadgeError> {
     let path = std::env::current_dir().unwrap();
-    let font_path = path.join(Path::new("fonts/DejaVuSans.ttf"));
+    let font_path = path.join(Path::new("fonts/verdana.ttf"));
     let font_data = match std::fs::read(font_path) {
         Ok(f) => f,
         Err(_) => return Err(BadgeError::CannotLocateFont),
