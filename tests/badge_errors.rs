@@ -39,7 +39,7 @@ fn error_color_not_valid() {
         label_color: String::from("#t"),
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         match style.generate_svg() {
             Err(BadgeError::ColorNotValid(_)) => {}
             _ => unreachable!(),
@@ -49,7 +49,7 @@ fn error_color_not_valid() {
         msg_color: String::from("rgb(300.0)"),
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         match style.generate_svg() {
             Err(BadgeError::ColorNotValid(_)) => {}
             _ => unreachable!(),
@@ -64,7 +64,7 @@ fn error_cannot_embed_logo() {
         embed_logo: true,
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         match style.generate_svg() {
             Err(BadgeError::CannotEmbedLogo(_)) => {}
             _ => unreachable!(),

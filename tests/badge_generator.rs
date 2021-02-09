@@ -44,7 +44,7 @@ pub fn all_styles(badge: Badge) -> std::vec::Vec<Style> {
     ]
 }
 
-pub fn badge_prefix(style: &Style) -> String {
+pub fn badge_prefix(style: Style) -> String {
     match style {
         Style::Flat(_) => String::from("flat_"),
         Style::FlatSquare(_) => String::from("flat_square_"),
@@ -63,7 +63,7 @@ fn create_badges_with_all_fields_populated() {
         msg_color: String::from("#007ec6"),
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         let svg = match style.generate_svg() {
             Ok(f) => f,
             Err(_) => unreachable!(),
@@ -80,7 +80,7 @@ fn create_badge_with_logo() {
         logo: String::from("https://simpleicons.org/icons/rust.svg"),
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         let svg = match style.generate_svg() {
             Ok(f) => f,
             Err(_) => unreachable!(),
@@ -99,7 +99,7 @@ fn create_badge_with_logo_local() {
         logo: String::from(font_path.to_str().unwrap()),
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         let svg = match style.generate_svg() {
             Ok(f) => f,
             Err(_) => unreachable!(),
@@ -117,7 +117,7 @@ fn create_badge_embed_logo() {
         embed_logo: true,
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         let svg = match style.generate_svg() {
             Ok(f) => f,
             Err(_) => unreachable!(),
@@ -135,7 +135,7 @@ fn create_badge_embed_logo_local_src() {
         embed_logo: true,
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         let svg = match style.generate_svg() {
             Ok(f) => f,
             Err(_) => unreachable!(),
@@ -152,7 +152,7 @@ fn create_badge_chinese_characters() {
         msg_color: String::from("firebrick"),
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         let svg = match style.generate_svg() {
             Ok(f) => f,
             Err(_) => unreachable!(),
@@ -168,7 +168,7 @@ fn create_badge_arabic_characters() {
         msg_text: String::from("انا لا اعرف"),
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         let svg = match style.generate_svg() {
             Ok(f) => f,
             Err(_) => unreachable!(),
@@ -185,7 +185,7 @@ fn create_badge_metal() {
         msg_color: String::from("black"),
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         let svg = match style.generate_svg() {
             Ok(f) => f,
             Err(_) => unreachable!(),
@@ -200,7 +200,7 @@ fn create_badge_badge_link() {
         badge_link: String::from("http://www.crates.io"),
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         let svg = match style.generate_svg() {
             Ok(f) => f,
             Err(_) => unreachable!(),
@@ -219,7 +219,7 @@ fn create_badge_with_separate_label_msg_links() {
         label_color: String::from("forestgreen"),
         ..Badge::default()
     };
-    for style in all_styles(badge).iter() {
+    for style in all_styles(badge) {
         let svg = match style.generate_svg() {
             Ok(f) => f,
             Err(_) => unreachable!(),
