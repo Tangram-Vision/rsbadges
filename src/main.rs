@@ -182,7 +182,7 @@ fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
         Err(f) => return Err(BadgeError::BadCommandLineArgs(f.to_string())),
     };
 
-    if matches.opt_present("h") {
+    if matches.opt_present("h") || args.len() == 1 {
         let brief = format!("Usage: {} [options]", program);
         println!("{}", opts.usage(&brief));
         std::process::exit(1);

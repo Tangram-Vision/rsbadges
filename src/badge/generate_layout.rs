@@ -303,7 +303,5 @@ pub(crate) fn social(badge: &Badge) -> Result<Layout, BadgeError> {
     layout.label_color = verify_color(&badge.label_color)?;
     layout.msg_color = verify_color(&badge.msg_color)?;
 
-    println!("{:#?}", layout);
-
     Ok(layout)
 }
