@@ -3,9 +3,13 @@
 Create shields.io-like badges from the comfort and safety of Rust
 
 ![flat](/assets/flat_badge.svg)
+
 ![flat_square](/assets/flat_square_badge.svg)
+
 ![plastic](/assets/plastic_badge.svg)
+
 ![for_the_badge](/assets/for_the_badge.svg)
+
 ![social](/assets/social_logo_embedded.svg)
 
 
