@@ -41,15 +41,13 @@ pub fn load_font<'a>(font_file: &str) -> Result<Font<'a>, BadgeError> {
     }
 }
 
-pub fn get_text_dims(font: &Font, text: &str, font_size: f32, kerning_pix: f32) -> (String, f32) {
+pub fn get_text_dims(font: &Font, text: &str, font_size: f32) -> (String, f32) {
     let norm_text = text.nfc().collect::<String>();
     let scale = Scale::uniform(font_size);
     let layout = font.layout(&norm_text, scale, point(0.0, 0.0));
     let mut glyphs_width = layout.fold(0.0, |acc, x| {
         acc + x.into_unpositioned().h_metrics().advance_width
     });
-    // 1px padding
-    glyphs_width += norm_text.len() as f32 * kerning_pix;
     if glyphs_width as usize % 2 == 0 {
         glyphs_width += 1.0;
     }
