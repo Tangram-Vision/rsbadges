@@ -26,7 +26,7 @@
     <rect width="{{ left_width + right_width }}" height="{{ badge_height }}" fill="url(#{{ id_smooth }})"/>
   </g>
 
-  <g fill="#fff" text-anchor="middle" font-family="PT Sans,Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">
     {% if !logo.is_empty() %}
     <image x="{{ logo_x }}" y="{{ logo_y }}" width="{{ logo_width }}" height="14" xlink:href="{{ logo }}"/>
     {% endif %}

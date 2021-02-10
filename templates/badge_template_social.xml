@@ -23,7 +23,7 @@
     {% if !logo.is_empty() %}
     <image x="{{ logo_x }}" y="{{ logo_y }}" width="{{ logo_width }}" height="14" xlink:href="{{ logo }}"/>
     {% endif %}
-    <g aria-hidden="true" fill="#333" text-anchor="middle" font-family="Open Sans,Helvetica Neue,Helvetica,Arial,sans-serif" text-rendering="geometricPrecision" font-weight="700" font-size="110px" line-height="14px">
+    <g aria-hidden="true" fill="#333" text-anchor="middle" font-family="Helvetica Neue,Helvetica,Arial,sans-serif" text-rendering="geometricPrecision" font-weight="700" font-size="110px" line-height="14px">
         <rect id="llink" stroke="#d5d5d5" fill="url(#{{ id_smooth }})" x=".5" y=".5" width="{{ label_rect_width }}" height="19" rx="2" />
         <text aria-hidden="true" x="{{ label_text_x }}" y="150" fill="#fff" transform="scale(.1)" textLength="{{ label_text_width }}">{{ label_text }}</text>
         <text x="{{ label_text_x }}" y="140" transform="scale(.1)" textLength="{{ label_text_width }}">{{ label_text }}</text>
