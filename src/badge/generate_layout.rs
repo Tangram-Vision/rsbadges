@@ -226,7 +226,7 @@ pub(crate) fn for_the_badge(badge: &Badge) -> Result<Layout, BadgeError> {
 
     // Message padding and width
     layout.msg_total_width =
-        layout.msg_text_width + 20.0 + (1.5 * layout.label_text_norm.len() as f32);
+        layout.msg_text_width + 20.0 + (1.5 * layout.msg_text_norm.len() as f32);
     layout.msg_text_x = layout.label_total_width + (layout.msg_total_width / 2.0);
     layout.msg_text_width = layout.msg_total_width - 24.0;
 
