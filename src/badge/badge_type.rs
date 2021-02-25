@@ -167,9 +167,6 @@ pub enum BadgeError {
     /// data into the SVG. This is usually due to a malformed logo URI.
     #[error("Unable to download and embed the logo. Attempted to load from {0}.")]
     CannotEmbedLogo(String),
-    /// RSBadges can't find the font file it uses to measure out the width of the badge.
-    #[error("Unable to find the font file.")]
-    CannotLocateFont,
     /// RSBadges can't load the font file it uses to measure out the width of the badge.
     /// This probably means the file has somehow become corrupted.
     #[error("Unable to load the font file.")]
