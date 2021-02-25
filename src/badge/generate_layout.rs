@@ -28,7 +28,7 @@ pub(crate) fn plastic(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 
     // Normalize text
-    let font = load_font("fonts/PTSans-Regular.ttf")?;
+    let font = load_font(include_bytes!("PTSans-Regular.ttf"))?;
     let (label_text_norm, label_text_width) = get_text_dims(&font, &badge.label_text, 17.0);
     layout.label_text_norm = label_text_norm;
     layout.label_text_width = label_text_width;
@@ -102,7 +102,7 @@ pub(crate) fn flat_or_square(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 
     // Normalize text
-    let font = load_font("fonts/PTSans-Regular.ttf")?;
+    let font = load_font(include_bytes!("PTSans-Regular.ttf"))?;
     let (label_text_norm, label_text_width) = get_text_dims(&font, &badge.label_text, 17.0);
     layout.label_text_norm = label_text_norm;
     layout.label_text_width = label_text_width;
@@ -176,12 +176,12 @@ pub(crate) fn for_the_badge(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 
     // Normalize text
-    let font = load_font("fonts/PTSans-Regular.ttf")?;
+    let font = load_font(include_bytes!("PTSans-Regular.ttf"))?;
     let (label_text_norm, label_text_width) =
         get_text_dims(&font, &badge.label_text.to_uppercase(), 14.0);
     layout.label_text_norm = label_text_norm;
     layout.label_text_width = label_text_width;
-    let bold_font = load_font("fonts/PTSans-Bold.ttf")?;
+    let bold_font = load_font(include_bytes!("PTSans-Bold.ttf"))?;
     let (msg_text_norm, msg_text_width) =
         get_text_dims(&bold_font, &badge.msg_text.to_uppercase(), 17.0);
     layout.msg_text_norm = msg_text_norm;
@@ -247,7 +247,7 @@ pub(crate) fn social(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 
     // Normalize text
-    let font = load_font("fonts/OpenSans-Regular.ttf")?;
+    let font = load_font(include_bytes!("OpenSans-Regular.ttf"))?;
     let cap_label = uppercase_first_letter(&badge.label_text);
     let (label_text_norm, label_text_width) = get_text_dims(&font, &cap_label, 16.0);
     layout.label_text_norm = label_text_norm;
