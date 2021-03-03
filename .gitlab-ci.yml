@@ -1,5 +1,7 @@
 # CONFIGURATION
-image: 'rust:latest'
+default:
+  image: 'rust:latest'
+
 
 stages:
   - test
