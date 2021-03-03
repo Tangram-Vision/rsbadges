@@ -7,8 +7,6 @@ stages:
   - test
   - doc
 
-variables:
-  CARGO_HOME: $CI_PROJECT_DIR/cargo
 
 ##### ########## ########## ########## ########## #####
 # TEST STAGE
