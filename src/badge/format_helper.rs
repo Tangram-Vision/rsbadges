@@ -21,13 +21,16 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
+//! Different helper functions used when formatting a badge for SVG generation.
+
 use super::badge_type::BadgeError;
 use css_color::Rgba;
 use rusttype::{point, Font, Scale};
 use std::path::Path;
 use unicode_normalization::UnicodeNormalization;
 
-// Docs: https://gitlab.redox-os.org/redox-os/rusttype/-/blob/master/dev/examples/ascii.rs
+/// Load a font into Rust.
+/// Docs: https://gitlab.redox-os.org/redox-os/rusttype/-/blob/master/dev/examples/ascii.rs
 pub fn load_font<'a>(bytes: &'static [u8]) -> Result<Font<'a>, BadgeError> {
     match Font::try_from_bytes(bytes) {
         Some(f) => Ok(f),
@@ -35,6 +38,8 @@ pub fn load_font<'a>(bytes: &'static [u8]) -> Result<Font<'a>, BadgeError> {
     }
 }
 
+/// Produce the text dimensions given the font, text, and requested size of the
+/// string.
 pub fn get_text_dims(font: &Font, text: &str, font_size: f32) -> (String, f32) {
     let norm_text = text.nfc().collect::<String>();
     let scale = Scale::uniform(font_size);
@@ -48,6 +53,7 @@ pub fn get_text_dims(font: &Font, text: &str, font_size: f32) -> (String, f32) {
     (norm_text, glyphs_width)
 }
 
+/// Verify that the string passed in is a valid color.
 pub fn verify_color(color: &str) -> Result<String, BadgeError> {
     let valid_color: Rgba = match color.parse() {
         Ok(c) => c,
@@ -60,8 +66,10 @@ pub fn verify_color(color: &str) -> Result<String, BadgeError> {
         valid_color.blue * 255.0
     ))
 }
+
 // Thanks, Shepmaster.
 // https://stackoverflow.com/questions/38406793/why-is-capitalizing-the-first-letter-of-a-string-so-convoluted-in-rust
+/// Make the first character of the given string be uppercase.
 pub fn uppercase_first_letter(s: &str) -> String {
     let mut c = s.chars();
     match c.next() {
@@ -70,10 +78,12 @@ pub fn uppercase_first_letter(s: &str) -> String {
     }
 }
 
+/// Create an embeddable logo from the given URI.
 pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {
     Ok(ureq::get(logo_uri).call()?.into_string()?)
 }
 
+/// Attempt to download a logo from a given URI. This can be a web URL or a local path.
 pub fn attempt_logo_download(logo_uri: &str) -> Result<String, BadgeError> {
     // Check for local copy
     let local_path = Path::new(logo_uri);

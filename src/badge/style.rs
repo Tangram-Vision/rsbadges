@@ -21,6 +21,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
+//! Different badge containers using to format and generate badge SVGs
+
 use super::badge_type::*;
 use super::generate_layout;
 use super::generate_svg;

@@ -1,17 +1,16 @@
 # CONFIGURATION
 default:
-  image: 'rust:latest'
-
+  image: "registry.gitlab.com/tangram-vision/oss/ci-oss/public-ci:latest"
 
 stages:
   - test
   - doc
 
-
 ##### ########## ########## ########## ########## #####
 # TEST STAGE
 # - [PASS REQ] runs all unit tests in the build
 # - [PASS REQ] runs a lint checker over every piece of code
+
 test:
   stage: test
   script:
@@ -21,8 +20,6 @@ test:
 
 lint:
   stage: test
-  before_script:
-    - rustup component add clippy
   script:
     - rustc --version
     - cargo --version
@@ -30,7 +27,14 @@ lint:
 
 ##### ########## ########## ########## ########## #####
 # DOC STAGE
+# - [PASS OPT] checks for documentation on all relevant pieces of code
 # - [PASS REQ] creates documentation pages
+
+doc-check:
+  stage: doc
+  script:
+    - cargo clippy --all-targets --all-features -- -A clippy::all -D clippy::missing_docs_in_private_items
+  allow_failure: true
 
 pages:
   stage: doc

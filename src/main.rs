@@ -21,16 +21,50 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
+//! # CLI
+//!
+//! The CLI features all of the customization options from the API, along with a
+//! few quality-of-life improvements for command line use and evaluation, such as
+//!
+//! - Opening a created badge SVG in browser after creation
+//! - Specifying a save directory for the SVG
+//!
+//! Valid argument formats match those found in the API (see [Badge]).
+//! Don't worry if you get it wrong; RSBadges will let you know.
+//!
+//! | Short      | Long                                                      | Default
+//! | ---------  | ------------------------------------                      | -------
+//! | `-a`       | `--label <string>`                                        | "test"
+//! | `-b`       | `--label-color <css_color>`                               | "#555"
+//! | `-c`       | `--label-link <url>`                                      | ""
+//! | `-x`       | `--msg <string>`                                          | "test"
+//! | `-y`       | `--msg-color <css_color>`                                 | "#007ec6"
+//! | `-z`       | `--msg-link <url>`                                        | ""
+//! | `-l`       | `--logo <url or local path>`                              | ""
+//! | `-f`       | `--save-to-svg-at <filepath/file.svg>`                    | ""
+//! | `-s`       | `--style <plastic,flat,flatsquare,forthebadge,social>`    | "flat"
+//! | `-o`       | `--open-in-browser`                                       | false
+//! | `-h`       | `--help`                                                  | false
+//! | `-e`       | `--embed-logo`                                            | false
+//!
+//! Run the CLI with the `-h` flag to see all possible arguments and flags.
+//!
+
 use getopts::Options;
 use rsbadges::{Badge, BadgeError, Style};
 use std::env;
 
+/// Convenience struct to hold command line options
 struct RSBadgesOptions {
+    /// The requested style of the badge
     style: Style,
+    /// Should this be opened in browser once generated?
     open_in_browser: bool,
+    /// Save the badge to this path
     save_to_path: String,
 }
 
+/// Create and save an SVG through a CLI tool
 fn main() -> Result<(), BadgeError> {
     println!("\n");
     let options = parse_project_dir_from_args()?;
@@ -73,6 +107,7 @@ fn main() -> Result<(), BadgeError> {
     Ok(())
 }
 
+/// Process and save all provided arguments
 fn parse_project_dir_from_args() -> Result<RSBadgesOptions, BadgeError> {
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
