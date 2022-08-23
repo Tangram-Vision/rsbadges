@@ -123,24 +123,47 @@ impl Default for Badge {
 }
 
 #[derive(Default, Debug)]
+/// The formatted layout of a badge.
+///
+/// These types are used for badge construction on the user side. Every type is
+/// validated and formatted before being used to create an SVG of the requested
+/// badge type.
 pub(crate) struct Layout {
+    /// text for label (left side)
     pub label_text_norm: String,
+    /// text for message (right side)
     pub msg_text_norm: String,
+    /// height of the badge, in px
     pub badge_height: f32,
+    /// width of text for label, in px
     pub label_text_width: f32,
+    /// width of text for message, in px
     pub msg_text_width: f32,
+    /// total width of the label side, in px
     pub label_total_width: f32,
+    /// total width of the message side, in px
     pub msg_total_width: f32,
+    /// logo text placement in x
     pub label_text_x: f32,
+    /// message text placement in x
     pub msg_text_x: f32,
+    /// message bubble placement in x
     pub msg_bubble_x: f32,
+    /// width of the label rectangle, in px
     pub label_rect_width: f32,
+    /// width of the message rectangle, in px
     pub msg_rect_width: f32,
+    /// padding of the logo, in px
     pub logo_padding: f32,
+    /// width of the logo, in px
     pub logo_width: f32,
+    /// logo placement in x
     pub logo_x: f32,
+    /// logo placement in y
     pub logo_y: f32,
+    /// the color of the label (left side)
     pub label_color: String,
+    /// the color of the message (right side)
     pub msg_color: String,
 }
 
@@ -149,7 +172,7 @@ pub(crate) struct Layout {
 /// Badges are lazily evaluated, in a fashion; their data is not verified
 /// until they are actually generated into SVGs. RSBadges tries to be loud
 /// about malformed data or prevented actions via the error types below.
-#[derive(Error, Debug, PartialEq)]
+#[derive(Error, Debug, PartialEq, Eq)]
 pub enum BadgeError {
     /// The arguments passed to the command line cannot be successfully parsed.
     #[error("Unable to parse command line arguments. {0}")]

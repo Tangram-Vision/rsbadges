@@ -21,9 +21,12 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
+//! Generate the correct SVG layout given badge information. This does not
+//! generate the SVG itself.
+
 use super::badge_type::*;
 use super::format_helper::*;
-
+/// Generate the correct layout information for a Plastic badge
 pub(crate) fn plastic(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 
@@ -98,6 +101,7 @@ pub(crate) fn plastic(badge: &Badge) -> Result<Layout, BadgeError> {
     Ok(layout)
 }
 
+/// Generate the correct layout information for a Flat or Square badge
 pub(crate) fn flat_or_square(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 
@@ -172,6 +176,7 @@ pub(crate) fn flat_or_square(badge: &Badge) -> Result<Layout, BadgeError> {
     Ok(layout)
 }
 
+/// Generate the correct layout information for a "For the Badge" badge
 pub(crate) fn for_the_badge(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 
@@ -243,6 +248,7 @@ pub(crate) fn for_the_badge(badge: &Badge) -> Result<Layout, BadgeError> {
     Ok(layout)
 }
 
+/// Generate the correct layout information for a Social badge
 pub(crate) fn social(badge: &Badge) -> Result<Layout, BadgeError> {
     let mut layout = Layout::default();
 

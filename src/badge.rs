@@ -21,6 +21,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 // OF SUCH DAMAGE.
 
+//! All types and functions needed to create a Badge of any style
+
 mod badge_type;
 mod format_helper;
 mod generate_layout;
