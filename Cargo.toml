@@ -9,7 +9,7 @@ license = "BSD-3-Clause"
 name = "rsbadges"
 readme = "README.md"
 repository = "https://gitlab.com/tangram-vision-oss/rsbadges"
-version = "1.1.1"
+version = "1.1.2"
 
 [dependencies]
 askama = "0.11"
