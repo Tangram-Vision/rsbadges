@@ -242,7 +242,11 @@ pub(crate) fn for_the_badge(badge: &Badge) -> Result<Layout, BadgeError> {
     layout.msg_text_x *= 10.0;
 
     // Color conversion to string
-    layout.label_color = verify_color(&badge.label_color)?;
+    if badge.label_text.is_empty() {
+        layout.label_color = verify_color(&badge.msg_color)?;
+    } else {
+        layout.label_color = verify_color(&badge.label_color)?;
+    }
     layout.msg_color = verify_color(&badge.msg_color)?;
 
     Ok(layout)
