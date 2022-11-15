@@ -85,8 +85,12 @@ pub fn uppercase_first_letter(s: &str) -> String {
 }
 
 /// Create an embeddable logo from the given URI.
-pub fn create_embedded_logo(logo_uri: &str) -> Result<String, ureq::Error> {
-    Ok(ureq::get(logo_uri).call()?.into_string()?)
+pub fn create_embedded_logo(logo_uri: &str) -> Result<String, BadgeError> {
+    if let Ok(uri) = ureq::get(logo_uri).call() {
+        Ok(uri.into_string().unwrap())
+    } else {
+        Err(BadgeError::CannotEmbedLogo(String::from(logo_uri)))
+    }
 }
 
 /// Attempt to download a logo from a given URI. This can be a web URL or a local path.
@@ -96,10 +100,7 @@ pub fn attempt_logo_download(logo_uri: &str) -> Result<String, BadgeError> {
 
     let data = match std::fs::read_to_string(local_path) {
         Ok(f) => f,
-        Err(_) => match create_embedded_logo(logo_uri) {
-            Ok(logo_data) => logo_data,
-            Err(_) => return Err(BadgeError::CannotEmbedLogo(String::from(logo_uri))),
-        },
+        Err(_) => create_embedded_logo(logo_uri)?,
     };
 
     // If not local, download
