@@ -30,6 +30,7 @@
 //! Different helper functions used when formatting a badge for SVG generation.
 
 use super::badge_type::BadgeError;
+use base64::{Engine as _, engine::general_purpose::STANDARD};
 use css_color::Rgba;
 use rusttype::{point, Font, Scale};
 use std::path::Path;
@@ -106,6 +107,6 @@ pub fn attempt_logo_download(logo_uri: &str) -> Result<String, BadgeError> {
     // If not local, download
     Ok(format!(
         "data:image/svg+xml;base64,{}",
-        base64::encode(data.as_bytes())
+        STANDARD.encode(data.as_bytes())
     ))
 }
