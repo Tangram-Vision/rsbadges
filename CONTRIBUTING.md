@@ -32,7 +32,7 @@ All bug reports are tracked in the repository's GitLab Issues. Good bug reports 
 
 ## Enhancements
 
-Enhancements desecribe new features or quality-of-life improvements that would make the software experience better.
+Enhancements describe new features or quality-of-life improvements that would make the software experience better.
 
 Before submitting an enhancement, we encourage you to read the documentation. The feature you'd like to see might already be implemented! If this is the case, it's not the code that should be improved; it's the documentation (something that can also be reported as an enhancement).
 

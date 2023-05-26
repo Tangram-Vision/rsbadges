@@ -185,7 +185,7 @@ pub enum BadgeError {
     BadCommandLineArgs(String),
     /// A color assigned to the Badge does not have a valid CSS color format.
     /// See [the CSS color picker](https://www.w3schools.com/colors/colors_picker.asp)
-    /// for vaild examples.
+    /// for valid examples.
     #[error("The provided color {0} is not a valid CSS color format.")]
     ColorNotValid(String),
     /// RSBadges is unable to save the generated badge to an SVG. This is usually
